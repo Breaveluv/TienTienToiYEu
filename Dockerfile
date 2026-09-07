@@ -24,8 +24,10 @@ FROM eclipse-temurin:17-jre-jammy
 
 WORKDIR /app
 
-# Tạo non-root user 'spring' để tăng cường bảo mật container
-RUN groupadd -r spring && useradd -r -g spring spring
+# Tạo non-root user 'spring' và thư mục data cho H2 database
+RUN groupadd -r spring && useradd -r -g spring spring \
+    && mkdir -p /app/data \
+    && chown -R spring:spring /app
 USER spring:spring
 
 # Sao chép file JAR đã đóng gói từ Stage 1
