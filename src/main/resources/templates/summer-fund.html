@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Quỹ Ủng Hộ Sinh Hoạt Hè - Chi Đoàn Thôn Tiền Tiến')}"></head>
+<style>
+  @keyframes modalSlideUp {
+    from { opacity: 0; transform: translateY(24px) scale(0.96); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .donor-honor-card {
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .donor-honor-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  }
+  @media (max-width: 768px) {
+    .data-table th:nth-child(5),
+    .data-table td:nth-child(5),
+    .data-table th:nth-child(7),
+    .data-table td:nth-child(7) {
+      display: none;
+    }
+  }
+</style>
+<body>
+  <div class="ambient-glow"></div>
+  <div class="ambient-glow-2"></div>
+
+  <div class="app-layout">
+    <!-- Sidebar Fragment -->
+    <div th:replace="~{fragments/sidebar :: sidebar('summerFund')}"></div>
+
+    <!-- Main Content Wrapper -->
+    <main class="main-wrapper">
+      <!-- Topbar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <div class="breadcrumb-nav">
+            <span>🏡 Chi Đoàn Thôn Tiền Tiến</span>
+            <span class="breadcrumb-separator">/</span>
+            <span style="color: #ef4444; font-weight: 700;">Quỹ Ủng Hộ Sinh Hoạt Hè 2026</span>
+          </div>
+        </div>
+
+        <div class="topbar-right" style="display: flex; align-items: center; gap: 10px;">
+          <!-- Theme Toggle -->
+          <button type="button" onclick="toggleTheme()" class="btn-theme-toggle" title="Chuyển chế độ Sáng / Tối"
+                  style="background: var(--bg-input); border: 1px solid var(--border-color); width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-primary); font-size: 1.05rem;">
+            <span id="themeIcon">🌓</span>
+          </button>
+
+          <!-- Nút mở Modal ghi nhận ủng hộ mới -->
+          <button type="button" onclick="openDonationModal()" class="btn-primary-gradient"
+                  style="background: linear-gradient(135deg, #ef4444 0%, #f97316 100%); border: none; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.35);">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+            <span>+ Ghi Nhận Ủng Hộ</span>
+          </button>
+
+          <!-- Nút mở Modal Nhập File Excel hoặc Google Sheet -->
+          <button type="button" onclick="openImportModal()" class="btn-action-link"
+                  style="background: var(--bg-input); border: 1px solid var(--border-color); padding: 9px 15px; border-radius: var(--radius-md); color: var(--text-primary); font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span>📥 Nhập Excel / Sheet</span>
+          </button>
+
+          <!-- Nút xem mã QR chuyển khoản -->
+          <button type="button" onclick="openQrModal()" class="btn-action-link"
+                  style="background: var(--bg-input); border: 1px solid var(--border-color); padding: 9px 15px; border-radius: var(--radius-md); color: var(--text-primary); font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            <span>Mã VietQR</span>
+          </button>
+
+          <!-- User Pill -->
+          <div class="user-pill" style="display: flex; align-items: center; gap: 10px; background: var(--bg-input); padding: 5px 12px; border-radius: var(--radius-full); border: 1px solid var(--border-color);">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=faces" alt="Avatar" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
+            <div class="user-pill-text">
+              <span class="user-pill-name" style="font-size: 0.82rem; font-weight: 700; color: var(--text-primary); display: block;">Ban Chỉ Đạo Hè</span>
+              <span class="user-pill-role" style="font-size: 0.72rem; color: var(--text-muted);">Thôn Tiền Tiến</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Page Content -->
+      <div class="page-content">
+        <!-- Flash Message Alerts -->
+        <div th:if="${successMessage}" class="alert-banner alert-success" style="background: rgba(16, 185, 129, 0.15); border: 1px solid var(--emerald); color: var(--emerald); padding: 12px 18px; border-radius: var(--radius-md); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; font-weight: 600;">
+          <span>🎉</span>
+          <span th:text="${successMessage}"></span>
+        </div>
+        <div th:if="${errorMessage}" class="alert-banner alert-error" style="background: rgba(239, 68, 68, 0.15); border: 1px solid #ef4444; color: #ef4444; padding: 12px 18px; border-radius: var(--radius-md); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; font-weight: 600;">
+          <span>⚠️</span>
+          <span th:text="${errorMessage}"></span>
+        </div>
+
+        <!-- Hero Banner: Quỹ Vận Động Hoạt Động Hè -->
+        <div class="hero-banner" style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.12) 0%, rgba(249, 115, 22, 0.12) 50%, rgba(16, 185, 129, 0.08) 100%); border: 1px solid rgba(239, 68, 68, 0.25); border-radius: var(--radius-lg); padding: 28px 32px; position: relative; overflow: hidden; margin-bottom: 24px;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 20px;">
+            <div style="max-width: 680px;">
+              <div class="hero-badge" style="background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); margin-bottom: 12px; display: inline-flex; align-items: center; gap: 8px; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700;">
+                <span style="font-size: 1rem;">☀️</span>
+                <span>Chiến Dịch Hè Tình Nguyện • Thôn Tiền Tiến 2026</span>
+              </div>
+              <h1 style="font-size: 1.85rem; font-weight: 800; color: var(--text-primary); margin: 0 0 10px 0; line-height: 1.3;">
+                SỔ VÀNG ỦNG HỘ HOẠT ĐỘNG HÈ THANH THIẾU NHI
+              </h1>
+              <p style="font-size: 0.95rem; color: var(--text-secondary); margin: 0 0 18px 0; line-height: 1.6;">
+                Chung tay cùng Chi đoàn Thôn Tiền Tiến tạo sân chơi lành mạnh, an toàn và bổ ích cho các em thiếu niên, nhi đồng: Tổ chức Hội trại hè, Giải bóng đá thiếu nhi, Đêm hội văn nghệ và trao học bổng tiếp sức đến trường!
+              </p>
+
+              <!-- Progress Bar: Tiến độ vận động quỹ -->
+              <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px 18px; box-shadow: var(--shadow-sm);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                  <span style="font-size: 0.85rem; font-weight: 700; color: var(--text-primary);">
+                    Tiến độ hoàn thành chỉ tiêu: <strong style="color: #ef4444;" th:text="${stats.percentAchieved + '%'}">63.2%</strong>
+                  </span>
+                  <span style="font-size: 0.82rem; color: var(--text-secondary);">
+                    Đạt <strong style="color: var(--emerald);" th:text="${#numbers.formatDecimal(stats.totalAmount, 0, 'COMMA', 0, 'POINT') + ' ₫'}">15.800.000 ₫</strong>
+                    / Chỉ tiêu <strong th:text="${#numbers.formatDecimal(stats.targetAmount, 0, 'COMMA', 0, 'POINT') + ' ₫'}">25.000.000 ₫</strong>
+                  </span>
+                </div>
+                <div style="width: 100%; height: 12px; background: var(--bg-input); border-radius: 6px; overflow: hidden; position: relative;">
+                  <div th:style="'width: ' + (${stats.percentAchieved > 100 ? 100 : stats.percentAchieved}) + '%; height: 100%; background: linear-gradient(90deg, #ef4444 0%, #f97316 50%, #10b981 100%); border-radius: 6px; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);'"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick Action Box -->
+            <div style="display: flex; flex-direction: column; gap: 12px; align-self: center;">
+              <button type="button" onclick="openDonationModal()" class="btn-primary-gradient"
+                      style="background: linear-gradient(135deg, #ef4444 0%, #f97316 100%); padding: 14px 24px; font-size: 1rem; border-radius: var(--radius-md); border: none; cursor: pointer; color: #ffffff; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                <span>Ủng Hộ Quỹ Hè Ngay</span>
+              </button>
+
+              <button type="button" onclick="openQrModal()" class="btn-action-link"
+                      style="background: var(--bg-surface); border: 1px solid var(--border-color); padding: 12px 20px; font-size: 0.9rem; border-radius: var(--radius-md); cursor: pointer; color: var(--text-primary); font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                <span>Quét VietQR Chuyển Khoản</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 KPI Stat Cards -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; margin-bottom: 28px;">
+          <!-- Card 1: Tổng tiền quyên góp -->
+          <div class="stat-card" style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 20px; display: flex; align-items: center; gap: 16px; box-shadow: var(--shadow-sm); position: relative; overflow: hidden;">
+            <div style="width: 52px; height: 52px; border-radius: 14px; background: rgba(239, 68, 68, 0.12); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; color: #ef4444; flex-shrink: 0;">
+              💰
+            </div>
+            <div>
+              <span style="font-size: 0.78rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); letter-spacing: 0.5px;">Tổng Quỹ Đã Vận Động</span>
+              <h3 style="font-size: 1.45rem; font-weight: 800; color: #ef4444; margin: 4px 0 0 0;"
+                  th:text="${#numbers.formatDecimal(stats.totalAmount, 0, 'COMMA', 0, 'POINT') + ' ₫'}">15.800.000 ₫</h3>
+            </div>
+          </div>
+
+          <!-- Card 2: Mục tiêu kế hoạch -->
+          <div class="stat-card" style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 20px; display: flex; align-items: center; gap: 16px; box-shadow: var(--shadow-sm); position: relative; overflow: hidden;">
+            <div style="width: 52px; height: 52px; border-radius: 14px; background: rgba(245, 158, 11, 0.12); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; color: #f59e0b; flex-shrink: 0;">
+              🎯
+            </div>
+            <div>
+              <span style="font-size: 0.78rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); letter-spacing: 0.5px;">Chỉ Tiêu Hoạt Động Hè</span>
+              <h3 style="font-size: 1.45rem; font-weight: 800; color: var(--text-primary); margin: 4px 0 0 0;"
+                  th:text="${#numbers.formatDecimal(stats.targetAmount, 0, 'COMMA', 0, 'POINT') + ' ₫'}">25.000.000 ₫</h3>
+            </div>
+          </div>
+
+          <!-- Card 3: Số lượt ủng hộ -->
+          <div class="stat-card" style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 20px; display: flex; align-items: center; gap: 16px; box-shadow: var(--shadow-sm); position: relative; overflow: hidden;">
+            <div style="width: 52px; height: 52px; border-radius: 14px; background: rgba(16, 185, 129, 0.12); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; color: var(--emerald); flex-shrink: 0;">
+              🤝
+            </div>
+            <div>
+              <span style="font-size: 0.78rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); letter-spacing: 0.5px;">Lượt Bà Con & Nhà Hảo Tâm</span>
+              <h3 style="font-size: 1.45rem; font-weight: 800; color: var(--emerald); margin: 4px 0 0 0;">
+                <span th:text="${stats.donorCount}">8</span> <span style="font-size: 0.9rem; font-weight: 600; color: var(--text-secondary);">tấm lòng</span>
+              </h3>
+            </div>
+          </div>
+
+          <!-- Card 4: Hiện vật hỗ trợ -->
+          <div class="stat-card" style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 20px; display: flex; align-items: center; gap: 16px; box-shadow: var(--shadow-sm); position: relative; overflow: hidden;">
+            <div style="width: 52px; height: 52px; border-radius: 14px; background: rgba(99, 102, 241, 0.12); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; color: #6366f1; flex-shrink: 0;">
+              🎁
+            </div>
+            <div>
+              <span style="font-size: 0.78rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); letter-spacing: 0.5px;">Đóng Góp Hiện Vật</span>
+              <h3 style="font-size: 1.45rem; font-weight: 800; color: #6366f1; margin: 4px 0 0 0;">
+                <span th:text="${stats.itemCount}">5</span> <span style="font-size: 0.9rem; font-weight: 600; color: var(--text-secondary);">hiện vật quý</span>
+              </h3>
+            </div>
+          </div>
+        </div>
+
+        <!-- BẢNG VÀNG TRI ÂN: TOP MẠNH THƯỜNG QUÂN HÈ 2026 -->
+        <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 24px; margin-bottom: 28px; box-shadow: var(--shadow-sm);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+            <div>
+              <h2 style="font-size: 1.25rem; font-weight: 800; color: var(--text-primary); margin: 0; display: flex; align-items: center; gap: 10px;">
+                <span>🏆</span>
+                <span>BẢNG VÀNG TRI ÂN MẠNH THƯỜNG QUÂN TIÊU BIỂU</span>
+              </h2>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin: 4px 0 0 0;">
+                Ghi nhận và tôn vinh những đóng góp to lớn của các cơ quan, đơn vị, con em xa quê và bà con thôn nhà
+              </p>
+            </div>
+            <span style="background: rgba(245, 158, 11, 0.15); color: #d97706; padding: 4px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 700;">
+              ✨ Vinh danh nghĩa tình
+            </span>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+            <div th:each="donor, iterStat : ${stats.topDonors}"
+                 class="donor-honor-card"
+                 th:style="${iterStat.index == 0 ? 'background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, var(--bg-surface) 100%); border: 2px solid #f59e0b;' :
+                            (iterStat.index == 1 ? 'background: linear-gradient(135deg, rgba(148, 163, 184, 0.08) 0%, var(--bg-surface) 100%); border: 1px solid #94a3b8;' :
+                            (iterStat.index == 2 ? 'background: linear-gradient(135deg, rgba(217, 119, 6, 0.08) 0%, var(--bg-surface) 100%); border: 1px solid #d97706;' :
+                             'background: var(--bg-surface); border: 1px solid var(--border-color);'))}"
+                 style="border-radius: var(--radius-md); padding: 16px; position: relative;">
+              
+              <!-- Badge huy chương -->
+              <div style="position: absolute; top: 12px; right: 12px; font-size: 1.3rem;">
+                <span th:if="${iterStat.index == 0}">🥇</span>
+                <span th:if="${iterStat.index == 1}">🥈</span>
+                <span th:if="${iterStat.index == 2}">🥉</span>
+                <span th:if="${iterStat.index > 2}" style="font-size: 0.85rem; font-weight: 800; color: var(--text-muted); background: var(--bg-input); padding: 2px 8px; border-radius: 12px;" th:text="${'#' + (iterStat.index + 1)}">#4</span>
+              </div>
+
+              <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px;">
+                <div style="width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, #ef4444 0%, #f97316 100%); color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.1rem;">
+                  <span th:text="${#strings.substring(donor.donorName, 0, 1)}">N</span>
+                </div>
+                <div>
+                  <h4 style="margin: 0; font-size: 0.98rem; font-weight: 700; color: var(--text-primary);" th:text="${donor.donorName}">Bác Nguyễn Văn Thắng</h4>
+                  <span style="font-size: 0.76rem; color: var(--text-muted);" th:text="${donor.donorTitle != null ? donor.donorTitle : donor.villageOrUnit}">Trưởng ban Mặt trận</span>
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px;">
+                <span style="font-size: 0.8rem; color: var(--text-secondary);">Mức ủng hộ:</span>
+                <strong style="font-size: 1.15rem; font-weight: 800; color: #ef4444;"
+                        th:text="${#numbers.formatDecimal(donor.amount, 0, 'COMMA', 0, 'POINT') + ' ₫'}">1.500.000 ₫</strong>
+              </div>
+
+              <!-- Hiện vật nếu có -->
+              <div th:if="${donor.itemDonation != null and !donor.itemDonation.isBlank()}"
+                   style="background: rgba(99, 102, 241, 0.08); border-left: 3px solid #6366f1; padding: 6px 10px; border-radius: 4px; font-size: 0.78rem; color: #4f46e5; margin-bottom: 8px;">
+                🎁 Hiện vật: <strong th:text="${donor.itemDonation}">1 thùng bánh kẹo</strong>
+              </div>
+
+              <p th:if="${donor.note != null and !donor.note.isBlank()}"
+                 style="font-size: 0.78rem; color: var(--text-secondary); margin: 0; font-style: italic; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;"
+                 th:text="'“' + ${donor.note} + '”'">
+                “Chúc Chi đoàn tổ chức hoạt động hè thật sôi nổi cho các cháu!”
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- SỔ VÀNG ỦNG HỘ: BẢNG SAO KÊ CHI TIẾT & BỘ LỌC TÌM KIẾM -->
+        <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow-sm);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 14px;">
+            <div>
+              <h2 style="font-size: 1.25rem; font-weight: 800; color: var(--text-primary); margin: 0; display: flex; align-items: center; gap: 10px;">
+                <span>📖</span>
+                <span>DANH SÁCH CHI TIẾT ỦNG HỘ QUỸ SINH HOẠT HÈ</span>
+              </h2>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin: 4px 0 0 0;">
+                Công khai, minh bạch 100% tài chính và hiện vật sinh hoạt hè theo quy chế Chi đoàn Thôn Tiền Tiến
+              </p>
+            </div>
+
+            <div style="display: flex; gap: 10px; align-items: center;">
+              <!-- Nút Làm Sạch Dữ Liệu -->
+              <form th:action="@{/summer-fund/clear-all}" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn làm sạch toàn bộ danh sách để nhập lại từ đầu?');" style="display: inline;">
+                <button type="submit" class="btn-action-link" title="Xóa toàn bộ để nhập lại"
+                        style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.3); padding: 8px 14px; border-radius: var(--radius-md); color: #ef4444; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+                  <span>🗑️ Làm Sạch Danh Sách</span>
+                </button>
+              </form>
+
+              <!-- Nút In danh sách -->
+              <button type="button" onclick="window.print()" class="btn-action-link"
+                      style="background: var(--bg-input); border: 1px solid var(--border-color); padding: 8px 16px; border-radius: var(--radius-md); color: var(--text-primary); font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                <span>In Sổ Vàng</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Bộ lọc tìm kiếm -->
+          <form method="get" th:action="@{/summer-fund}" style="display: grid; grid-template-columns: 2fr 1.2fr 1.2fr auto; gap: 12px; margin-bottom: 20px; align-items: center;">
+            <!-- Ô tìm kiếm text -->
+            <div style="position: relative;">
+              <input type="text" name="search" th:value="${search}" placeholder="🔍 Tìm theo tên người ủng hộ, xóm, số phiếu thu..."
+                     style="width: 100%; padding: 10px 14px; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: var(--radius-md); color: var(--text-primary); font-size: 0.88rem; box-sizing: border-box;">
+            </div>
+
+            <!-- Lọc theo Mục đích -->
+            <div>
+              <select name="purpose" style="width: 100%; padding: 10px 14px; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: var(--radius-md); color: var(--text-primary); font-size: 0.88rem; cursor: pointer; box-sizing: border-box;">
+                <option value="all" th:selected="${selectedPurpose == 'all'}">Tất cả mục đích ủng hộ</option>
+                <option th:each="p : ${purposes}" th:value="${p}" th:text="${p}" th:selected="${selectedPurpose == p}">Trại hè thiếu nhi</option>
+              </select>
+            </div>
+
+            <!-- Lọc theo Xóm / Đơn vị -->
+            <div>
+              <select name="village" style="width: 100%; padding: 10px 14px; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: var(--radius-md); color: var(--text-primary); font-size: 0.88rem; cursor: pointer; box-sizing: border-box;">
+                <option value="all" th:selected="${selectedVillage == 'all'}">Tất cả Xóm / Nguồn tài trợ</option>
+                <option th:each="v : ${villages}" th:value="${v}" th:text="${v}" th:selected="${selectedVillage == v}">Xóm 1</option>
+              </select>
+            </div>
+
+            <!-- Nút Lọc và Xóa Lọc -->
+            <div style="display: flex; gap: 8px;">
+              <button type="submit" class="btn-primary-gradient" style="background: linear-gradient(135deg, #ef4444 0%, #f97316 100%); border: none; padding: 10px 18px; border-radius: var(--radius-md); color: #fff; font-weight: 700; cursor: pointer;">
+                Lọc
+              </button>
+              <a th:href="@{/summer-fund}" class="btn-action-link" style="background: var(--bg-input); border: 1px solid var(--border-color); padding: 10px 14px; border-radius: var(--radius-md); color: var(--text-muted); text-decoration: none; font-size: 0.85rem; display: flex; align-items: center;">
+                Đặt lại
+              </a>
+            </div>
+          </form>
+
+          <!-- Thanh Tổng Kết Nhanh Số Liệu Đang Hiển Thị -->
+          <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(239, 68, 68, 0.08) 100%); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 12px 18px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div style="font-size: 0.9rem; color: var(--text-secondary); display: flex; align-items: center; gap: 8px;">
+              <span>📊</span>
+              <span>Đang hiển thị: <strong style="color: var(--text-primary);" th:text="${totalFilteredCount}">0</strong> lượt đóng góp</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 16px;">
+              <div style="font-size: 0.95rem; font-weight: 700; color: var(--text-primary);">
+                Tổng tiền: <strong style="color: var(--emerald); font-size: 1.25rem; font-weight: 900;" th:text="${#numbers.formatDecimal(filteredTotalAmount, 0, 'COMMA', 0, 'POINT') + ' ₫'}">0 ₫</strong>
+              </div>
+              <div th:if="${filteredItemCount > 0}" style="background: rgba(99, 102, 241, 0.12); color: #4f46e5; padding: 4px 10px; border-radius: 6px; font-size: 0.82rem; font-weight: 700;">
+                🎁 [[${filteredItemCount}]] hiện vật
+              </div>
+            </div>
+          </div>
+
+          <!-- Bảng dữ liệu danh sách ủng hộ -->
+          <div style="overflow-x: auto;">
+            <table class="data-table" style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.88rem;">
+              <thead>
+                <tr style="background: var(--bg-input); border-bottom: 2px solid var(--border-color); color: var(--text-muted); font-size: 0.78rem; text-transform: uppercase;">
+                  <th style="padding: 12px 14px;">Mã Phiếu</th>
+                  <th style="padding: 12px 14px;">Họ và Tên / Đơn vị</th>
+                  <th style="padding: 12px 14px;">Địa bàn / Xóm</th>
+                  <th style="padding: 12px 14px; text-align: right;">Số Tiền (VNĐ)</th>
+                  <th style="padding: 12px 14px;">Hiện Vật Đi Kèm</th>
+                  <th style="padding: 12px 14px;">Mục Đích</th>
+                  <th style="padding: 12px 14px;">Hình Thức</th>
+                  <th style="padding: 12px 14px;">Ngày Ủng Hộ</th>
+                  <th style="padding: 12px 14px; text-align: center;">Thao Tác</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr th:if="${#lists.isEmpty(donations)}">
+                  <td colspan="9" style="text-align: center; padding: 36px 14px; color: var(--text-muted);">
+                    <div style="font-size: 2.5rem; margin-bottom: 8px;">📭</div>
+                    <p style="margin: 0; font-weight: 600;">Không tìm thấy khoản đóng góp nào phù hợp với bộ lọc!</p>
+                  </td>
+                </tr>
+
+                <tr th:each="donation : ${donations}" style="border-bottom: 1px solid var(--border-color); transition: background 0.2s;" onmouseover="this.style.background='var(--bg-hover)'" onmouseout="this.style.background='transparent'">
+                  <!-- Mã phiếu -->
+                  <td style="padding: 14px;">
+                    <span style="background: rgba(239, 68, 68, 0.1); color: #ef4444; padding: 3px 8px; border-radius: 6px; font-weight: 700; font-size: 0.78rem;"
+                          th:text="${donation.receiptCode}">QHH-2026-001</span>
+                  </td>
+
+                  <!-- Họ tên & vai trò -->
+                  <td style="padding: 14px;">
+                    <strong style="color: var(--text-primary); font-size: 0.92rem; display: block;" th:text="${donation.donorName}">Bác Nguyễn Văn Thắng</strong>
+                    <span style="font-size: 0.74rem; color: var(--text-muted);" th:text="${donation.donorTitle}">Mạnh thường quân</span>
+                    <p th:if="${donation.note != null and !donation.note.isBlank()}"
+                       style="margin: 4px 0 0 0; font-size: 0.76rem; color: var(--text-secondary); font-style: italic;"
+                       th:text="'“' + ${donation.note} + '”'"></p>
+                  </td>
+
+                  <!-- Địa bàn / Xóm -->
+                  <td style="padding: 14px;">
+                    <span style="background: var(--bg-input); padding: 3px 8px; border-radius: 6px; font-size: 0.8rem; color: var(--text-secondary);"
+                          th:text="${donation.villageOrUnit}">Xóm 2</span>
+                  </td>
+
+                  <!-- Số tiền -->
+                  <td style="padding: 14px; text-align: right;">
+                    <strong style="color: var(--emerald); font-size: 1.05rem;"
+                            th:text="${#numbers.formatDecimal(donation.amount, 0, 'COMMA', 0, 'POINT') + ' ₫'}">1.500.000 ₫</strong>
+                  </td>
+
+                  <!-- Hiện vật -->
+                  <td style="padding: 14px;">
+                    <span th:if="${donation.itemDonation != null and !donation.itemDonation.isBlank()}"
+                          style="background: rgba(99, 102, 241, 0.1); color: #4f46e5; padding: 4px 8px; border-radius: 6px; font-size: 0.78rem; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+                      🎁 <span th:text="${donation.itemDonation}">1 thùng bánh kẹo</span>
+                    </span>
+                    <span th:unless="${donation.itemDonation != null and !donation.itemDonation.isBlank()}" style="color: var(--text-muted); font-size: 0.8rem;">—</span>
+                  </td>
+
+                  <!-- Mục đích -->
+                  <td style="padding: 14px;">
+                    <span style="background: rgba(245, 158, 11, 0.12); color: #d97706; padding: 3px 8px; border-radius: 6px; font-size: 0.78rem; font-weight: 600;"
+                          th:text="${donation.donationPurpose}">Trại hè thiếu nhi</span>
+                  </td>
+
+                  <!-- Hình thức -->
+                  <td style="padding: 14px;">
+                    <span style="font-size: 0.8rem; color: var(--text-secondary);"
+                          th:text="${donation.paymentMethod}">Tiền mặt</span>
+                  </td>
+
+                  <!-- Ngày đóng góp -->
+                  <td style="padding: 14px; color: var(--text-muted); font-size: 0.82rem;"
+                      th:text="${donation.donationDate != null ? #temporals.format(donation.donationDate, 'dd/MM/yyyy') : '—'}">02/06/2026</td>
+
+                  <!-- Thao tác xóa -->
+                  <td style="padding: 14px; text-align: center;">
+                    <form th:action="@{'/summer-fund/' + ${donation.id} + '/delete'}" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xóa bản ghi ủng hộ này?');" style="display: inline;">
+                      <button type="submit" title="Xóa bản ghi"
+                              style="background: transparent; border: none; color: #ef4444; cursor: pointer; padding: 4px 8px; border-radius: 4px; font-size: 0.85rem;"
+                              onmouseover="this.style.background='rgba(239, 68, 68, 0.1)'" onmouseout="this.style.background='transparent'">
+                        🗑️
+                      </button>
+                    </form>
+                  </td>
+                </tr>
+              </tbody>
+
+              <!-- DÒNG TỔNG CỘNG CUỐI BẢNG -->
+              <tfoot style="background: var(--bg-input); border-top: 2px solid var(--border-color); font-weight: 800;">
+                <tr>
+                  <td style="padding: 16px 14px;">
+                    <span style="background: linear-gradient(135deg, #ef4444 0%, #f97316 100%); color: #ffffff; padding: 4px 10px; border-radius: 6px; font-size: 0.78rem; letter-spacing: 0.5px; font-weight: 800; display: inline-block;">
+                      TỔNG CỘNG
+                    </span>
+                  </td>
+                  <td style="padding: 16px 14px;" colspan="2">
+                    <span style="color: var(--text-primary); font-size: 0.95rem;">
+                      Tổng số: <strong style="color: #ef4444;" th:text="${totalFilteredCount}">0</strong> lượt ủng hộ
+                    </span>
+                  </td>
+                  <td style="padding: 16px 14px; text-align: right;">
+                    <strong style="color: var(--emerald); font-size: 1.25rem; font-weight: 900; display: block;"
+                            th:text="${#numbers.formatDecimal(filteredTotalAmount, 0, 'COMMA', 0, 'POINT') + ' ₫'}">0 ₫</strong>
+                  </td>
+                  <td style="padding: 16px 14px;">
+                    <span th:if="${filteredItemCount > 0}"
+                          style="background: rgba(99, 102, 241, 0.15); color: #4f46e5; padding: 4px 10px; border-radius: 6px; font-size: 0.82rem; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;">
+                      🎁 <span th:text="${filteredItemCount}">0</span> hiện vật
+                    </span>
+                    <span th:unless="${filteredItemCount > 0}" style="color: var(--text-muted); font-size: 0.82rem;">—</span>
+                  </td>
+                  <td colspan="4" style="padding: 16px 14px; color: var(--text-muted); font-size: 0.82rem; font-style: italic;">
+                    * Tự động tính tổng toàn bộ danh sách đang hiển thị
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- MODAL 1: GHI NHẬN ỦNG HỘ MỚI -->
+  <div id="donationModal" style="display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); align-items: center; justify-content: center; padding: 20px;">
+    <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-lg); width: 100%; max-width: 580px; max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow-xl); position: relative; animation: modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);">
+      <!-- Modal Header -->
+      <div style="padding: 20px 24px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(249, 115, 22, 0.08) 100%);">
+        <h3 style="margin: 0; font-size: 1.2rem; font-weight: 800; color: var(--text-primary); display: flex; align-items: center; gap: 8px;">
+          <span>💖</span> Ghi Nhận Ủng Hộ Quỹ Sinh Hoạt Hè
+        </h3>
+        <button type="button" onclick="closeDonationModal()" style="background: transparent; border: none; font-size: 1.4rem; color: var(--text-muted); cursor: pointer; padding: 0 6px;">&times;</button>
+      </div>
+
+      <!-- Modal Body Form -->
+      <form th:action="@{/summer-fund/new}" method="post" th:object="${newDonation}" style="padding: 24px;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+          <!-- Họ và tên -->
+          <div style="grid-column: span 2;">
+            <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px;">
+              Họ và tên Người / Đơn vị ủng hộ <span style="color: #ef4444;">*</span>
+            </label>
+            <input type="text" th:field="*{donorName}" required placeholder="Ví dụ: Bác Nguyễn Văn A, Công ty TNHH Xây dựng..."
+                   style="width: 100%; padding: 10px 14px; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: var(--radius-md); color: var(--text-primary); font-size: 0.9rem; box-sizing: border-box;">
+          </div>
+
+          <!-- Danh xưng / Vai trò -->
+          <div>
+            <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px;">
+              Danh xưng / Vai trò
+            </label>
+            <input type="text" th:field="*{donorTitle}" placeholder="Bà con nhân dân, Cựu đoàn viên..."
+                   style="width: 100%; padding: 10px 14px; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: var(--radius-md); color: var(--text-primary); font-size: 0.9rem; box-sizing: border-box;">
+          </div>
+
+          <!-- Xóm / Nguồn -->
+          <div>
+            <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px;">
+              Xóm / Địa bàn
+            </label>
+            <select th:field="*{villageOrUnit}" style="width: 100%; padding: 10px 14px; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: var(--radius-md); color: var(--text-primary); font-size: 0.9rem; box-sizing: border-box;">
+              <option th:each="v : ${villages}" th:value="${v}" th:text="${v}">Xóm 1</option>
+            </select>
+          </div>
+
+          <!-- Số tiền ủng hộ -->
+          <div>
+            <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px;">
+              Số tiền ủng hộ (VNĐ) <span style="color: #ef4444;">*</span>
+            </label>
+            <input type="number" th:field="*{amount}" required min="0" step="10000" placeholder="500000"
+                   style="width: 100%; padding: 10px 14px; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: var(--radius-md); color: var(--text-primary); font-size: 0.9rem; box-sizing: border-box;">
+          </div>
+
+          <!-- Phương thức -->
+          <div>
+            <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px;">
+              Hình thức ủng hộ
+            </label>
+            <select th:field="*{paymentMethod}" style="width: 100%; padding: 10px 14px; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: var(--radius-md); color: var(--text-primary); font-size: 0.9rem; box-sizing: border-box;">
+              <option value="Chuyển khoản VietQR">Chuyển khoản VietQR</option>
+              <option value="Tiền mặt">Tiền mặt trực tiếp</option>
+              <option value="Hiện vật">Hiện vật</option>
+            </select>
+          </div>
+
+          <!-- Hiện vật nếu có -->
+          <div style="grid-column: span 2;">
+            <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px;">
+              Ủng hộ Hiện vật (nếu có)
+            </label>
+            <input type="text" th:field="*{itemDonation}" placeholder="Ví dụ: 2 thùng sữa tươi, 5 quả bóng đá, 50 tập vở..."
+                   style="width: 100%; padding: 10px 14px; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: var(--radius-md); color: var(--text-primary); font-size: 0.9rem; box-sizing: border-box;">
+          </div>
+
+          <!-- Mục đích ủng hộ -->
+          <div style="grid-column: span 2;">
+            <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px;">
+              Mục đích ủng hộ
+            </label>
+            <select th:field="*{donationPurpose}" style="width: 100%; padding: 10px 14px; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: var(--radius-md); color: var(--text-primary); font-size: 0.9rem; box-sizing: border-box;">
+              <option th:each="p : ${purposes}" th:value="${p}" th:text="${p}">Trại hè Thiếu nhi</option>
+            </select>
+          </div>
+
+          <!-- Lời nhắn / Lời chúc -->
+          <div style="grid-column: span 2;">
+            <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px;">
+              Lời nhắn gửi / Lời chúc các em thiếu nhi
+            </label>
+            <textarea th:field="*{note}" rows="3" placeholder="Gửi gắm tình cảm và lời động viên tới các cháu thiếu nhi Thôn Tiền Tiến..."
+                      style="width: 100%; padding: 10px 14px; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: var(--radius-md); color: var(--text-primary); font-size: 0.9rem; box-sizing: border-box; resize: vertical;"></textarea>
+          </div>
+        </div>
+
+        <!-- Modal Actions -->
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 20px;">
+          <button type="button" onclick="closeDonationModal()" class="btn-action-link"
+                  style="background: var(--bg-input); border: 1px solid var(--border-color); padding: 10px 20px; border-radius: var(--radius-md); color: var(--text-secondary); cursor: pointer; font-weight: 600;">
+            Hủy
+          </button>
+          <button type="submit" class="btn-primary-gradient"
+                  style="background: linear-gradient(135deg, #ef4444 0%, #f97316 100%); border: none; padding: 10px 24px; border-radius: var(--radius-md); color: #fff; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);">
+            Lưu Ghi Nhận
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 2: MÃ VIETQR CHUYỂN KHOẢN -->
+  <div id="qrModal" style="display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); align-items: center; justify-content: center; padding: 20px;">
+    <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-lg); width: 100%; max-width: 440px; text-align: center; padding: 28px; box-shadow: var(--shadow-xl); position: relative;">
+      <button type="button" onclick="closeQrModal()" style="position: absolute; top: 14px; right: 16px; background: transparent; border: none; font-size: 1.4rem; color: var(--text-muted); cursor: pointer;">&times;</button>
+      
+      <div style="width: 56px; height: 56px; border-radius: 50%; background: rgba(239, 68, 68, 0.12); color: #ef4444; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin: 0 auto 14px;">
+        📲
+      </div>
+      <h3 style="margin: 0 0 6px 0; font-size: 1.25rem; font-weight: 800; color: var(--text-primary);">
+        QUÉT MÃ VIETQR ỦNG HỘ HÈ
+      </h3>
+      <p style="margin: 0 0 18px 0; font-size: 0.85rem; color: var(--text-muted);">
+        Chuyển khoản trực tiếp vào Quỹ Sinh Hoạt Hè Chi Đoàn Thôn Tiền Tiến
+      </p>
+
+      <!-- Khung hiển thị QR code thông minh mô phỏng -->
+      <div style="background: #ffffff; padding: 16px; border-radius: 12px; display: inline-block; box-shadow: var(--shadow-md); margin-bottom: 18px; border: 1px solid rgba(0,0,0,0.08);">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=TIENTIEN-YOUTH-SUMMER-FUND-2026" alt="Mã QR Ủng hộ hè" style="width: 200px; height: 200px; display: block;">
+        <span style="display: block; font-size: 0.72rem; color: #64748b; font-weight: 700; margin-top: 8px;">VIETQR • CHI ĐOÀN THÔN TIỀN TIẾN</span>
+      </div>
+
+      <!-- Chi tiết tài khoản -->
+      <div style="background: var(--bg-input); border: 1px solid var(--border-color); border-radius: 10px; padding: 14px; text-align: left; font-size: 0.85rem; margin-bottom: 20px;">
+        <div style="margin-bottom: 6px;">
+          <span style="color: var(--text-muted);">Ngân hàng:</span>
+          <strong style="color: var(--text-primary); float: right;">Agribank / MB Bank</strong>
+        </div>
+        <div style="margin-bottom: 6px;">
+          <span style="color: var(--text-muted);">Số tài khoản:</span>
+          <strong style="color: #ef4444; font-size: 0.95rem; float: right;">1903.6888.9999</strong>
+        </div>
+        <div style="margin-bottom: 6px;">
+          <span style="color: var(--text-muted);">Chủ tài khoản:</span>
+          <strong style="color: var(--text-primary); float: right;">CHI ĐOÀN THÔN TIỀN TIẾN</strong>
+        </div>
+        <div style="padding-top: 6px; border-top: 1px dashed var(--border-color);">
+          <span style="color: var(--text-muted);">Nội dung CK:</span>
+          <strong style="color: var(--emerald); float: right;">UNG HO HE [Họ Tên]</strong>
+        </div>
+      </div>
+
+      <button type="button" onclick="closeQrModal()" class="btn-primary-gradient" style="width: 100%; padding: 12px; border: none; border-radius: var(--radius-md); font-weight: 700; cursor: pointer; color: #fff; background: linear-gradient(135deg, #ef4444 0%, #f97316 100%);">
+        Đã Hiểu & Đóng
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL 3: NHẬP DỮ LIỆU TỪ EXCEL HOẶC GOOGLE SHEET -->
+  <div id="importFundModal" style="display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); align-items: center; justify-content: center; padding: 20px;">
+    <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-lg); width: 100%; max-width: 580px; max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow-xl); position: relative; animation: modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);">
+      <!-- Modal Header -->
+      <div style="padding: 20px 24px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(59, 130, 246, 0.08) 100%);">
+        <div>
+          <h3 style="margin: 0; font-size: 1.2rem; font-weight: 800; color: var(--text-primary); display: flex; align-items: center; gap: 8px;">
+            <span>📥</span> Nhập Danh Sách Quỹ Sinh Hoạt Hè
+          </h3>
+          <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: var(--text-muted);">
+            Hỗ trợ đọc tự động từ file Excel máy tính hoặc đồng bộ trực tuyến từ link Google Sheet
+          </p>
+        </div>
+        <button type="button" onclick="closeImportModal()" style="background: transparent; border: none; font-size: 1.4rem; color: var(--text-muted); cursor: pointer; padding: 0 6px;">&times;</button>
+      </div>
+
+      <!-- Tab Switch Buttons -->
+      <div style="display: flex; border-bottom: 1px solid var(--border-color); background: var(--bg-input);">
+        <button type="button" id="tabBtnFile" onclick="switchImportTab('file')"
+                style="flex: 1; padding: 12px; border: none; background: transparent; font-weight: 700; font-size: 0.88rem; cursor: pointer; color: var(--emerald); border-bottom: 2px solid var(--emerald); display: flex; align-items: center; justify-content: center; gap: 8px;">
+          <span>📄 Tải Lên File Excel / CSV</span>
+        </button>
+        <button type="button" id="tabBtnSheet" onclick="switchImportTab('sheet')"
+                style="flex: 1; padding: 12px; border: none; background: transparent; font-weight: 700; font-size: 0.88rem; cursor: pointer; color: var(--text-muted); border-bottom: 2px solid transparent; display: flex; align-items: center; justify-content: center; gap: 8px;">
+          <span>🌐 Link Google Sheets Trực Tuyến</span>
+        </button>
+      </div>
+
+      <!-- TAB 1 CONTENT: Upload File Excel -->
+      <div id="tabContentFile" style="padding: 24px;">
+        <form th:action="@{/summer-fund/import-file}" method="post" enctype="multipart/form-data">
+          <div style="border: 2px dashed var(--border-color); border-radius: 12px; padding: 28px 20px; text-align: center; background: var(--bg-input); margin-bottom: 20px; transition: border-color 0.3s;">
+            <div style="font-size: 2.5rem; margin-bottom: 10px;">📊</div>
+            <label for="excelFile" style="font-weight: 700; font-size: 0.95rem; color: var(--text-primary); cursor: pointer; display: block; margin-bottom: 6px;">
+              Bấm vào đây để chọn file Excel (.xlsx, .xls) hoặc CSV
+            </label>
+            <p style="font-size: 0.78rem; color: var(--text-muted); margin: 0 0 14px 0;">
+              Dung lượng tối đa: 15MB • Tự động trích xuất Họ tên, Xóm, Số tiền, Hiện vật
+            </p>
+            <input type="file" id="excelFile" name="file" accept=".xlsx, .xls, .csv" required
+                   style="font-size: 0.85rem; color: var(--text-secondary); max-width: 280px; margin: 0 auto; display: block;">
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+            <a th:href="@{/summer-fund/template}" class="btn-action-link"
+               style="background: transparent; border: 1px dashed var(--border-color); padding: 8px 14px; border-radius: var(--radius-md); font-size: 0.82rem; color: var(--text-secondary); text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+              <span>⬇️ Tải File Mẫu Excel Chuẩn</span>
+            </a>
+
+            <div style="display: flex; gap: 10px;">
+              <button type="button" onclick="closeImportModal()" class="btn-action-link"
+                      style="background: var(--bg-input); border: 1px solid var(--border-color); padding: 9px 18px; border-radius: var(--radius-md); color: var(--text-secondary); cursor: pointer; font-weight: 600;">
+                Hủy
+              </button>
+              <button type="submit" class="btn-primary-gradient"
+                      style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); border: none; padding: 9px 22px; border-radius: var(--radius-md); color: #fff; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);">
+                Đọc File & Nhập Dữ Liệu
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- TAB 2 CONTENT: Nhập từ link Google Sheet -->
+      <div id="tabContentSheet" style="padding: 24px; display: none;">
+        <form th:action="@{/summer-fund/import-sheet}" method="post">
+          <div style="background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.25); border-radius: 10px; padding: 14px 16px; margin-bottom: 20px;">
+            <div style="display: flex; align-items: center; gap: 8px; font-weight: 700; color: #2563eb; font-size: 0.88rem; margin-bottom: 6px;">
+              <span>💡</span> Hướng dẫn kết nối Google Sheet trong 10 giây:
+            </div>
+            <ol style="margin: 0; padding-left: 20px; font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6;">
+              <li>Mở bảng tính Google Sheet ghi chép danh sách ủng hộ hè của bạn.</li>
+              <li>Bấm nút <strong>Chia sẻ (Share)</strong> ở góc trên bên phải.</li>
+              <li>Chuyển quyền truy cập chung thành: <strong>"Bất kỳ ai có đường liên kết"</strong> (Chỉ cần quyền <em>Người xem</em>).</li>
+              <li>Sao chép toàn bộ đường link dán vào ô bên dưới và bấm <strong>"Bắt Đầu Đồng Bộ"</strong>.</li>
+            </ol>
+          </div>
+
+          <div style="margin-bottom: 20px;">
+            <label for="sheetUrl" style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px;">
+              Dán Đường Dẫn Google Sheet <span style="color: #ef4444;">*</span>
+            </label>
+            <input type="url" id="sheetUrl" name="sheetUrl" required
+                   placeholder="https://docs.google.com/spreadsheets/d/1BxiMVs.../edit?usp=sharing"
+                   style="width: 100%; padding: 12px 14px; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: var(--radius-md); color: var(--text-primary); font-size: 0.88rem; box-sizing: border-box;">
+          </div>
+
+          <div style="display: flex; justify-content: flex-end; gap: 10px;">
+            <button type="button" onclick="closeImportModal()" class="btn-action-link"
+                    style="background: var(--bg-input); border: 1px solid var(--border-color); padding: 9px 18px; border-radius: var(--radius-md); color: var(--text-secondary); cursor: pointer; font-weight: 600;">
+              Hủy
+            </button>
+            <button type="submit" class="btn-primary-gradient"
+                    style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); border: none; padding: 9px 24px; border-radius: var(--radius-md); color: #fff; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);">
+              🔄 Bắt Đầu Đồng Bộ Ngay
+            </button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <div th:replace="~{fragments/scripts :: scripts}"></div>
+
+  <script>
+    function openDonationModal() {
+      const modal = document.getElementById('donationModal');
+      if (modal) modal.style.display = 'flex';
+    }
+
+    function closeDonationModal() {
+      const modal = document.getElementById('donationModal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function openQrModal() {
+      const modal = document.getElementById('qrModal');
+      if (modal) modal.style.display = 'flex';
+    }
+
+    function closeQrModal() {
+      const modal = document.getElementById('qrModal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function openImportModal() {
+      const modal = document.getElementById('importFundModal');
+      if (modal) modal.style.display = 'flex';
+    }
+
+    function closeImportModal() {
+      const modal = document.getElementById('importFundModal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function switchImportTab(tab) {
+      const tabFile = document.getElementById('tabContentFile');
+      const tabSheet = document.getElementById('tabContentSheet');
+      const btnFile = document.getElementById('tabBtnFile');
+      const btnSheet = document.getElementById('tabBtnSheet');
+
+      if (tab === 'file') {
+        tabFile.style.display = 'block';
+        tabSheet.style.display = 'none';
+        btnFile.style.color = 'var(--emerald)';
+        btnFile.style.borderBottom = '2px solid var(--emerald)';
+        btnSheet.style.color = 'var(--text-muted)';
+        btnSheet.style.borderBottom = '2px solid transparent';
+      } else {
+        tabFile.style.display = 'none';
+        tabSheet.style.display = 'block';
+        btnSheet.style.color = 'var(--primary, #3b82f6)';
+        btnSheet.style.borderBottom = '2px solid var(--primary, #3b82f6)';
+        btnFile.style.color = 'var(--text-muted)';
+        btnFile.style.borderBottom = '2px solid transparent';
+      }
+    }
+
+    // Đóng modal khi nhấn phím Escape
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape') {
+        closeDonationModal();
+        closeQrModal();
+        closeImportModal();
+      }
+    });
+  </script>
+</body>
+</html>
