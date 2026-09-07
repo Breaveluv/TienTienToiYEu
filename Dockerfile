@@ -30,8 +30,8 @@ RUN groupadd -r spring && useradd -r -g spring spring \
     && chown -R spring:spring /app
 USER spring:spring
 
-# Sao chép file JAR đã đóng gói từ Stage 1
-COPY --from=builder /app/build/libs/TienTienYouthManagement-0.0.1-SNAPSHOT.jar app.jar
+# Sao chép file JAR đã đóng gói từ Stage 1 với quyền non-root
+COPY --chown=spring:spring --from=builder /app/build/libs/TienTienYouthManagement-0.0.1-SNAPSHOT.jar app.jar
 
 # Render tự động cấp phát biến môi trường PORT (mặc định 8080 nếu chạy local)
 ENV PORT=8080
