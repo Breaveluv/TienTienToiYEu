@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<body>
+  <!-- Reusable Sidebar Fragment -->
+  <aside th:fragment="sidebar(activeTab)" class="sidebar">
+    <div class="brand-section">
+      <a th:href="@{/}" style="display: flex; align-items: center; gap: 14px; text-decoration: none; color: inherit;">
+        <div class="brand-logo-wrap">
+          <img th:src="@{/assets/logo.svg}" alt="Logo Chi đoàn Thôn Tiền Tiến">
+        </div>
+        <div class="brand-info">
+          <h1>THÔN TIỀN TIẾN</h1>
+          <span>Chi Đoàn Thanh Niên</span>
+        </div>
+      </a>
+    </div>
+
+    <ul class="nav-menu">
+      <li class="nav-section-title">Nghiệp vụ Chi đoàn thôn</li>
+      
+      <li class="nav-item">
+        <a th:href="@{/}" class="nav-link" th:classappend="${activeTab == 'dashboard' ? 'active' : ''}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg>
+          <span>Tổng quan Thôn</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a th:href="@{/members}" class="nav-link" th:classappend="${activeTab == 'members' ? 'active' : ''}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <span>Sổ Đoàn Viên Thôn</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a th:href="@{/members/new}" class="nav-link" th:classappend="${activeTab == 'newMember' ? 'active' : ''}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+          <span>Tiếp Nhận Đoàn Viên</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a th:href="@{/members/import}" class="nav-link" th:classappend="${activeTab == 'import' ? 'active' : ''}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span>Đọc Danh Sách File</span>
+        </a>
+      </li>
+
+      <li class="nav-section-title">Trí Tuệ Nhân Tạo</li>
+      
+      <li class="nav-item">
+        <a th:href="@{/ai/copilot}" class="nav-link" th:classappend="${activeTab == 'copilot' ? 'active' : ''}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          <span>Trợ Lý AI Chi Đoàn</span>
+          <span style="margin-left: auto; font-size: 0.65rem; background: rgba(16, 185, 129, 0.2); color: var(--emerald); padding: 2px 6px; border-radius: 8px; font-weight: 700;">PRO</span>
+        </a>
+      </li>
+    </ul>
+
+    <div class="sidebar-footer">
+      <div class="commune-card" style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px;">
+        <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
+          <span class="pulsing-dot"></span>
+          <span style="font-size: 0.72rem; font-weight: 700; color: var(--emerald); text-transform: uppercase;">CẤP CƠ SỞ XÓM THÔN</span>
+        </div>
+        <p style="font-weight: 800; font-size: 0.88rem; color: var(--text-primary);">Chi Đoàn Thôn Tiền Tiến</p>
+        <p style="font-size: 0.74rem; color: var(--text-secondary); margin-top: 2px;">Nhà văn hóa Thôn Tiền Tiến</p>
+      </div>
+    </div>
+  </aside>
+</body>
+</html>

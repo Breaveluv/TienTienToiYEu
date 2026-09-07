@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<body>
+  <!-- Reusable Topbar Fragment -->
+  <header th:fragment="topbar(title, subtitle)" class="topbar">
+    <div class="topbar-title">
+      <h2 th:text="${title}">Chi Đoàn Thôn Tiền Tiến</h2>
+      <p th:text="${subtitle}">Hệ thống Quản lý Đoàn viên Cơ sở</p>
+    </div>
+
+    <div class="topbar-actions" style="display: flex; align-items: center; gap: 12px;">
+      <!-- Dark / Light Mode Toggle Button -->
+      <button type="button" onclick="toggleTheme()" class="btn-theme-toggle" title="Chuyển chế độ Sáng / Tối"
+              style="background: var(--bg-input); border: 1px solid var(--border-color); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-primary); font-size: 1.1rem; transition: all var(--transition-fast);">
+        <span id="themeIcon">🌓</span>
+      </button>
+
+      <!-- User Pill -->
+      <div class="user-pill" style="display: flex; align-items: center; gap: 10px; background: var(--bg-input); padding: 5px 12px; border-radius: var(--radius-full); border: 1px solid var(--border-color);">
+        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=faces" alt="Avatar" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
+        <div class="user-pill-text" style="line-height: 1.2;">
+          <span class="user-pill-name" style="font-size: 0.82rem; font-weight: 700; color: var(--text-primary); display: block;">BCH Chi Đoàn</span>
+          <span class="user-pill-role" style="font-size: 0.72rem; color: var(--text-muted);">Thôn Tiền Tiến</span>
+        </div>
+      </div>
+    </div>
+  </header>
+</body>
+</html>

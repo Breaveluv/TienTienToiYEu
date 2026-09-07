@@ -1,0 +1,2264 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Quản Lý Đoàn Viên - Thôn Tiền Tiến</title>
+  
+  <!-- Favicon biểu trưng sao vàng cờ Đoàn -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%23005baa'/><polygon points='50,15 61,38 85,38 66,54 73,78 50,63 27,78 34,54 15,38 39,38' fill='%23ffcc00'/></svg>">
+
+  <!-- Google Fonts: Be Vietnam Pro (Chuẩn quốc tế cho tiếng Việt) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5.3.3 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Bootstrap Icons 1.11.3 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --doan-blue: #005baa;       /* Màu xanh cờ Đoàn TNCS Hồ Chí Minh */
+      --doan-blue-dark: #004080;  /* Xanh đậm viền & hover */
+      --doan-blue-light: #e6f0fa; /* Nền xanh phấn nhạt */
+      --doan-red: #dc2626;        /* Đỏ cờ Tổ quốc */
+      --doan-gold: #f59e0b;       /* Vàng sao biểu trưng */
+      --doan-green: #10b981;      /* Xanh lá tình nguyện */
+      --bg-body: #f4f6f9;         /* Nền xám nhạt hiện đại */
+      --card-radius: 14px;
+      --sidebar-width: 270px;
+      --transition: all 0.25s ease;
+    }
+
+    * {
+      font-family: 'Be Vietnam Pro', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-body);
+      color: #1e293b;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ========================================================
+       1. SIDEBAR MENU DỌC
+    ======================================================== */
+    .app-sidebar {
+      width: var(--sidebar-width);
+      background-color: #ffffff;
+      border-right: 1px solid #e2e8f0;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 1040;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      box-shadow: 2px 0 12px rgba(0, 0, 0, 0.03);
+    }
+
+    .sidebar-brand {
+      padding: 20px 18px;
+      border-bottom: 1px solid #f1f5f9;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--doan-blue), #2563eb);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      box-shadow: 0 4px 12px rgba(0, 91, 170, 0.3);
+      flex-shrink: 0;
+    }
+
+    .brand-text h1 {
+      font-size: 0.98rem;
+      font-weight: 800;
+      color: var(--doan-blue-dark);
+      margin: 0;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+    }
+
+    .brand-text span {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .sidebar-nav {
+      padding: 16px 12px;
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .nav-category {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #94a3b8;
+      letter-spacing: 0.08em;
+      padding: 8px 12px 4px;
+    }
+
+    .sidebar-nav .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #475569;
+      border-radius: 10px;
+      margin-bottom: 4px;
+      transition: var(--transition);
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .sidebar-nav .nav-link i {
+      font-size: 1.15rem;
+      transition: var(--transition);
+      color: #64748b;
+    }
+
+    .sidebar-nav .nav-link:hover {
+      background-color: var(--doan-blue-light);
+      color: var(--doan-blue);
+      transform: translateX(4px);
+    }
+
+    .sidebar-nav .nav-link:hover i {
+      color: var(--doan-blue);
+    }
+
+    .sidebar-nav .nav-link.active {
+      background-color: var(--doan-blue);
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(0, 91, 170, 0.35);
+    }
+
+    .sidebar-nav .nav-link.active i {
+      color: #ffffff;
+    }
+
+    .sidebar-footer {
+      padding: 14px;
+      border-top: 1px solid #f1f5f9;
+      background: #fafafa;
+    }
+
+    .unit-tag {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 0.78rem;
+    }
+
+    /* ========================================================
+       2. KHU VỰC NỘI DUNG CHÍNH (MAIN CONTENT)
+    ======================================================== */
+    .app-main {
+      margin-left: var(--sidebar-width);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: var(--transition);
+    }
+
+    /* ========================================================
+       3. HEADER THANH TRÊN
+    ======================================================== */
+    .app-header {
+      height: 70px;
+      background-color: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 0 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1020;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+    }
+
+    .header-search {
+      width: 320px;
+      position: relative;
+    }
+
+    .header-search i {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      font-size: 0.95rem;
+    }
+
+    .header-search input {
+      padding-left: 38px;
+      border-radius: 20px;
+      border: 1px solid #e2e8f0;
+      background-color: #f8fafc;
+      font-size: 0.88rem;
+      transition: var(--transition);
+    }
+
+    .header-search input:focus {
+      background-color: #ffffff;
+      border-color: var(--doan-blue);
+      box-shadow: 0 0 0 3px rgba(0, 91, 170, 0.15);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .btn-icon-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid #e2e8f0;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #475569;
+      position: relative;
+      transition: var(--transition);
+      cursor: pointer;
+    }
+
+    .btn-icon-circle:hover {
+      background-color: var(--doan-blue-light);
+      color: var(--doan-blue);
+      border-color: var(--doan-blue);
+    }
+
+    .badge-dot {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 8px;
+      height: 8px;
+      background-color: var(--doan-red);
+      border-radius: 50%;
+      border: 2px solid #ffffff;
+    }
+
+    .user-profile-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 5px 12px 5px 6px;
+      border-radius: 24px;
+      border: 1px solid #e2e8f0;
+      background: #f8fafc;
+      cursor: pointer;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .user-profile-btn:hover {
+      background-color: #ffffff;
+      border-color: var(--doan-blue);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .user-profile-btn img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    /* ========================================================
+       4. CÁC TRANG CON (PAGE VIEWS - SPA ROUTING)
+    ======================================================== */
+    .page-body {
+      padding: 28px;
+      flex: 1;
+    }
+
+    .page-view {
+      display: none;
+      animation: pageFadeIn 0.25s ease-out;
+    }
+
+    .page-view.active {
+      display: block;
+    }
+
+    @keyframes pageFadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Banner chào mừng */
+    .banner-welcome {
+      background: linear-gradient(135deg, var(--doan-blue) 0%, #1d4ed8 60%, #0284c7 100%);
+      border-radius: var(--card-radius);
+      padding: 24px 28px;
+      color: #ffffff;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      box-shadow: 0 8px 24px rgba(0, 91, 170, 0.25);
+    }
+
+    .banner-welcome h2 {
+      font-size: 1.45rem;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .banner-welcome p {
+      font-size: 0.88rem;
+      color: rgba(255, 255, 255, 0.9);
+      margin: 0;
+    }
+
+    /* Thẻ thống kê (Overview Cards) */
+    .stat-card-custom {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: var(--card-radius);
+      padding: 22px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+      height: 100%;
+    }
+
+    .stat-card-custom:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 20px rgba(0, 91, 170, 0.08);
+      border-color: rgba(0, 91, 170, 0.3);
+    }
+
+    .stat-card-custom .icon-shape {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+    }
+
+    .icon-blue { background-color: rgba(0, 91, 170, 0.12); color: var(--doan-blue); }
+    .icon-purple { background-color: rgba(139, 92, 246, 0.12); color: #7c3aed; }
+    .icon-green { background-color: rgba(16, 185, 129, 0.12); color: var(--doan-green); }
+    .icon-gold { background-color: rgba(245, 158, 11, 0.12); color: #d97706; }
+
+    .stat-title {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #64748b;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+
+    .stat-number {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.2;
+      margin-bottom: 4px;
+    }
+
+    .stat-subtext {
+      font-size: 0.78rem;
+      color: #64748b;
+      margin: 0;
+    }
+
+    /* Thẻ chứa bảng dữ liệu */
+    .table-container-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: var(--card-radius);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+      overflow: hidden;
+      margin-top: 24px;
+    }
+
+    .table-header-bar {
+      padding: 18px 24px;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .table-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0;
+    }
+
+    .custom-table {
+      width: 100%;
+      margin: 0;
+      vertical-align: middle;
+    }
+
+    .custom-table thead th {
+      background-color: #f8fafc;
+      color: #475569;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 14px 20px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .custom-table tbody td {
+      padding: 14px 20px;
+      font-size: 0.88rem;
+      color: #334155;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .custom-table tbody tr:hover {
+      background-color: #f8fafc;
+    }
+
+    /* Badges trạng thái */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    .status-active { background-color: rgba(16, 185, 129, 0.12); color: #047857; }
+    .status-active::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #10b981; }
+
+    .status-away { background-color: rgba(245, 158, 11, 0.12); color: #b45309; }
+    .status-away::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #f59e0b; }
+
+    .status-student { background-color: rgba(139, 92, 246, 0.12); color: #6d28d9; }
+    .status-student::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #8b5cf6; }
+
+    /* Nút hành động nhỏ */
+    .btn-action-group {
+      display: inline-flex;
+      gap: 6px;
+    }
+
+    .btn-action {
+      padding: 5px 10px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    /* Nút chính màu cờ Đoàn */
+    .btn-doan-primary {
+      background-color: var(--doan-blue);
+      border-color: var(--doan-blue);
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 0.88rem;
+      border-radius: 8px;
+      padding: 8px 18px;
+      box-shadow: 0 4px 12px rgba(0, 91, 170, 0.25);
+      transition: var(--transition);
+    }
+
+    .btn-doan-primary:hover {
+      background-color: var(--doan-blue-dark);
+      border-color: var(--doan-blue-dark);
+      color: #ffffff;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 91, 170, 0.35);
+    }
+
+    /* ========================================================
+       5. PHÂN TRANG (PAGINATION STYLING)
+    ======================================================== */
+    .pagination-custom .page-link {
+      color: #475569;
+      border-color: #e2e8f0;
+      border-radius: 8px;
+      margin: 0 3px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      padding: 6px 14px;
+      transition: var(--transition);
+      cursor: pointer;
+    }
+
+    .pagination-custom .page-item.active .page-link {
+      background-color: var(--doan-blue);
+      border-color: var(--doan-blue);
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(0, 91, 170, 0.3);
+    }
+
+    .pagination-custom .page-link:hover:not(.disabled) {
+      background-color: var(--doan-blue-light);
+      color: var(--doan-blue);
+    }
+
+    .pagination-custom .page-item.disabled .page-link {
+      color: #94a3b8;
+      background-color: #f8fafc;
+      border-color: #e2e8f0;
+      cursor: not-allowed;
+    }
+
+    /* ========================================================
+       6. RESPONSIVE MOBILE & TABLET
+    ======================================================== */
+    .sidebar-toggle-btn {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 1.4rem;
+      color: #334155;
+      padding: 4px;
+    }
+
+    @media (max-width: 991.98px) {
+      .app-sidebar {
+        transform: translateX(-100%);
+      }
+      .app-sidebar.show {
+        transform: translateX(0);
+      }
+      .app-main {
+        margin-left: 0;
+        width: 100%;
+      }
+      .sidebar-toggle-btn {
+        display: block;
+      }
+      .header-search {
+        width: 200px;
+      }
+      .sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.4);
+        z-index: 1030;
+        display: none;
+      }
+      .sidebar-overlay.show {
+        display: block;
+      }
+    }
+
+    @media (max-width: 575.98px) {
+      .header-search {
+        display: none;
+      }
+      .page-body {
+        padding: 16px;
+      }
+      .banner-welcome {
+        padding: 18px;
+      }
+      .banner-welcome h2 {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Overlay khi mở Sidebar trên Mobile -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- ========================================================
+       1. SIDEBAR (MENU ĐIỀU HƯỚNG DỌC)
+  ======================================================== -->
+  <aside class="app-sidebar" id="appSidebar">
+    <!-- Brand Title -->
+    <div class="sidebar-brand">
+      <div class="brand-logo-icon">
+        <i class="bi bi-star-fill"></i>
+      </div>
+      <div class="brand-text">
+        <h1>ĐOÀN TNCS THÔN TIỀN TIẾN</h1>
+        <span>Hệ Thống Quản Lý Đoàn Vụ</span>
+      </div>
+    </div>
+
+    <!-- Navigation Menu có chức năng chuyển trang -->
+    <nav class="sidebar-nav">
+      <div class="nav-category">Cổng Thông Tin</div>
+      <a href="home.html" class="nav-link mb-2" style="background-color: #f0f9ff; color: #0284c7; border: 1px dashed #bae6fd;">
+        <i class="bi bi-house-door-fill" style="color: #0284c7;"></i>
+        <span>Về Trang Chủ (Home)</span>
+      </a>
+
+      <div class="nav-category">Hệ Thống Quản Trị</div>
+      <a class="nav-link active" data-page="dashboard" onclick="switchPage('dashboard')">
+        <i class="bi bi-grid-1x2-fill"></i>
+        <span>Tổng quan</span>
+      </a>
+      <a class="nav-link" data-page="members" onclick="switchPage('members')">
+        <i class="bi bi-people-fill"></i>
+        <span>Danh sách Đoàn viên</span>
+      </a>
+
+      <div class="nav-category mt-3">Công tác Đoàn vụ</div>
+      <a class="nav-link" data-page="activities" onclick="switchPage('activities')">
+        <i class="bi bi-calendar2-check-fill"></i>
+        <span>Quản lý Hoạt động</span>
+      </a>
+      <a class="nav-link" data-page="fees" onclick="switchPage('fees')">
+        <i class="bi bi-cash-stack"></i>
+        <span>Đóng Đoàn phí</span>
+      </a>
+      <a class="nav-link" data-page="statistics" onclick="switchPage('statistics')">
+        <i class="bi bi-bar-chart-line-fill"></i>
+        <span>Thống kê</span>
+      </a>
+    </nav>
+
+    <!-- Sidebar Footer -->
+    <div class="sidebar-footer">
+      <div class="unit-tag">
+        <div class="d-flex align-items-center gap-2">
+          <span class="badge bg-primary" style="font-size: 0.65rem;">CƠ SỞ</span>
+          <strong class="text-dark">Chi Đoàn Thôn Tiền Tiến</strong>
+        </div>
+        <small class="text-muted d-block mt-1">Đoàn TNCS Hồ Chí Minh</small>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ========================================================
+       2. KHU VỰC NỘI DUNG CHÍNH (MAIN CONTENT)
+  ======================================================== -->
+  <div class="app-main">
+    
+    <!-- HEADER -->
+    <header class="app-header">
+      <div class="d-flex align-items-center gap-3">
+        <!-- Nút toggle sidebar cho Mobile -->
+        <button class="sidebar-toggle-btn" id="sidebarToggle" aria-label="Toggle Navigation">
+          <i class="bi bi-list"></i>
+        </button>
+
+        <!-- Thanh tìm kiếm nhanh toàn hệ thống -->
+        <div class="header-search">
+          <i class="bi bi-search"></i>
+          <input type="text" class="form-control" id="globalSearchInput" placeholder="Tìm nhanh đoàn viên, SĐT, xóm...">
+        </div>
+      </div>
+
+      <!-- Header Actions -->
+      <div class="header-actions">
+        <!-- Nút Về Trang Chủ Cổng Thông Tin -->
+        <a href="home.html" class="btn btn-outline-primary btn-sm rounded-pill fw-bold px-3 py-1 d-none d-sm-inline-flex align-items-center gap-1" title="Quay lại Cổng thông tin công khai">
+          <i class="bi bi-house-door-fill"></i>
+          <span>Trang Chủ (Home)</span>
+        </a>
+
+        <!-- Biểu tượng thông báo -->
+        <div class="dropdown">
+          <button class="btn-icon-circle" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Thông báo mới">
+            <i class="bi bi-bell"></i>
+            <span class="badge-dot"></span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 p-2" style="width: 290px;">
+            <li class="dropdown-header fw-bold text-dark">Thông báo Chi đoàn thôn (3)</li>
+            <li><hr class="dropdown-divider my-1"></li>
+            <li>
+              <a class="dropdown-item rounded p-2" href="#" onclick="switchPage('activities')">
+                <div class="small fw-bold text-primary">🌱 Chủ nhật xanh tuần này</div>
+                <div class="text-muted" style="font-size: 0.78rem;">Tập trung tại Nhà văn hóa Thôn Tiền Tiến lúc 7h00.</div>
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item rounded p-2" href="#" onclick="switchPage('fees')">
+                <div class="small fw-bold text-success">💰 Hoàn thành 92% quỹ Đoàn</div>
+                <div class="text-muted" style="font-size: 0.78rem;">Còn 4 đoàn viên chưa đóng đủ Quý III.</div>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Tài khoản Admin -->
+        <div class="dropdown">
+          <a class="user-profile-btn dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=faces" alt="Admin">
+            <div class="d-none d-sm-block text-start">
+              <div class="fw-bold text-dark" style="font-size: 0.84rem; line-height: 1.1;">Bí Thư Chi Đoàn</div>
+              <small class="text-muted" style="font-size: 0.72rem;">Thôn Tiền Tiến</small>
+            </div>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
+            <li><a class="dropdown-item" href="home.html"><i class="bi bi-house-door me-2 text-primary"></i>Về Cổng Thông Tin (Home)</a></li>
+            <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Hồ sơ cá nhân</a></li>
+            <li><a class="dropdown-item" href="#" onclick="switchPage('statistics')"><i class="bi bi-bar-chart me-2"></i>Xem báo cáo chi đoàn</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-box-arrow-right me-2"></i>Đăng xuất</a></li>
+          </ul>
+        </div>
+      </div>
+    </header>
+
+    <!-- NỘI DUNG TRANG CHÍNH -->
+    <main class="page-body">
+
+      <!-- ========================================================
+           TRANG 1: TỔNG QUAN (DASHBOARD)
+      ======================================================== -->
+      <div class="page-view active" id="view-dashboard">
+        <!-- Hero Banner Mini -->
+        <div class="banner-welcome">
+          <div>
+            <h2>Hệ Thống Quản Lý Đoàn Viên Thôn Tiền Tiến</h2>
+            <p>Chào mừng đồng chí Bí thư Chi đoàn! Nắm bắt nhanh tình hình đoàn vụ, hoạt động và phong trào thanh niên thôn.</p>
+          </div>
+          <div class="d-flex gap-2">
+            <button class="btn btn-light text-primary fw-bold px-3 py-2 shadow-sm" data-bs-toggle="modal" data-bs-target="#memberModal">
+              <i class="bi bi-person-plus-fill me-1"></i> + Tiếp Nhận Đoàn Viên
+            </button>
+            <button class="btn btn-outline-light fw-bold px-3 py-2" onclick="switchPage('members')">
+              <i class="bi bi-arrow-right me-1"></i> Vào Sổ Đoàn Viên
+            </button>
+          </div>
+        </div>
+
+        <!-- 4 THẺ THỐNG KÊ (OVERVIEW CARDS) -->
+        <div class="row g-3 mb-4">
+          <!-- Thẻ 1: Tổng số đoàn viên -->
+          <div class="col-12 col-sm-6 col-xl-3">
+            <div class="stat-card-custom" onclick="switchPage('members')" style="cursor: pointer;" title="Bấm để xem danh sách">
+              <div class="d-flex align-items-center justify-content-between mb-3">
+                <span class="stat-title">Tổng số đoàn viên</span>
+                <div class="icon-shape icon-blue">
+                  <i class="bi bi-people-fill"></i>
+                </div>
+              </div>
+              <div class="stat-number">48</div>
+              <p class="stat-subtext">
+                <span class="text-success fw-bold"><i class="bi bi-arrow-up-short"></i>+4 đoàn viên</span> so với tháng trước
+              </p>
+            </div>
+          </div>
+
+          <!-- Thẻ 2: Đoàn viên Nam / Nữ -->
+          <div class="col-12 col-sm-6 col-xl-3">
+            <div class="stat-card-custom" onclick="switchPage('statistics')" style="cursor: pointer;" title="Bấm để xem thống kê cơ cấu">
+              <div class="d-flex align-items-center justify-content-between mb-3">
+                <span class="stat-title">Đoàn viên Nam / Nữ</span>
+                <div class="icon-shape icon-purple">
+                  <i class="bi bi-gender-ambiguous"></i>
+                </div>
+              </div>
+              <div class="stat-number">28 <span style="font-size: 1.1rem; color: #94a3b8; font-weight: 500;">/</span> 20</div>
+              <div class="progress mt-2" style="height: 6px;">
+                <div class="progress-bar bg-primary" role="progressbar" style="width: 58%;" title="Nam 58%"></div>
+                <div class="progress-bar bg-info" role="progressbar" style="width: 42%;" title="Nữ 42%"></div>
+              </div>
+              <p class="stat-subtext mt-1 d-flex justify-content-between">
+                <span>Nam: 58%</span>
+                <span>Nữ: 42%</span>
+              </p>
+            </div>
+          </div>
+
+          <!-- Thẻ 3: Số hoạt động trong tháng -->
+          <div class="col-12 col-sm-6 col-xl-3">
+            <div class="stat-card-custom" onclick="switchPage('activities')" style="cursor: pointer;" title="Bấm để xem quản lý hoạt động">
+              <div class="d-flex align-items-center justify-content-between mb-3">
+                <span class="stat-title">Hoạt động trong tháng</span>
+                <div class="icon-shape icon-green">
+                  <i class="bi bi-flag-fill"></i>
+                </div>
+              </div>
+              <div class="stat-number">6</div>
+              <p class="stat-subtext">
+                <span class="text-success fw-bold">4 hoàn thành</span> • 2 sắp diễn ra
+              </p>
+            </div>
+          </div>
+
+          <!-- Thẻ 4: Tổng quỹ đoàn -->
+          <div class="col-12 col-sm-6 col-xl-3">
+            <div class="stat-card-custom" onclick="switchPage('fees')" style="cursor: pointer;" title="Bấm để xem sổ đoàn phí">
+              <div class="d-flex align-items-center justify-content-between mb-3">
+                <span class="stat-title">Tổng quỹ đoàn</span>
+                <div class="icon-shape icon-gold">
+                  <i class="bi bi-cash-stack"></i>
+                </div>
+              </div>
+              <div class="stat-number" style="font-size: 1.55rem;">8.450.000 <small style="font-size: 0.9rem;">đ</small></div>
+              <p class="stat-subtext">
+                <span class="text-success fw-bold">92%</span> đoàn viên đã hoàn thành nộp
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Khối 2 cột: Bảng tóm tắt & Tin tức phong trào -->
+        <div class="row g-4">
+          <div class="col-12 col-lg-8">
+            <div class="table-container-card mt-0">
+              <div class="table-header-bar">
+                <div>
+                  <h3 class="table-title">Đoàn Viên Tiêu Biểu Thôn Tiền Tiến</h3>
+                  <small class="text-muted">Gương mặt đoàn viên tích cực đi đầu trong các phong trào</small>
+                </div>
+                <button class="btn btn-outline-primary btn-sm fw-bold" onclick="switchPage('members')">
+                  Xem tất cả đoàn viên (15) <i class="bi bi-arrow-right ms-1"></i>
+                </button>
+              </div>
+              <div class="table-responsive">
+                <table class="table custom-table">
+                  <thead>
+                    <tr>
+                      <th class="text-center" style="width: 50px;">STT</th>
+                      <th>Họ và tên</th>
+                      <th>Chức vụ</th>
+                      <th>Xóm cư trú</th>
+                      <th>Trạng thái</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="text-center fw-bold text-muted">01</td>
+                      <td>
+                        <strong class="text-dark d-block">Nguyễn Văn An</strong>
+                        <small class="text-muted">Sinh năm 2002</small>
+                      </td>
+                      <td><span class="badge bg-primary-subtle text-primary fw-bold">Bí thư Chi đoàn</span></td>
+                      <td>Xóm 1 (Thôn Tiền Tiến)</td>
+                      <td><span class="status-badge status-active">Đang sinh hoạt</span></td>
+                    </tr>
+                    <tr>
+                      <td class="text-center fw-bold text-muted">02</td>
+                      <td>
+                        <strong class="text-dark d-block">Trần Thị Mai Anh</strong>
+                        <small class="text-muted">Sinh năm 2001</small>
+                      </td>
+                      <td><span class="fw-bold text-dark">Phó Bí thư Chi đoàn</span></td>
+                      <td>Xóm 2 (Thôn Tiền Tiến)</td>
+                      <td><span class="status-badge status-active">Đang sinh hoạt</span></td>
+                    </tr>
+                    <tr>
+                      <td class="text-center fw-bold text-muted">03</td>
+                      <td>
+                        <strong class="text-dark d-block">Lê Hoàng Minh</strong>
+                        <small class="text-muted">Sinh năm 2003</small>
+                      </td>
+                      <td><span class="fw-bold text-dark">Chi ủy viên</span></td>
+                      <td>Xóm 3 (Thôn Tiền Tiến)</td>
+                      <td><span class="status-badge status-active">Đang sinh hoạt</span></td>
+                    </tr>
+                    <tr>
+                      <td class="text-center fw-bold text-muted">04</td>
+                      <td>
+                        <strong class="text-dark d-block">Vũ Đức Thịnh</strong>
+                        <small class="text-muted">Sinh năm 2000</small>
+                      </td>
+                      <td><span class="text-muted">Thanh niên làm kinh tế giỏi</span></td>
+                      <td>Xóm 4 (Thôn Tiền Tiến)</td>
+                      <td><span class="status-badge status-active">Đang sinh hoạt</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cột phải: Hoạt động sắp diễn ra & Tỷ lệ xóm -->
+          <div class="col-12 col-lg-4">
+            <!-- Card Hoạt động sắp diễn ra -->
+            <div class="card border-0 shadow-sm rounded-3 mb-3 p-3 bg-white">
+              <div class="d-flex align-items-center justify-content-between mb-3 border-bottom pb-2">
+                <h6 class="fw-bold text-dark m-0"><i class="bi bi-calendar-event text-primary me-2"></i>Hoạt Động Sắp Diễn Ra</h6>
+                <a href="javascript:void(0)" onclick="switchPage('activities')" class="small text-primary text-decoration-none fw-bold">Chi tiết</a>
+              </div>
+              <div class="d-flex flex-column gap-3">
+                <div class="d-flex gap-3 align-items-start">
+                  <div class="text-center bg-primary text-white rounded-2 px-2 py-1" style="min-width: 48px;">
+                    <div class="fw-bold" style="font-size: 1.1rem; line-height: 1;">06</div>
+                    <small style="font-size: 0.68rem; text-transform: uppercase;">Tháng 9</small>
+                  </div>
+                  <div>
+                    <strong class="d-block text-dark small">Chủ Nhật Xanh vệ sinh đường xóm</strong>
+                    <span class="text-muted" style="font-size: 0.76rem;"><i class="bi bi-geo-alt me-1"></i>Trục đường Xóm 1 & 2 Thôn Tiền Tiến</span>
+                  </div>
+                </div>
+
+                <div class="d-flex gap-3 align-items-start">
+                  <div class="text-center bg-success text-white rounded-2 px-2 py-1" style="min-width: 48px;">
+                    <div class="fw-bold" style="font-size: 1.1rem; line-height: 1;">15</div>
+                    <small style="font-size: 0.68rem; text-transform: uppercase;">Tháng 9</small>
+                  </div>
+                  <div>
+                    <strong class="d-block text-dark small">Đêm hội Trăng rằm Trung Thu thiếu nhi</strong>
+                    <span class="text-muted" style="font-size: 0.76rem;"><i class="bi bi-geo-alt me-1"></i>Sân Nhà văn hóa Thôn Tiền Tiến</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card Tỷ lệ nộp đoàn phí theo Xóm -->
+            <div class="card border-0 shadow-sm rounded-3 p-3 bg-white">
+              <div class="d-flex align-items-center justify-content-between mb-3 border-bottom pb-2">
+                <h6 class="fw-bold text-dark m-0"><i class="bi bi-pie-chart text-warning me-2"></i>Tiến Độ Nộp Đoàn Phí</h6>
+                <a href="javascript:void(0)" onclick="switchPage('fees')" class="small text-primary text-decoration-none fw-bold">Xem sổ</a>
+              </div>
+              <div class="small mb-2 d-flex justify-content-between">
+                <span>Xóm 1 (14 đoàn viên)</span>
+                <span class="fw-bold text-success">100%</span>
+              </div>
+              <div class="progress mb-3" style="height: 6px;">
+                <div class="progress-bar bg-success" style="width: 100%;"></div>
+              </div>
+
+              <div class="small mb-2 d-flex justify-content-between">
+                <span>Xóm 2 (12 đoàn viên)</span>
+                <span class="fw-bold text-primary">95%</span>
+              </div>
+              <div class="progress mb-3" style="height: 6px;">
+                <div class="progress-bar bg-primary" style="width: 95%;"></div>
+              </div>
+
+              <div class="small mb-2 d-flex justify-content-between">
+                <span>Xóm 3 & 4 (18 đoàn viên)</span>
+                <span class="fw-bold text-warning">88%</span>
+              </div>
+              <div class="progress" style="height: 6px;">
+                <div class="progress-bar bg-warning" style="width: 88%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================================
+           TRANG 2: DANH SÁCH ĐOÀN VIÊN (CÓ CHUYỂN TRANG / PHÂN TRANG)
+      ======================================================== -->
+      <div class="page-view" id="view-members">
+        <!-- Header trang danh sách -->
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
+          <div>
+            <h3 class="fw-bold text-dark m-0">Sổ Quản Lý Đoàn Viên Thôn Tiền Tiến</h3>
+            <small class="text-muted">Danh sách đầy đủ đoàn viên thanh niên đang sinh hoạt hoặc tạm vắng tại chi đoàn thôn</small>
+          </div>
+          <div class="d-flex gap-2">
+            <button class="btn btn-outline-secondary btn-sm" onclick="exportTableToCSV('Danh_Sach_Doan_Vien_Thon_Tien_Tien.csv')">
+              <i class="bi bi-download me-1"></i> Xuất File CSV
+            </button>
+            <button class="btn btn-doan-primary btn-sm" data-bs-toggle="modal" data-bs-target="#memberModal">
+              <i class="bi bi-person-plus-fill me-1"></i> + Tiếp Nhận Mới
+            </button>
+          </div>
+        </div>
+
+        <!-- Thanh bộ lọc dữ liệu -->
+        <div class="card border-0 shadow-sm rounded-3 p-3 mb-3 bg-white">
+          <div class="row g-2 align-items-center">
+            <div class="col-12 col-md-5">
+              <div class="input-group input-group-sm">
+                <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
+                <input type="text" class="form-control border-start-0 bg-light" id="memberTableSearchInput" placeholder="Tìm theo tên đoàn viên, chức vụ, số điện thoại...">
+              </div>
+            </div>
+            <div class="col-6 col-md-3">
+              <select class="form-select form-select-sm" id="villageFilter" onchange="applyFilters()">
+                <option value="">Tất cả xóm thôn</option>
+                <option value="Xóm 1">Xóm 1 (Thôn Tiền Tiến)</option>
+                <option value="Xóm 2">Xóm 2 (Thôn Tiền Tiến)</option>
+                <option value="Xóm 3">Xóm 3 (Thôn Tiền Tiến)</option>
+                <option value="Xóm 4">Xóm 4 (Thôn Tiền Tiến)</option>
+                <option value="Cụm Đình - Chùa">Cụm Đình - Chùa</option>
+                <option value="Cụm Đồng Sau">Cụm Đồng Sau</option>
+              </select>
+            </div>
+            <div class="col-6 col-md-2">
+              <select class="form-select form-select-sm" id="statusFilter" onchange="applyFilters()">
+                <option value="">Tất cả trạng thái</option>
+                <option value="Đang sinh hoạt">Đang sinh hoạt</option>
+                <option value="Đi làm ăn xa">Đi làm ăn xa</option>
+                <option value="Sinh viên học xa">Sinh viên học xa</option>
+              </select>
+            </div>
+            <div class="col-12 col-md-2 text-end">
+              <button class="btn btn-light btn-sm w-100 text-muted" onclick="resetFilters()">
+                <i class="bi bi-arrow-counterclockwise me-1"></i> Đặt lại lọc
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bảng dữ liệu đoàn viên chính -->
+        <div class="table-container-card mt-0">
+          <div class="table-responsive">
+            <table class="table custom-table" id="youthMemberTable">
+              <thead>
+                <tr>
+                  <th style="width: 60px;" class="text-center">STT</th>
+                  <th>Họ và tên</th>
+                  <th>Ngày sinh</th>
+                  <th>Chức vụ</th>
+                  <th>Địa bàn (Xóm)</th>
+                  <th>Trạng thái</th>
+                  <th style="width: 170px;" class="text-center">Hành động</th>
+                </tr>
+              </thead>
+              <tbody id="memberTableBody">
+                <!-- Đoàn viên 1 -->
+                <tr data-village="Xóm 1" data-status="Đang sinh hoạt">
+                  <td class="text-center fw-bold text-muted row-stt">01</td>
+                  <td>
+                    <div class="d-flex align-items-center gap-2">
+                      <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&h=80&fit=crop&crop=faces" class="rounded-circle" width="34" height="34" alt="Avatar">
+                      <div>
+                        <strong class="text-dark d-block">Nguyễn Văn An</strong>
+                        <small class="text-muted">0982.145.892</small>
+                      </div>
+                    </div>
+                  </td>
+                  <td>26/03/2002</td>
+                  <td><span class="fw-bold text-primary">Bí thư Chi đoàn</span></td>
+                  <td>Xóm 1 (Thôn Tiền Tiến)</td>
+                  <td><span class="status-badge status-active">Đang sinh hoạt</span></td>
+                  <td class="text-center">
+                    <div class="btn-action-group">
+                      <button class="btn btn-outline-primary btn-action" onclick="viewMember('Nguyễn Văn An', '26/03/2002', 'Bí thư Chi đoàn', 'Xóm 1 (Thôn Tiền Tiến)', 'Đang sinh hoạt', '0982.145.892')"><i class="bi bi-eye"></i> Xem</button>
+                      <button class="btn btn-outline-warning btn-action" onclick="editMember('Nguyễn Văn An', '26/03/2002', 'Bí thư Chi đoàn', 'Xóm 1 (Thôn Tiền Tiến)')"><i class="bi bi-pencil"></i> Sửa</button>
+                      <button class="btn btn-outline-danger btn-action" onclick="deleteMember(this, 'Nguyễn Văn An')"><i class="bi bi-trash"></i> Xóa</button>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Đoàn viên 2 -->
+                <tr data-village="Xóm 2" data-status="Đang sinh hoạt">
+                  <td class="text-center fw-bold text-muted row-stt">02</td>
+                  <td>
+                    <div class="d-flex align-items-center gap-2">
+                      <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=80&h=80&fit=crop&crop=faces" class="rounded-circle" width="34" height="34" alt="Avatar">
+                      <div>
+                        <strong class="text-dark d-block">Trần Thị Mai Anh</strong>
+                        <small class="text-muted">0974.321.654</small>
+                      </div>
+                    </div>
+                  </td>
+                  <td>19/05/2001</td>
+                  <td><span class="fw-bold text-dark">Phó Bí thư Chi đoàn</span></td>
+                  <td>Xóm 2 (Thôn Tiền Tiến)</td>
+                  <td><span class="status-badge status-active">Đang sinh hoạt</span></td>
+                  <td class="text-center">
+                    <div class="btn-action-group">
+                      <button class="btn btn-outline-primary btn-action" onclick="viewMember('Trần Thị Mai Anh', '19/05/2001', 'Phó Bí thư Chi đoàn', 'Xóm 2 (Thôn Tiền Tiến)', 'Đang sinh hoạt', '0974.321.654')"><i class="bi bi-eye"></i> Xem</button>
+                      <button class="btn btn-outline-warning btn-action" onclick="editMember('Trần Thị Mai Anh', '19/05/2001', 'Phó Bí thư Chi đoàn', 'Xóm 2 (Thôn Tiền Tiến)')"><i class="bi bi-pencil"></i> Sửa</button>
+                      <button class="btn btn-outline-danger btn-action" onclick="deleteMember(this, 'Trần Thị Mai Anh')"><i class="bi bi-trash"></i> Xóa</button>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Đoàn viên 3 -->
+                <tr data-village="Xóm 3" data-status="Đang sinh hoạt">
+                  <td class="text-center fw-bold text-muted row-stt">03</td>
+                  <td>
+                    <div class="d-flex align-items-center gap-2">
+                      <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=faces" class="rounded-circle" width="34" height="34" alt="Avatar">
+                      <div>
+                        <strong class="text-dark d-block">Lê Hoàng Minh</strong>
+                        <small class="text-muted">0912.876.543</small>
+                      </div>
+                    </div>
+                  </td>
+                  <td>14/08/2003</td>
+                  <td><span class="fw-bold text-dark">Chi ủy viên</span></td>
+                  <td>Xóm 3 (Thôn Tiền Tiến)</td>
+                  <td><span class="status-badge status-active">Đang sinh hoạt</span></td>
+                  <td class="text-center">
+                    <div class="btn-action-group">
+                      <button class="btn btn-outline-primary btn-action" onclick="viewMember('Lê Hoàng Minh', '14/08/2003', 'Chi ủy viên', 'Xóm 3 (Thôn Tiền Tiến)', 'Đang sinh hoạt', '0912.876.543')"><i class="bi bi-eye"></i> Xem</button>
+                      <button class="btn btn-outline-warning btn-action" onclick="editMember('Lê Hoàng Minh', '14/08/2003', 'Chi ủy viên', 'Xóm 3 (Thôn Tiền Tiến)')"><i class="bi bi-pencil"></i> Sửa</button>
+                      <button class="btn btn-outline-danger btn-action" onclick="deleteMember(this, 'Lê Hoàng Minh')"><i class="bi bi-trash"></i> Xóa</button>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Đoàn viên 4 -->
+                <tr data-village="Xóm 1" data-status="Sinh viên học xa">
+                  <td class="text-center fw-bold text-muted row-stt">04</td>
+                  <td>
+                    <div class="d-flex align-items-center gap-2">
+                      <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=80&h=80&fit=crop&crop=faces" class="rounded-circle" width="34" height="34" alt="Avatar">
+                      <div>
+                        <strong class="text-dark d-block">Phạm Quỳnh Trang</strong>
+                        <small class="text-muted">0965.432.189</small>
+                      </div>
+                    </div>
+                  </td>
+                  <td>02/11/2004</td>
+                  <td><span class="text-muted">Đoàn viên</span></td>
+                  <td>Xóm 1 (Thôn Tiền Tiến)</td>
+                  <td><span class="status-badge status-student">Sinh viên học xa</span></td>
+                  <td class="text-center">
+                    <div class="btn-action-group">
+                      <button class="btn btn-outline-primary btn-action" onclick="viewMember('Phạm Quỳnh Trang', '02/11/2004', 'Đoàn viên', 'Xóm 1 (Thôn Tiền Tiến)', 'Sinh viên học xa', '0965.432.189')"><i class="bi bi-eye"></i> Xem</button>
+                      <button class="btn btn-outline-warning btn-action" onclick="editMember('Phạm Quỳnh Trang', '02/11/2004', 'Đoàn viên', 'Xóm 1 (Thôn Tiền Tiến)')"><i class="bi bi-pencil"></i> Sửa</button>
+                      <button class="btn btn-outline-danger btn-action" onclick="deleteMember(this, 'Phạm Quỳnh Trang')"><i class="bi bi-trash"></i> Xóa</button>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Đoàn viên 5 -->
+                <tr data-village="Xóm 4" data-status="Đang sinh hoạt">
+                  <td class="text-center fw-bold text-muted row-stt">05</td>
+                  <td>
+                    <div class="d-flex align-items-center gap-2">
+                      <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=faces" class="rounded-circle" width="34" height="34" alt="Avatar">
+                      <div>
+                        <strong class="text-dark d-block">Vũ Đức Thịnh</strong>
+                        <small class="text-muted">0903.214.567</small>
+                      </div>
+                    </div>
+                  </td>
+                  <td>20/01/2000</td>
+                  <td><span class="fw-bold text-dark">TN làm kinh tế giỏi</span></td>
+                  <td>Xóm 4 (Thôn Tiền Tiến)</td>
+                  <td><span class="status-badge status-active">Đang sinh hoạt</span></td>
+                  <td class="text-center">
+                    <div class="btn-action-group">
+                      <button class="btn btn-outline-primary btn-action" onclick="viewMember('Vũ Đức Thịnh', '20/01/2000', 'TN làm kinh tế giỏi', 'Xóm 4 (Thôn Tiền Tiến)', 'Đang sinh hoạt', '0903.214.567')"><i class="bi bi-eye"></i> Xem</button>
+                      <button class="btn btn-outline-warning btn-action" onclick="editMember('Vũ Đức Thịnh', '20/01/2000', 'TN làm kinh tế giỏi', 'Xóm 4 (Thôn Tiền Tiến)')"><i class="bi bi-pencil"></i> Sửa</button>
+                      <button class="btn btn-outline-danger btn-action" onclick="deleteMember(this, 'Vũ Đức Thịnh')"><i class="bi bi-trash"></i> Xóa</button>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Đoàn viên 6 -->
+                <tr data-village="Xóm 2" data-status="Đi làm ăn xa">
+                  <td class="text-center fw-bold text-muted row-stt">06</td>
+                  <td>
+                    <div class="d-flex align-items-center gap-2">
+                      <img src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=80&h=80&fit=crop&crop=faces" class="rounded-circle" width="34" height="34" alt="Avatar">
+                      <div>
+                        <strong class="text-dark d-block">Đặng Quốc Tuấn</strong>
+                        <small class="text-muted">0932.119.876</small>
+                      </div>
+                    </div>
+                  </td>
+                  <td>05/09/2002</td>
+                  <td><span class="text-muted">Đoàn viên</span></td>
+                  <td>Xóm 2 (Thôn Tiền Tiến)</td>
+                  <td><span class="status-badge status-away">Đi làm ăn xa</span></td>
+                  <td class="text-center">
+                    <div class="btn-action-group">
+                      <button class="btn btn-outline-primary btn-action" onclick="viewMember('Đặng Quốc Tuấn', '05/09/2002', 'Đoàn viên', 'Xóm 2 (Thôn Tiền Tiến)', 'Đi làm ăn xa', '0932.119.876')"><i class="bi bi-eye"></i> Xem</button>
+                      <button class="btn btn-outline-warning btn-action" onclick="editMember('Đặng Quốc Tuấn', '05/09/2002', 'Đoàn viên', 'Xóm 2 (Thôn Tiền Tiến)')"><i class="bi bi-pencil"></i> Sửa</button>
+                      <button class="btn btn-outline-danger btn-action" onclick="deleteMember(this, 'Đặng Quốc Tuấn')"><i class="bi bi-trash"></i> Xóa</button>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Đoàn viên 7 -->
+                <tr data-village="Cụm Đình - Chùa" data-status="Đang sinh hoạt">
+                  <td class="text-center fw-bold text-muted row-stt">07</td>
+                  <td>
+                    <div class="d-flex align-items-center gap-2">
+                      <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=80&h=80&fit=crop&crop=faces" class="rounded-circle" width="34" height="34" alt="Avatar">
+                      <div>
+                        <strong class="text-dark d-block">Hoàng Thu Hà</strong>
+                        <small class="text-muted">0987.654.321</small>
+                      </div>
+                    </div>
+                  </td>
+                  <td>12/10/2003</td>
+                  <td><span class="fw-bold text-dark">Trưởng ban văn nghệ</span></td>
+                  <td>Cụm Đình - Chùa</td>
+                  <td><span class="status-badge status-active">Đang sinh hoạt</span></td>
+                  <td class="text-center">
+                    <div class="btn-action-group">
+                      <button class="btn btn-outline-primary btn-action" onclick="viewMember('Hoàng Thu Hà', '12/10/2003', 'Trưởng ban văn nghệ', 'Cụm Đình - Chùa', 'Đang sinh hoạt', '0987.654.321')"><i class="bi bi-eye"></i> Xem</button>
+                      <button class="btn btn-outline-warning btn-action" onclick="editMember('Hoàng Thu Hà', '12/10/2003', 'Trưởng ban văn nghệ', 'Cụm Đình - Chùa')"><i class="bi bi-pencil"></i> Sửa</button>
+                      <button class="btn btn-outline-danger btn-action" onclick="deleteMember(this, 'Hoàng Thu Hà')"><i class="bi bi-trash"></i> Xóa</button>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Đoàn viên 8 -->
+                <tr data-village="Xóm 3" data-status="Đang sinh hoạt">
+                  <td class="text-center fw-bold text-muted row-stt">08</td>
+                  <td>
+                    <div class="d-flex align-items-center gap-2">
+                      <img src="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=80&h=80&fit=crop&crop=faces" class="rounded-circle" width="34" height="34" alt="Avatar">
+                      <div>
+                        <strong class="text-dark d-block">Bùi Văn Hùng</strong>
+                        <small class="text-muted">0918.234.567</small>
+                      </div>
+                    </div>
+                  </td>
+                  <td>08/04/2001</td>
+                  <td><span class="fw-bold text-dark">Tổ trưởng thanh niên AN</span></td>
+                  <td>Xóm 3 (Thôn Tiền Tiến)</td>
+                  <td><span class="status-badge status-active">Đang sinh hoạt</span></td>
+                  <td class="text-center">
+                    <div class="btn-action-group">
+                      <button class="btn btn-outline-primary btn-action" onclick="viewMember('Bùi Văn Hùng', '08/04/2001', 'Tổ trưởng thanh niên AN', 'Xóm 3 (Thôn Tiền Tiến)', 'Đang sinh hoạt', '0918.234.567')"><i class="bi bi-eye"></i> Xem</button>
+                      <button class="btn btn-outline-warning btn-action" onclick="editMember('Bùi Văn Hùng', '08/04/2001', 'Tổ trưởng thanh niên AN', 'Xóm 3 (Thôn Tiền Tiến)')"><i class="bi bi-pencil"></i> Sửa</button>
+                      <button class="btn btn-outline-danger btn-action" onclick="deleteMember(this, 'Bùi Văn Hùng')"><i class="bi bi-trash"></i> Xóa</button>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Đoàn viên 9 -->
+                <tr data-village="Xóm 4" data-status="Sinh viên học xa">
+                  <td class="text-center fw-bold text-muted row-stt">09</td>
+                  <td>
+                    <div class="d-flex align-items-center gap-2">
+                      <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=80&h=80&fit=crop&crop=faces" class="rounded-circle" width="34" height="34" alt="Avatar">
+                      <div>
+                        <strong class="text-dark d-block">Đỗ Phương Thảo</strong>
+                        <small class="text-muted">0967.890.123</small>
+                      </div>
+                    </div>
+                  </td>
+                  <td>17/07/2004</td>
+                  <td><span class="text-muted">Đoàn viên</span></td>
+                  <td>Xóm 4 (Thôn Tiền Tiến)</td>
+                  <td><span class="status-badge status-student">Sinh viên học xa</span></td>
+                  <td class="text-center">
+                    <div class="btn-action-group">
+                      <button class="btn btn-outline-primary btn-action" onclick="viewMember('Đỗ Phương Thảo', '17/07/2004', 'Đoàn viên', 'Xóm 4 (Thôn Tiền Tiến)', 'Sinh viên học xa', '0967.890.123')"><i class="bi bi-eye"></i> Xem</button>
+                      <button class="btn btn-outline-warning btn-action" onclick="editMember('Đỗ Phương Thảo', '17/07/2004', 'Đoàn viên', 'Xóm 4 (Thôn Tiền Tiến)')"><i class="bi bi-pencil"></i> Sửa</button>
+                      <button class="btn btn-outline-danger btn-action" onclick="deleteMember(this, 'Đỗ Phương Thảo')"><i class="bi bi-trash"></i> Xóa</button>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Đoàn viên 10 -->
+                <tr data-village="Xóm 1" data-status="Đi làm ăn xa">
+                  <td class="text-center fw-bold text-muted row-stt">10</td>
+                  <td>
+                    <div class="d-flex align-items-center gap-2">
+                      <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop&crop=faces" class="rounded-circle" width="34" height="34" alt="Avatar">
+                      <div>
+                        <strong class="text-dark d-block">Ngô Quang Hải</strong>
+                        <small class="text-muted">0934.567.891</small>
+                      </div>
+                    </div>
+                  </td>
+                  <td>11/02/2002</td>
+                  <td><span class="text-muted">Đoàn viên</span></td>
+                  <td>Xóm 1 (Thôn Tiền Tiến)</td>
+                  <td><span class="status-badge status-away">Đi làm ăn xa</span></td>
+                  <td class="text-center">
+                    <div class="btn-action-group">
+                      <button class="btn btn-outline-primary btn-action" onclick="viewMember('Ngô Quang Hải', '11/02/2002', 'Đoàn viên', 'Xóm 1 (Thôn Tiền Tiến)', 'Đi làm ăn xa', '0934.567.891')"><i class="bi bi-eye"></i> Xem</button>
+                      <button class="btn btn-outline-warning btn-action" onclick="editMember('Ngô Quang Hải', '11/02/2002', 'Đoàn viên', 'Xóm 1 (Thôn Tiền Tiến)')"><i class="bi bi-pencil"></i> Sửa</button>
+                      <button class="btn btn-outline-danger btn-action" onclick="deleteMember(this, 'Ngô Quang Hải')"><i class="bi bi-trash"></i> Xóa</button>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Đoàn viên 11 -->
+                <tr data-village="Cụm Đồng Sau" data-status="Đang sinh hoạt">
+                  <td class="text-center fw-bold text-muted row-stt">11</td>
+                  <td>
+                    <div class="d-flex align-items-center gap-2">
+                      <img src="https://images.unsplash.com/photo-1548142813-c348350df52b?w=80&h=80&fit=crop&crop=faces" class="rounded-circle" width="34" height="34" alt="Avatar">
+                      <div>
+                        <strong class="text-dark d-block">Trịnh Thị Linh</strong>
+                        <small class="text-muted">0971.223.344</small>
+                      </div>
+                    </div>
+                  </td>
+                  <td>09/09/2003</td>
+                  <td><span class="fw-bold text-dark">Phó ban Thể thao thôn</span></td>
+                  <td>Cụm Đồng Sau</td>
+                  <td><span class="status-badge status-active">Đang sinh hoạt</span></td>
+                  <td class="text-center">
+                    <div class="btn-action-group">
+                      <button class="btn btn-outline-primary btn-action" onclick="viewMember('Trịnh Thị Linh', '09/09/2003', 'Phó ban Thể thao thôn', 'Cụm Đồng Sau', 'Đang sinh hoạt', '0971.223.344')"><i class="bi bi-eye"></i> Xem</button>
+                      <button class="btn btn-outline-warning btn-action" onclick="editMember('Trịnh Thị Linh', '09/09/2003', 'Phó ban Thể thao thôn', 'Cụm Đồng Sau')"><i class="bi bi-pencil"></i> Sửa</button>
+                      <button class="btn btn-outline-danger btn-action" onclick="deleteMember(this, 'Trịnh Thị Linh')"><i class="bi bi-trash"></i> Xóa</button>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Đoàn viên 12 -->
+                <tr data-village="Xóm 2" data-status="Đang sinh hoạt">
+                  <td class="text-center fw-bold text-muted row-stt">12</td>
+                  <td>
+                    <div class="d-flex align-items-center gap-2">
+                      <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=80&h=80&fit=crop&crop=faces" class="rounded-circle" width="34" height="34" alt="Avatar">
+                      <div>
+                        <strong class="text-dark d-block">Phạm Minh Đức</strong>
+                        <small class="text-muted">0983.445.566</small>
+                      </div>
+                    </div>
+                  </td>
+                  <td>30/12/2002</td>
+                  <td><span class="text-muted">Đoàn viên</span></td>
+                  <td>Xóm 2 (Thôn Tiền Tiến)</td>
+                  <td><span class="status-badge status-active">Đang sinh hoạt</span></td>
+                  <td class="text-center">
+                    <div class="btn-action-group">
+                      <button class="btn btn-outline-primary btn-action" onclick="viewMember('Phạm Minh Đức', '30/12/2002', 'Đoàn viên', 'Xóm 2 (Thôn Tiền Tiến)', 'Đang sinh hoạt', '0983.445.566')"><i class="bi bi-eye"></i> Xem</button>
+                      <button class="btn btn-outline-warning btn-action" onclick="editMember('Phạm Minh Đức', '30/12/2002', 'Đoàn viên', 'Xóm 2 (Thôn Tiền Tiến)')"><i class="bi bi-pencil"></i> Sửa</button>
+                      <button class="btn btn-outline-danger btn-action" onclick="deleteMember(this, 'Phạm Minh Đức')"><i class="bi bi-trash"></i> Xóa</button>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Đoàn viên 13 -->
+                <tr data-village="Xóm 3" data-status="Đang sinh hoạt">
+                  <td class="text-center fw-bold text-muted row-stt">13</td>
+                  <td>
+                    <div class="d-flex align-items-center gap-2">
+                      <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=80&h=80&fit=crop&crop=faces" class="rounded-circle" width="34" height="34" alt="Avatar">
+                      <div>
+                        <strong class="text-dark d-block">Lương Gia Huy</strong>
+                        <small class="text-muted">0915.667.788</small>
+                      </div>
+                    </div>
+                  </td>
+                  <td>22/06/2004</td>
+                  <td><span class="text-muted">Đoàn viên</span></td>
+                  <td>Xóm 3 (Thôn Tiền Tiến)</td>
+                  <td><span class="status-badge status-active">Đang sinh hoạt</span></td>
+                  <td class="text-center">
+                    <div class="btn-action-group">
+                      <button class="btn btn-outline-primary btn-action" onclick="viewMember('Lương Gia Huy', '22/06/2004', 'Đoàn viên', 'Xóm 3 (Thôn Tiền Tiến)', 'Đang sinh hoạt', '0915.667.788')"><i class="bi bi-eye"></i> Xem</button>
+                      <button class="btn btn-outline-warning btn-action" onclick="editMember('Lương Gia Huy', '22/06/2004', 'Đoàn viên', 'Xóm 3 (Thôn Tiền Tiến)')"><i class="bi bi-pencil"></i> Sửa</button>
+                      <button class="btn btn-outline-danger btn-action" onclick="deleteMember(this, 'Lương Gia Huy')"><i class="bi bi-trash"></i> Xóa</button>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Đoàn viên 14 -->
+                <tr data-village="Xóm 4" data-status="Sinh viên học xa">
+                  <td class="text-center fw-bold text-muted row-stt">14</td>
+                  <td>
+                    <div class="d-flex align-items-center gap-2">
+                      <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&h=80&fit=crop&crop=faces" class="rounded-circle" width="34" height="34" alt="Avatar">
+                      <div>
+                        <strong class="text-dark d-block">Nguyễn Mai Lan</strong>
+                        <small class="text-muted">0962.334.455</small>
+                      </div>
+                    </div>
+                  </td>
+                  <td>18/03/2005</td>
+                  <td><span class="text-muted">Đoàn viên</span></td>
+                  <td>Xóm 4 (Thôn Tiền Tiến)</td>
+                  <td><span class="status-badge status-student">Sinh viên học xa</span></td>
+                  <td class="text-center">
+                    <div class="btn-action-group">
+                      <button class="btn btn-outline-primary btn-action" onclick="viewMember('Nguyễn Mai Lan', '18/03/2005', 'Đoàn viên', 'Xóm 4 (Thôn Tiền Tiến)', 'Sinh viên học xa', '0962.334.455')"><i class="bi bi-eye"></i> Xem</button>
+                      <button class="btn btn-outline-warning btn-action" onclick="editMember('Nguyễn Mai Lan', '18/03/2005', 'Đoàn viên', 'Xóm 4 (Thôn Tiền Tiến)')"><i class="bi bi-pencil"></i> Sửa</button>
+                      <button class="btn btn-outline-danger btn-action" onclick="deleteMember(this, 'Nguyễn Mai Lan')"><i class="bi bi-trash"></i> Xóa</button>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Đoàn viên 15 -->
+                <tr data-village="Xóm 1" data-status="Đang sinh hoạt">
+                  <td class="text-center fw-bold text-muted row-stt">15</td>
+                  <td>
+                    <div class="d-flex align-items-center gap-2">
+                      <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=faces" class="rounded-circle" width="34" height="34" alt="Avatar">
+                      <div>
+                        <strong class="text-dark d-block">Phan Tuấn Kiệt</strong>
+                        <small class="text-muted">0905.889.900</small>
+                      </div>
+                    </div>
+                  </td>
+                  <td>04/01/2001</td>
+                  <td><span class="fw-bold text-dark">Thanh niên mô hình VAC</span></td>
+                  <td>Xóm 1 (Thôn Tiền Tiến)</td>
+                  <td><span class="status-badge status-active">Đang sinh hoạt</span></td>
+                  <td class="text-center">
+                    <div class="btn-action-group">
+                      <button class="btn btn-outline-primary btn-action" onclick="viewMember('Phan Tuấn Kiệt', '04/01/2001', 'Thanh niên mô hình VAC', 'Xóm 1 (Thôn Tiền Tiến)', 'Đang sinh hoạt', '0905.889.900')"><i class="bi bi-eye"></i> Xem</button>
+                      <button class="btn btn-outline-warning btn-action" onclick="editMember('Phan Tuấn Kiệt', '04/01/2001', 'Thanh niên mô hình VAC', 'Xóm 1 (Thôn Tiền Tiến)')"><i class="bi bi-pencil"></i> Sửa</button>
+                      <button class="btn btn-outline-danger btn-action" onclick="deleteMember(this, 'Phan Tuấn Kiệt')"><i class="bi bi-trash"></i> Xóa</button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- THANH PHÂN TRANG / CHUYỂN TRANG BẢNG (PAGINATION BAR) -->
+          <div class="p-3 border-top bg-light d-flex align-items-center justify-content-between flex-wrap gap-3">
+            <!-- Chọn số dòng hiển thị -->
+            <div class="d-flex align-items-center gap-2 small">
+              <span class="text-muted">Hiển thị:</span>
+              <select class="form-select form-select-sm" id="rowsPerPageSelect" style="width: 80px;" onchange="changePageSize()">
+                <option value="5" selected>5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+              </select>
+              <span class="text-muted" id="paginationInfo">Hiển thị 1 - 5 trong tổng số 15 đoàn viên</span>
+            </div>
+
+            <!-- Các nút chuyển trang -->
+            <nav aria-label="Table pagination">
+              <ul class="pagination pagination-custom pagination-sm m-0" id="tablePaginationList">
+                <!-- Javascript sẽ tự động kết xuất nút chuyển trang động tại đây -->
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================================
+           TRANG 3: QUẢN LÝ HOẠT ĐỘNG PHONG TRÀO
+      ======================================================== -->
+      <div class="page-view" id="view-activities">
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4">
+          <div>
+            <h3 class="fw-bold text-dark m-0">Quản Lý Hoạt Động & Phong Trào Thanh Niên</h3>
+            <small class="text-muted">Kế hoạch công tác chi đoàn, phong trào thanh niên xung kích Thôn Tiền Tiến</small>
+          </div>
+          <button class="btn btn-doan-primary btn-sm" onclick="showToast('Chức năng thêm hoạt động mới của Chi đoàn!')">
+            <i class="bi bi-plus-circle me-1"></i> + Tạo Kế Hoạch Mới
+          </button>
+        </div>
+
+        <!-- 3 Thẻ tóm tắt hoạt động -->
+        <div class="row g-3 mb-4">
+          <div class="col-12 col-md-4">
+            <div class="card border-0 shadow-sm p-3 bg-white rounded-3">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <small class="text-muted text-uppercase fw-bold">Tổng hoạt động (Năm 2026)</small>
+                  <div class="fs-3 fw-bold text-primary">6</div>
+                </div>
+                <div class="icon-shape icon-blue"><i class="bi bi-flag-fill"></i></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="card border-0 shadow-sm p-3 bg-white rounded-3">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <small class="text-muted text-uppercase fw-bold">Đã hoàn thành xuất sắc</small>
+                  <div class="fs-3 fw-bold text-success">4</div>
+                </div>
+                <div class="icon-shape icon-green"><i class="bi bi-check-circle-fill"></i></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="card border-0 shadow-sm p-3 bg-white rounded-3">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <small class="text-muted text-uppercase fw-bold">Đang / Sắp triển khai</small>
+                  <div class="fs-3 fw-bold text-warning">2</div>
+                </div>
+                <div class="icon-shape icon-gold"><i class="bi bi-clock-history"></i></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Danh sách các hoạt động phong trào cụ thể -->
+        <div class="row g-3">
+          <!-- Hoạt động 1 -->
+          <div class="col-12 col-md-6">
+            <div class="card border-0 shadow-sm rounded-3 p-3 bg-white h-100">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <span class="badge bg-success-subtle text-success border border-success-subtle">Đã hoàn thành</span>
+                <small class="text-muted"><i class="bi bi-calendar-event me-1"></i>15/08/2026</small>
+              </div>
+              <h5 class="fw-bold text-dark mb-1">Chủ Nhật Xanh - Xóa điểm đen rác thải đường thôn</h5>
+              <p class="text-muted small mb-3">Tổ chức ra quân 35 đoàn viên thanh niên dọn dẹp vệ sinh, phát quang bụi rậm và trồng hoa ven trục đường chính Thôn Tiền Tiến.</p>
+              <div class="mt-auto d-flex justify-content-between align-items-center pt-2 border-top">
+                <small class="text-muted"><i class="bi bi-people me-1"></i>35 đoàn viên tham gia</small>
+                <button class="btn btn-outline-primary btn-sm" onclick="showToast('Đã mở biên bản tổng kết hoạt động!')">Xem báo cáo</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hoạt động 2 -->
+          <div class="col-12 col-md-6">
+            <div class="card border-0 shadow-sm rounded-3 p-3 bg-white h-100">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <span class="badge bg-primary-subtle text-primary border border-primary-subtle">Đang diễn ra</span>
+                <small class="text-muted"><i class="bi bi-calendar-event me-1"></i>01/09 - 10/09/2026</small>
+              </div>
+              <h5 class="fw-bold text-dark mb-1">Giải bóng đá mini Thanh niên Thôn Tiền Tiến 2026</h5>
+              <p class="text-muted small mb-3">Giao lưu bóng đá giữa 4 đội đại diện cho Xóm 1, Xóm 2, Xóm 3, Xóm 4 tại sân vận động Thôn Tiền Tiến chào mừng Quốc khánh 2/9.</p>
+              <div class="mt-auto d-flex justify-content-between align-items-center pt-2 border-top">
+                <small class="text-muted"><i class="bi bi-trophy me-1"></i>4 đội bóng / 48 VĐV</small>
+                <button class="btn btn-outline-primary btn-sm" onclick="showToast('Xem lịch thi đấu & điểm số các xóm!')">Lịch thi đấu</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hoạt động 3 -->
+          <div class="col-12 col-md-6">
+            <div class="card border-0 shadow-sm rounded-3 p-3 bg-white h-100">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <span class="badge bg-warning-subtle text-warning border border-warning-subtle">Sắp diễn ra</span>
+                <small class="text-muted"><i class="bi bi-calendar-event me-1"></i>15/08 Âm lịch</small>
+              </div>
+              <h5 class="fw-bold text-dark mb-1">Đêm hội Trăng rằm - Trung thu cho thiếu nhi thôn</h5>
+              <p class="text-muted small mb-3">Phối hợp cùng Ban lãnh đạo thôn Tiền Tiến tổ chức rước đèn ông sao, múa lân và trao 120 suất quà cho các em thiếu nhi trong thôn.</p>
+              <div class="mt-auto d-flex justify-content-between align-items-center pt-2 border-top">
+                <small class="text-muted"><i class="bi bi-geo-alt me-1"></i>Sân Nhà văn hóa Thôn</small>
+                <button class="btn btn-outline-primary btn-sm" onclick="showToast('Phân công nhiệm vụ đoàn viên phục vụ Trung thu!')">Phân công việc</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hoạt động 4 -->
+          <div class="col-12 col-md-6">
+            <div class="card border-0 shadow-sm rounded-3 p-3 bg-white h-100">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <span class="badge bg-success-subtle text-success border border-success-subtle">Đã hoàn thành</span>
+                <small class="text-muted"><i class="bi bi-calendar-event me-1"></i>27/07/2026</small>
+              </div>
+              <h5 class="fw-bold text-dark mb-1">Đền ơn đáp nghĩa - Thăm tặng quà gia đình thương binh liệt sĩ</h5>
+              <p class="text-muted small mb-3">Chi đoàn tổ chức dâng hương tại Đài tưởng niệm và đến thăm, trao quà cho 5 gia đình chính sách, cựu thanh niên xung phong ở thôn.</p>
+              <div class="mt-auto d-flex justify-content-between align-items-center pt-2 border-top">
+                <small class="text-muted"><i class="bi bi-heart-fill text-danger me-1"></i>5 suất quà trao tận tay</small>
+                <button class="btn btn-outline-primary btn-sm" onclick="showToast('Xem ảnh & danh sách thăm tặng quà!')">Xem biên bản</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================================
+           TRANG 4: ĐÓNG ĐOÀN PHÍ
+      ======================================================== -->
+      <div class="page-view" id="view-fees">
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4">
+          <div>
+            <h3 class="fw-bold text-dark m-0">Sổ Theo Dõi Đóng Đoàn Phí & Quỹ Chi Đoàn</h3>
+            <small class="text-muted">Mức thu: 5.000 đ/tháng/đoàn viên theo Điều lệ Đoàn TNCS Hồ Chí Minh (60.000 đ/năm)</small>
+          </div>
+          <button class="btn btn-doan-primary btn-sm" onclick="showToast('Mở form ghi nhận nộp đoàn phí!')">
+            <i class="bi bi-receipt me-1"></i> + Ghi Nhận Đóng Phí
+          </button>
+        </div>
+
+        <!-- 3 Thẻ thống kê quỹ -->
+        <div class="row g-3 mb-4">
+          <div class="col-12 col-md-4">
+            <div class="card border-0 shadow-sm p-3 bg-white rounded-3">
+              <small class="text-muted text-uppercase fw-bold">Tổng quỹ đoàn hiện có</small>
+              <div class="fs-2 fw-bold text-dark mt-1">8.450.000 <small class="fs-6">đ</small></div>
+              <small class="text-success"><i class="bi bi-check-circle me-1"></i>Đã quyết toán công khai</small>
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="card border-0 shadow-sm p-3 bg-white rounded-3">
+              <small class="text-muted text-uppercase fw-bold">Tỷ lệ đoàn viên đã nộp</small>
+              <div class="fs-2 fw-bold text-success mt-1">92%</div>
+              <small class="text-muted">44/48 đoàn viên đã nộp đủ</small>
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="card border-0 shadow-sm p-3 bg-white rounded-3">
+              <small class="text-muted text-uppercase fw-bold">Đoàn viên còn thiếu / chưa nộp</small>
+              <div class="fs-2 fw-bold text-warning mt-1">4 <small class="fs-6">đoàn viên</small></div>
+              <small class="text-muted">Đang theo học hoặc làm việc xa</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bảng thu đoàn phí -->
+        <div class="table-container-card mt-0">
+          <div class="table-header-bar">
+            <h5 class="table-title">Danh Sách Nộp Đoàn Phí Năm 2026</h5>
+            <span class="badge bg-primary">Chi Đoàn Thôn Tiền Tiến</span>
+          </div>
+          <div class="table-responsive">
+            <table class="table custom-table">
+              <thead>
+                <tr>
+                  <th class="text-center" style="width: 60px;">STT</th>
+                  <th>Họ và tên</th>
+                  <th>Xóm cư trú</th>
+                  <th>Mức nộp/tháng</th>
+                  <th>Số tháng đã nộp</th>
+                  <th>Tổng tiền</th>
+                  <th>Trạng thái</th>
+                  <th class="text-center">Thao tác</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="text-center fw-bold text-muted">01</td>
+                  <td><strong>Nguyễn Văn An</strong></td>
+                  <td>Xóm 1 (Thôn Tiền Tiến)</td>
+                  <td>5.000 đ</td>
+                  <td>12 / 12 tháng</td>
+                  <td class="fw-bold text-success">60.000 đ</td>
+                  <td><span class="badge bg-success-subtle text-success">Đã hoàn thành</span></td>
+                  <td class="text-center"><button class="btn btn-light btn-sm" onclick="showToast('Đoàn viên đã hoàn thành cả năm!')"><i class="bi bi-check2"></i> Đã thu</button></td>
+                </tr>
+                <tr>
+                  <td class="text-center fw-bold text-muted">02</td>
+                  <td><strong>Trần Thị Mai Anh</strong></td>
+                  <td>Xóm 2 (Thôn Tiền Tiến)</td>
+                  <td>5.000 đ</td>
+                  <td>12 / 12 tháng</td>
+                  <td class="fw-bold text-success">60.000 đ</td>
+                  <td><span class="badge bg-success-subtle text-success">Đã hoàn thành</span></td>
+                  <td class="text-center"><button class="btn btn-light btn-sm" onclick="showToast('Đoàn viên đã hoàn thành cả năm!')"><i class="bi bi-check2"></i> Đã thu</button></td>
+                </tr>
+                <tr>
+                  <td class="text-center fw-bold text-muted">03</td>
+                  <td><strong>Phạm Quỳnh Trang</strong></td>
+                  <td>Xóm 1 (Thôn Tiền Tiến)</td>
+                  <td>5.000 đ</td>
+                  <td>6 / 12 tháng</td>
+                  <td class="fw-bold text-warning">30.000 đ</td>
+                  <td><span class="badge bg-warning-subtle text-warning">Còn 6 tháng</span></td>
+                  <td class="text-center"><button class="btn btn-primary btn-sm" onclick="showToast('Đã ghi nhận nộp tiếp 6 tháng cho đ/c Trang!')"><i class="bi bi-cash"></i> Thu phí</button></td>
+                </tr>
+                <tr>
+                  <td class="text-center fw-bold text-muted">04</td>
+                  <td><strong>Đặng Quốc Tuấn</strong></td>
+                  <td>Xóm 2 (Thôn Tiền Tiến)</td>
+                  <td>5.000 đ</td>
+                  <td>0 / 12 tháng</td>
+                  <td class="fw-bold text-danger">0 đ</td>
+                  <td><span class="badge bg-danger-subtle text-danger">Chưa nộp (Đi làm xa)</span></td>
+                  <td class="text-center"><button class="btn btn-primary btn-sm" onclick="showToast('Gửi tin nhắn nhắc nộp đoàn phí cho đ/c Tuấn!')"><i class="bi bi-send"></i> Nhắc nhở</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================================
+           TRANG 5: THỐNG KÊ CHI ĐOÀN
+      ======================================================== -->
+      <div class="page-view" id="view-statistics">
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4">
+          <div>
+            <h3 class="fw-bold text-dark m-0">Báo Cáo Thống Kê Công Tác Đoàn Thôn Tiền Tiến</h3>
+            <small class="text-muted">Số liệu tổng hợp phục vụ giao ban chi bộ thôn và báo cáo Đoàn xã cấp trên</small>
+          </div>
+          <button class="btn btn-outline-secondary btn-sm" onclick="window.print()">
+            <i class="bi bi-printer me-1"></i> In Báo Cáo
+          </button>
+        </div>
+
+        <div class="row g-4">
+          <!-- Phân bổ theo xóm -->
+          <div class="col-12 col-lg-6">
+            <div class="card border-0 shadow-sm rounded-3 p-4 bg-white h-100">
+              <h5 class="fw-bold text-dark mb-3"><i class="bi bi-geo-alt text-primary me-2"></i>Cơ Cấu Đoàn Viên Theo Địa Bàn Xóm</h5>
+              
+              <div class="mb-3">
+                <div class="d-flex justify-content-between small fw-bold mb-1">
+                  <span>Xóm 1 (Khu vực trung tâm thôn)</span>
+                  <span>14 đồng chí (29%)</span>
+                </div>
+                <div class="progress" style="height: 8px;">
+                  <div class="progress-bar bg-primary" style="width: 29%;"></div>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <div class="d-flex justify-content-between small fw-bold mb-1">
+                  <span>Xóm 2 (Khu vực phía Tây)</span>
+                  <span>12 đồng chí (25%)</span>
+                </div>
+                <div class="progress" style="height: 8px;">
+                  <div class="progress-bar bg-info" style="width: 25%;"></div>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <div class="d-flex justify-content-between small fw-bold mb-1">
+                  <span>Xóm 3 (Khu vực phía Đông)</span>
+                  <span>10 đồng chí (21%)</span>
+                </div>
+                <div class="progress" style="height: 8px;">
+                  <div class="progress-bar bg-success" style="width: 21%;"></div>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <div class="d-flex justify-content-between small fw-bold mb-1">
+                  <span>Xóm 4 (Khu vực giáp đồi)</span>
+                  <span>8 đồng chí (17%)</span>
+                </div>
+                <div class="progress" style="height: 8px;">
+                  <div class="progress-bar bg-warning" style="width: 17%;"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="d-flex justify-content-between small fw-bold mb-1">
+                  <span>Cụm Đình - Chùa & Đồng Sau</span>
+                  <span>4 đồng chí (8%)</span>
+                </div>
+                <div class="progress" style="height: 8px;">
+                  <div class="progress-bar bg-secondary" style="width: 8%;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tình trạng sinh hoạt & Đánh giá phân loại -->
+          <div class="col-12 col-lg-6">
+            <div class="card border-0 shadow-sm rounded-3 p-4 bg-white h-100">
+              <h5 class="fw-bold text-dark mb-3"><i class="bi bi-person-check text-success me-2"></i>Tình Trạng Sinh Hoạt & Rèn Luyện</h5>
+
+              <div class="mb-4">
+                <div class="d-flex justify-content-between small fw-bold mb-1">
+                  <span>Sinh hoạt thường xuyên tại thôn</span>
+                  <span class="text-success">31 đ/c (65%)</span>
+                </div>
+                <div class="progress" style="height: 8px;">
+                  <div class="progress-bar bg-success" style="width: 65%;"></div>
+                </div>
+              </div>
+
+              <div class="mb-4">
+                <div class="d-flex justify-content-between small fw-bold mb-1">
+                  <span>Đi làm ăn xa (giữ mối liên hệ)</span>
+                  <span class="text-warning">9 đ/c (19%)</span>
+                </div>
+                <div class="progress" style="height: 8px;">
+                  <div class="progress-bar bg-warning" style="width: 19%;"></div>
+                </div>
+              </div>
+
+              <div class="mb-4">
+                <div class="d-flex justify-content-between small fw-bold mb-1">
+                  <span>Sinh viên các trường ĐH, Cao đẳng</span>
+                  <span class="text-primary">8 đ/c (16%)</span>
+                </div>
+                <div class="progress" style="height: 8px;">
+                  <div class="progress-bar bg-primary" style="width: 16%;"></div>
+                </div>
+              </div>
+
+              <div class="p-3 bg-light rounded-3 border">
+                <h6 class="fw-bold text-dark small mb-2"><i class="bi bi-award text-warning me-1"></i>Dự kiến Xếp Loại Đoàn Viên 2026:</h6>
+                <div class="row text-center g-2 small">
+                  <div class="col-4">
+                    <div class="fw-bold text-success fs-5">22</div>
+                    <span class="text-muted">Xuất sắc</span>
+                  </div>
+                  <div class="col-4">
+                    <div class="fw-bold text-primary fs-5">18</div>
+                    <span class="text-muted">Khá</span>
+                  </div>
+                  <div class="col-4">
+                    <div class="fw-bold text-secondary fs-5">8</div>
+                    <span class="text-muted">Hoàn thành</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ========================================================
+       MODAL 1: XEM CHI TIẾT ĐOÀN VIÊN
+  ======================================================== -->
+  <div class="modal fade" id="viewMemberModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title fw-bold"><i class="bi bi-person-badge me-2"></i>Hồ Sơ Đoàn Viên Thôn Tiền Tiến</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4 text-center">
+          <div class="mb-3">
+            <div class="d-inline-block p-1 rounded-circle border border-primary border-2">
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&h=120&fit=crop&crop=faces" id="modalViewAvatar" class="rounded-circle" width="80" height="80" alt="Avatar">
+            </div>
+          </div>
+          <h4 class="fw-bold mb-1" id="modalViewName">Nguyễn Văn An</h4>
+          <span class="badge bg-primary-subtle text-primary border border-primary-subtle mb-3 px-3 py-1" id="modalViewPosition">Bí thư Chi đoàn</span>
+
+          <div class="text-start bg-light p-3 rounded-3 border">
+            <div class="row g-2 small">
+              <div class="col-5 text-muted">Ngày sinh:</div>
+              <div class="col-7 fw-bold text-dark" id="modalViewBirth">26/03/2002</div>
+
+              <div class="col-5 text-muted">Xóm cư trú:</div>
+              <div class="col-7 fw-bold text-dark" id="modalViewVillage">Xóm 1 (Thôn Tiền Tiến)</div>
+
+              <div class="col-5 text-muted">Số điện thoại:</div>
+              <div class="col-7 fw-bold text-dark" id="modalViewPhone">0982.145.892</div>
+
+              <div class="col-5 text-muted">Trạng thái:</div>
+              <div class="col-7 fw-bold text-success" id="modalViewStatus">Đang sinh hoạt</div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-0 bg-light">
+          <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Đóng</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL 2: TIẾP NHẬN / SỬA ĐOÀN VIÊN
+  ======================================================== -->
+  <div class="modal fade" id="memberModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title fw-bold" id="memberModalTitle"><i class="bi bi-person-plus-fill me-2"></i>Tiếp Nhận Đoàn Viên Mới</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="memberForm" onsubmit="handleFormSubmit(event)">
+          <div class="modal-body p-4">
+            <div class="mb-3">
+              <label class="form-label fw-bold small text-muted">Họ và tên đoàn viên *</label>
+              <input type="text" class="form-control" id="formFullName" placeholder="Ví dụ: Nguyễn Văn An" required>
+            </div>
+            <div class="row g-2 mb-3">
+              <div class="col-6">
+                <label class="form-label fw-bold small text-muted">Ngày sinh *</label>
+                <input type="text" class="form-control" id="formBirthDate" placeholder="dd/mm/yyyy" required>
+              </div>
+              <div class="col-6">
+                <label class="form-label fw-bold small text-muted">Giới tính</label>
+                <select class="form-select" id="formGender">
+                  <option value="Nam">Nam</option>
+                  <option value="Nữ">Nữ</option>
+                </select>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-bold small text-muted">Xóm / Cụm dân cư (Thôn Tiền Tiến) *</label>
+              <select class="form-select" id="formVillage" required>
+                <option value="Xóm 1 (Thôn Tiền Tiến)">Xóm 1 (Thôn Tiền Tiến)</option>
+                <option value="Xóm 2 (Thôn Tiền Tiến)">Xóm 2 (Thôn Tiền Tiến)</option>
+                <option value="Xóm 3 (Thôn Tiền Tiến)">Xóm 3 (Thôn Tiền Tiến)</option>
+                <option value="Xóm 4 (Thôn Tiền Tiến)">Xóm 4 (Thôn Tiền Tiến)</option>
+                <option value="Cụm Đình - Chùa (Thôn Tiền Tiến)">Cụm Đình - Chùa (Thôn Tiền Tiến)</option>
+                <option value="Cụm Đồng Sau (Thôn Tiền Tiến)">Cụm Đồng Sau (Thôn Tiền Tiến)</option>
+              </select>
+            </div>
+            <div class="row g-2 mb-3">
+              <div class="col-6">
+                <label class="form-label fw-bold small text-muted">Chức vụ trong Chi đoàn</label>
+                <input type="text" class="form-control" id="formPosition" placeholder="Ví dụ: Đoàn viên">
+              </div>
+              <div class="col-6">
+                <label class="form-label fw-bold small text-muted">Trạng thái sinh hoạt</label>
+                <select class="form-select" id="formStatus">
+                  <option value="Đang sinh hoạt">Đang sinh hoạt</option>
+                  <option value="Đi làm ăn xa">Đi làm ăn xa</option>
+                  <option value="Sinh viên học xa">Sinh viên học xa</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer border-0 bg-light">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy bỏ</button>
+            <button type="submit" class="btn btn-doan-primary">Lưu Vào Sổ Chi Đoàn</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       TOAST THÔNG BÁO TƯƠNG TÁC
+  ======================================================== -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="liveToast" class="toast align-items-center text-bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body" id="toastMessage">
+          Thao tác thành công!
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap 5.3.3 JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- ========================================================
+       LOGIC JAVASCRIPT THUẦN: CHUYỂN TRANG & PHÂN TRANG BẢNG
+  ======================================================== -->
+  <script>
+    // ==========================================================
+    // 1. CHỨC NĂNG CHUYỂN TRANG GIAO DIỆN (PAGE SWITCHING / ROUTER)
+    // ==========================================================
+    function switchPage(pageId) {
+      // Ẩn tất cả các trang
+      const views = document.querySelectorAll('.page-view');
+      views.forEach(v => v.classList.remove('active'));
+
+      // Hiện trang được chọn
+      const targetView = document.getElementById('view-' + pageId);
+      if (targetView) {
+        targetView.classList.add('active');
+      } else {
+        document.getElementById('view-dashboard').classList.add('active');
+        pageId = 'dashboard';
+      }
+
+      // Cập nhật trạng thái active trên Sidebar menu
+      const navLinks = document.querySelectorAll('.sidebar-nav .nav-link');
+      navLinks.forEach(link => {
+        if (link.getAttribute('data-page') === pageId) {
+          link.classList.add('active');
+        } else {
+          link.classList.remove('active');
+        }
+      });
+
+      // Cập nhật hash trên URL (hỗ trợ lưu bookmark và nút Back/Forward)
+      window.location.hash = pageId;
+
+      // Đóng sidebar trên mobile nếu đang mở
+      const appSidebar = document.getElementById('appSidebar');
+      const sidebarOverlay = document.getElementById('sidebarOverlay');
+      if (appSidebar) appSidebar.classList.remove('show');
+      if (sidebarOverlay) sidebarOverlay.classList.remove('show');
+
+      // Cuộn trang lên đầu
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      // Nếu chuyển vào trang danh sách đoàn viên, reset lại phân trang
+      if (pageId === 'members') {
+        initTablePagination();
+      }
+    }
+
+    // Lắng nghe sự kiện hashchange để hỗ trợ Back/Forward của trình duyệt
+    window.addEventListener('hashchange', function() {
+      const hash = window.location.hash.replace('#', '');
+      if (hash) {
+        switchPage(hash);
+      }
+    });
+
+    // ==========================================================
+    // 2. CHỨC NĂNG PHÂN TRANG & CHUYỂN TRANG BẢNG ĐOÀN VIÊN (PAGINATION)
+    // ==========================================================
+    let currentPage = 1;
+    let pageSize = 5;
+    let filteredRows = [];
+
+    function initTablePagination() {
+      const tableBody = document.getElementById('memberTableBody');
+      if (!tableBody) return;
+
+      const allRows = Array.from(tableBody.querySelectorAll('tr'));
+      
+      // Lọc các hàng đang hiển thị theo bộ lọc
+      const searchVal = (document.getElementById('memberTableSearchInput')?.value || '').toLowerCase().trim();
+      const villageVal = document.getElementById('villageFilter')?.value || '';
+      const statusVal = document.getElementById('statusFilter')?.value || '';
+
+      filteredRows = allRows.filter(row => {
+        const text = row.textContent.toLowerCase();
+        const rowVillage = row.getAttribute('data-village') || '';
+        const rowStatus = row.getAttribute('data-status') || '';
+
+        const matchSearch = !searchVal || text.includes(searchVal);
+        const matchVillage = !villageVal || rowVillage.includes(villageVal);
+        const matchStatus = !statusVal || rowStatus.includes(statusVal);
+
+        return matchSearch && matchVillage && matchStatus;
+      });
+
+      // Đảm bảo currentPage hợp lệ
+      const totalPages = Math.ceil(filteredRows.length / pageSize) || 1;
+      if (currentPage > totalPages) currentPage = totalPages;
+      if (currentPage < 1) currentPage = 1;
+
+      // Ẩn tất cả các dòng trước
+      allRows.forEach(r => r.style.display = 'none');
+
+      // Hiện các dòng thuộc trang hiện tại
+      const startIndex = (currentPage - 1) * pageSize;
+      const endIndex = Math.min(startIndex + pageSize, filteredRows.length);
+
+      for (let i = startIndex; i < endIndex; i++) {
+        filteredRows[i].style.display = '';
+      }
+
+      // Cập nhật text tóm tắt phân trang
+      const infoEl = document.getElementById('paginationInfo');
+      if (infoEl) {
+        if (filteredRows.length === 0) {
+          infoEl.textContent = 'Không tìm thấy đoàn viên phù hợp';
+        } else {
+          infoEl.textContent = `Hiển thị ${startIndex + 1} - ${endIndex} trong tổng số ${filteredRows.length} đoàn viên`;
+        }
+      }
+
+      // Vẽ các nút phân trang
+      renderPaginationControls(totalPages);
+    }
+
+    // Vẽ danh sách nút chuyển trang: [« Trước] [1] [2] [3] ... [Sau »]
+    function renderPaginationControls(totalPages) {
+      const pagList = document.getElementById('tablePaginationList');
+      if (!pagList) return;
+
+      let html = '';
+
+      // Nút "Trang trước"
+      const prevDisabled = currentPage === 1 ? 'disabled' : '';
+      html += `
+        <li class="page-item ${prevDisabled}">
+          <a class="page-link" onclick="goToPage(${currentPage - 1})" aria-label="Previous">
+            <i class="bi bi-chevron-left me-1"></i>Trước
+          </a>
+        </li>
+      `;
+
+      // Các nút số trang
+      for (let p = 1; p <= totalPages; p++) {
+        const activeClass = p === currentPage ? 'active' : '';
+        html += `
+          <li class="page-item ${activeClass}">
+            <a class="page-link" onclick="goToPage(${p})">${p}</a>
+          </li>
+        `;
+      }
+
+      // Nút "Trang sau"
+      const nextDisabled = (currentPage === totalPages || totalPages === 0) ? 'disabled' : '';
+      html += `
+        <li class="page-item ${nextDisabled}">
+          <a class="page-link" onclick="goToPage(${currentPage + 1})" aria-label="Next">
+            Sau<i class="bi bi-chevron-right ms-1"></i>
+          </a>
+        </li>
+      `;
+
+      pagList.innerHTML = html;
+    }
+
+    // Hàm chuyển sang trang cụ thể
+    function goToPage(page) {
+      const totalPages = Math.ceil(filteredRows.length / pageSize) || 1;
+      if (page >= 1 && page <= totalPages && page !== currentPage) {
+        currentPage = page;
+        initTablePagination();
+      }
+    }
+
+    // Thay đổi số lượng dòng hiển thị trên mỗi trang (5, 10, 15 dòng)
+    function changePageSize() {
+      const sel = document.getElementById('rowsPerPageSelect');
+      if (sel) {
+        pageSize = parseInt(sel.value, 10) || 5;
+        currentPage = 1;
+        initTablePagination();
+      }
+    }
+
+    // Áp dụng bộ lọc xóm và trạng thái
+    function applyFilters() {
+      currentPage = 1;
+      initTablePagination();
+    }
+
+    // Đặt lại bộ lọc về mặc định
+    function resetFilters() {
+      const searchInput = document.getElementById('memberTableSearchInput');
+      const villageFilter = document.getElementById('villageFilter');
+      const statusFilter = document.getElementById('statusFilter');
+
+      if (searchInput) searchInput.value = '';
+      if (villageFilter) villageFilter.value = '';
+      if (statusFilter) statusFilter.value = '';
+
+      currentPage = 1;
+      initTablePagination();
+      showToast('Đã đặt lại toàn bộ bộ lọc!');
+    }
+
+    // Lắng nghe tìm kiếm nhanh trên bảng đoàn viên
+    const memberSearchInput = document.getElementById('memberTableSearchInput');
+    if (memberSearchInput) {
+      memberSearchInput.addEventListener('input', function() {
+        currentPage = 1;
+        initTablePagination();
+      });
+    }
+
+    // Lắng nghe thanh tìm kiếm nhanh toàn hệ thống ở Header
+    const globalSearch = document.getElementById('globalSearchInput');
+    if (globalSearch) {
+      globalSearch.addEventListener('input', function(e) {
+        const query = e.target.value.trim();
+        if (query.length > 0) {
+          switchPage('members');
+          const memberSearch = document.getElementById('memberTableSearchInput');
+          if (memberSearch) {
+            memberSearch.value = query;
+            currentPage = 1;
+            initTablePagination();
+          }
+        }
+      });
+    }
+
+    // ==========================================================
+    // 3. TOAST & CÁC THAO TÁC MODAL (XEM, SỬA, XÓA, XUẤT CSV)
+    // ==========================================================
+    function showToast(msg) {
+      const toastEl = document.getElementById('liveToast');
+      const toastMsg = document.getElementById('toastMessage');
+      if (toastEl && toastMsg) {
+        toastMsg.textContent = msg;
+        const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
+        toast.show();
+      }
+    }
+
+    function viewMember(name, birth, pos, village, status, phone) {
+      document.getElementById('modalViewName').textContent = name;
+      document.getElementById('modalViewBirth').textContent = birth;
+      document.getElementById('modalViewPosition').textContent = pos;
+      document.getElementById('modalViewVillage').textContent = village;
+      document.getElementById('modalViewStatus').textContent = status;
+      document.getElementById('modalViewPhone').textContent = phone;
+      
+      const modal = new bootstrap.Modal(document.getElementById('viewMemberModal'));
+      modal.show();
+    }
+
+    function editMember(name, birth, pos, village) {
+      document.getElementById('memberModalTitle').innerHTML = '<i class="bi bi-pencil-square me-2"></i>Chỉnh Sửa Thông Tin Đoàn Viên';
+      document.getElementById('formFullName').value = name;
+      document.getElementById('formBirthDate').value = birth;
+      document.getElementById('formPosition').value = pos;
+      document.getElementById('formVillage').value = village;
+      
+      const modal = new bootstrap.Modal(document.getElementById('memberModal'));
+      modal.show();
+    }
+
+    function deleteMember(btn, name) {
+      if (confirm(`Đồng chí có chắc chắn muốn xóa đoàn viên "${name}" khỏi danh sách?`)) {
+        const row = btn.closest('tr');
+        if (row) {
+          row.style.transition = 'all 0.3s ease';
+          row.style.opacity = '0';
+          row.style.transform = 'scale(0.95)';
+          setTimeout(() => {
+            row.remove();
+            initTablePagination();
+            showToast(`Đã xóa đoàn viên "${name}" thành công!`);
+          }, 300);
+        }
+      }
+    }
+
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('formFullName').value;
+      const modalEl = document.getElementById('memberModal');
+      const modal = bootstrap.Modal.getInstance(modalEl);
+      if (modal) modal.hide();
+
+      showToast(`Đã lưu thông tin đoàn viên "${name}" vào Sổ Chi Đoàn!`);
+      e.target.reset();
+    }
+
+    function exportTableToCSV(filename) {
+      const csv = [];
+      const rows = document.querySelectorAll("#youthMemberTable tr");
+      
+      for (let i = 0; i < rows.length; i++) {
+        const row = [], cols = rows[i].querySelectorAll("td, th");
+        for (let j = 0; j < cols.length - 1; j++) {
+          row.push('"' + cols[j].innerText.replace(/"/g, '""').replace(/\n/g, ' ') + '"');
+        }
+        csv.push(row.join(","));
+      }
+
+      const csvFile = new Blob(["\uFEFF" + csv.join("\n")], { type: "text/csv;charset=utf-8;" });
+      const downloadLink = document.createElement("a");
+      downloadLink.download = filename;
+      downloadLink.href = window.URL.createObjectURL(csvFile);
+      downloadLink.style.display = "none";
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+      showToast("Đã tải xuống danh sách đoàn viên (.csv)!");
+    }
+
+    // Sidebar toggle cho Mobile
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const appSidebar = document.getElementById('appSidebar');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+    function toggleSidebar() {
+      appSidebar.classList.toggle('show');
+      sidebarOverlay.classList.toggle('show');
+    }
+
+    if (sidebarToggle) sidebarToggle.addEventListener('click', toggleSidebar);
+    if (sidebarOverlay) sidebarOverlay.addEventListener('click', toggleSidebar);
+
+    // ==========================================================
+    // KHỞI ĐỘNG KHI TẢI TRANG
+    // ==========================================================
+    document.addEventListener('DOMContentLoaded', function() {
+      const initialHash = window.location.hash.replace('#', '') || 'dashboard';
+      switchPage(initialHash);
+      initTablePagination();
+    });
+  </script>
+</body>
+</html>

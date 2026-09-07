@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head(${isEdit} ? 'Chỉnh Sửa Đoàn Viên - Thôn Tiền Tiến' : 'Tiếp Nhận Đoàn Viên - Thôn Tiền Tiến')}"></head>
+<body>
+  <div class="ambient-glow"></div>
+  <div class="ambient-glow-2"></div>
+
+  <div class="app-layout">
+    <!-- Sidebar Fragment -->
+    <div th:replace="~{fragments/sidebar :: sidebar(${isEdit} ? 'members' : 'newMember')}"></div>
+
+    <!-- Main Content -->
+    <main class="main-wrapper">
+      <!-- Topbar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <div class="breadcrumb-nav">
+            <a th:href="@{/}">🏡 Chi Đoàn Thôn Tiền Tiến</a>
+            <span class="breadcrumb-separator">/</span>
+            <a th:href="@{/members}">Sổ Đoàn Viên</a>
+            <span class="breadcrumb-separator">/</span>
+            <span style="color: var(--primary); font-weight: 700;" th:text="${isEdit} ? 'Chỉnh Sửa Thông Tin' : 'Tiếp Nhận Mới'">Biểu Mẫu</span>
+          </div>
+        </div>
+
+        <div class="topbar-right" style="display: flex; align-items: center; gap: 10px;">
+          <!-- Theme Toggle -->
+          <button type="button" onclick="toggleTheme()" class="btn-theme-toggle" title="Chuyển chế độ Sáng / Tối"
+                  style="background: var(--bg-input); border: 1px solid var(--border-color); width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-primary); font-size: 1.05rem;">
+            <span id="themeIcon">🌓</span>
+          </button>
+          <a th:href="@{/members}" class="btn-secondary" style="padding: 9px 16px; text-decoration: none; font-size: 0.85rem; font-weight: 600;">
+            <span>&larr; Trở Lại Danh Bạ</span>
+          </a>
+        </div>
+      </header>
+
+      <!-- Page Content -->
+      <div class="page-content">
+        <div class="form-card" style="border-radius: var(--radius-xl); padding: 36px;">
+          <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border-color);">
+            <div style="width: 50px; height: 50px; border-radius: var(--radius-md); background: linear-gradient(135deg, #1d4ed8, #2563eb); color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; box-shadow: 0 6px 16px rgba(29, 78, 216, 0.3);">
+              <span th:text="${isEdit} ? '✏️' : '📝'">📝</span>
+            </div>
+            <div>
+              <h2 class="form-card-title" style="margin-bottom: 2px;" th:text="${isEdit} ? 'Chỉnh Sửa Thông Tin Đoàn Viên' : 'Tiếp Nhận Đoàn Viên Vào Chi Đoàn Thôn'"></h2>
+              <p style="font-size: 0.86rem; color: var(--text-secondary);" th:text="${isEdit} ? 'Cập nhật quá trình công tác, địa bàn cư trú và hoạt động tại Thôn Tiền Tiến.' : 'Nhập thông tin đoàn viên mới kết nạp hoặc chuyển sinh hoạt về Chi đoàn Thôn Tiền Tiến.'"></p>
+            </div>
+          </div>
+
+          <form th:action="${isEdit} ? @{'/members/' + ${member.id} + '/edit'} : @{/members/new}" method="post">
+            <!-- Nhóm 1: Thông tin cá nhân -->
+            <div style="margin-bottom: 24px;">
+              <h4 style="font-size: 0.88rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--primary); margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
+                <span>👤</span> 1. Thông Tin Lý Lịch Cá Nhân
+              </h4>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="fullName">Họ và tên đoàn viên *</label>
+                  <input type="text" id="fullName" name="fullName" th:value="${member.fullName}" class="form-input" placeholder="Ví dụ: Nguyễn Văn An" required>
+                </div>
+
+                <div class="form-group">
+                  <label for="birthYear">Năm sinh *</label>
+                  <input type="text" id="birthYear" name="birthYear" th:value="${member.birthYear}" class="form-input" placeholder="Ví dụ: 2002" required>
+                </div>
+
+                <div class="form-group">
+                  <label for="gender">Giới tính</label>
+                  <select id="gender" name="gender" class="form-select">
+                    <option value="Nam" th:selected="${member.gender == 'Nam'}">Nam</option>
+                    <option value="Nữ" th:selected="${member.gender == 'Nữ'}">Nữ</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="phone">Số điện thoại liên hệ *</label>
+                  <input type="text" id="phone" name="phone" th:value="${member.phone}" class="form-input" placeholder="Ví dụ: 0982.123.456" required>
+                </div>
+              </div>
+            </div>
+
+            <!-- Nhóm 2: Cư trú & Chi đoàn -->
+            <div style="margin-bottom: 24px; padding-top: 18px; border-top: 1px solid var(--border-color);">
+              <h4 style="font-size: 0.88rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--primary); margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
+                <span>🏡</span> 2. Địa Bàn Cư Trú & Sinh Hoạt Chi Đoàn
+              </h4>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="village">Xóm / Cụm dân cư (Thôn Tiền Tiến) *</label>
+                  <select id="village" name="village" class="form-select" required>
+                    <option th:each="v : ${villages}" th:value="${v}" th:text="${v}" th:selected="${member.village == v}"></option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="position">Chức vụ trong Chi đoàn</label>
+                  <input type="text" id="position" name="position" th:value="${member.position}" class="form-input" placeholder="Ví dụ: Bí thư Chi đoàn / Đoàn viên">
+                </div>
+
+                <div class="form-group">
+                  <label for="residenceStatus">Tình trạng sinh hoạt thực tế *</label>
+                  <select id="residenceStatus" name="residenceStatus" class="form-select" required>
+                    <option th:each="r : ${residences}" th:value="${r}" th:text="${r}" th:selected="${member.residenceStatus == r}"></option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="volunteerDays">Số buổi tham gia Ngày Chủ nhật xanh</label>
+                  <input type="number" id="volunteerDays" name="volunteerDays" th:value="${member.volunteerDays}" class="form-input" min="0" placeholder="0">
+                </div>
+              </div>
+            </div>
+
+            <!-- Nhóm 3: Đánh giá & Ghi chú -->
+            <div style="margin-bottom: 28px; padding-top: 18px; border-top: 1px solid var(--border-color);">
+              <h4 style="font-size: 0.88rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--primary); margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
+                <span>⭐</span> 3. Xếp Loại & Ghi Chú Cống Hiến
+              </h4>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="classification">Xếp loại đoàn viên cuối năm</label>
+                  <select id="classification" name="classification" class="form-select">
+                    <option value="Xuất sắc" th:selected="${member.classification == 'Xuất sắc'}">Xuất sắc</option>
+                    <option value="Khá" th:selected="${member.classification == 'Khá'}">Khá</option>
+                    <option value="Trung bình" th:selected="${member.classification == 'Trung bình'}">Trung bình</option>
+                  </select>
+                </div>
+
+                <div class="form-group full">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                    <label for="activityNotes" style="margin-bottom: 0;">Ghi chú cống hiến & hoạt động ở Thôn Tiền Tiến</label>
+                    <button type="button" onclick="suggestNotesWithAi()" class="btn-secondary" style="padding: 4px 10px; font-size: 0.78rem; font-weight: 700; color: #1d4ed8; border-color: rgba(29, 78, 216, 0.3); background: rgba(29, 78, 216, 0.05); cursor: pointer;">
+                      ⚡ AI Gợi Ý Ghi Chú
+                    </button>
+                  </div>
+                  <textarea id="activityNotes" name="activityNotes" class="form-textarea" rows="3" placeholder="Ví dụ: Tham gia hỗ trợ tổ công nghệ số cộng đồng hướng dẫn người dân thôn, tham gia dọn đường làng ngõ xóm..." th:text="${member.activityNotes}"></textarea>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div style="display: flex; gap: 14px; justify-content: flex-end; padding-top: 20px; border-top: 1px solid var(--border-color);">
+              <a th:href="@{/members}" class="btn-secondary" style="padding: 12px 24px; text-decoration: none; font-weight: 600;">Hủy Bỏ</a>
+              <button type="submit" class="btn-primary-gradient" style="padding: 12px 28px; border: none; cursor: pointer; font-size: 0.95rem; border-radius: var(--radius-md);">
+                <span th:text="${isEdit} ? '💾 Cập Nhật Thông Tin' : '➕ Lưu Vào Sổ Chi Đoàn'">Lưu Dữ Liệu</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Scripts Fragment -->
+  <div th:replace="~{fragments/scripts :: scripts}"></div>
+
+  <script>
+    async function suggestNotesWithAi() {
+      const name = document.getElementById('fullName').value.trim() || 'Đoàn viên';
+      const pos = document.getElementById('position').value.trim() || 'Đoàn viên';
+      const village = document.getElementById('village').value;
+      const residence = document.getElementById('residenceStatus').value;
+      const days = document.getElementById('volunteerDays').value || '2';
+      const classification = document.getElementById('classification').value;
+
+      const textarea = document.getElementById('activityNotes');
+      const originalText = textarea.value;
+      textarea.value = '⚡ AI đang soạn thảo gợi ý ghi chú phù hợp với thực tế Thôn Tiền Tiến...';
+
+      try {
+        const res = await fetch('/api/ai/generate-review', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            fullName: name,
+            position: pos,
+            village: village,
+            residenceStatus: residence,
+            volunteerDays: days,
+            classification: classification,
+            reviewType: 'summer_review'
+          })
+        });
+        const data = await res.json();
+        if (data.review) {
+          textarea.value = data.review;
+        } else {
+          textarea.value = originalText;
+        }
+      } catch (err) {
+        alert('Lỗi gọi AI: ' + err.message);
+        textarea.value = originalText;
+      }
+    }
+  </script>
+</body>
+</html>

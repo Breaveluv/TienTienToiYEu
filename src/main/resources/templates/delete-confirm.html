@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Xác Nhận Xóa Đoàn Viên - Thôn Tiền Tiến')}"></head>
+<body>
+  <div class="ambient-glow"></div>
+  <div class="ambient-glow-2"></div>
+
+  <div class="app-layout">
+    <!-- Sidebar Fragment -->
+    <div th:replace="~{fragments/sidebar :: sidebar('members')}"></div>
+
+    <!-- Main Content -->
+    <main class="main-wrapper">
+      <div class="page-content" style="display: flex; align-items: center; justify-content: center; min-height: calc(100vh - 80px);">
+        <div class="confirm-box-card" style="width: 100%;">
+          <div style="width: 80px; height: 80px; border-radius: 50%; background: rgba(239, 68, 68, 0.12); color: #dc2626; display: inline-flex; align-items: center; justify-content: center; font-size: 2.5rem; margin-bottom: 20px;">
+            ⚠️
+          </div>
+          <h2 style="font-size: 1.5rem; font-weight: 800; color: #dc2626; margin-bottom: 12px;">Xác Nhận Xóa Đoàn Viên</h2>
+          <p style="font-size: 0.95rem; color: var(--text-primary); margin-bottom: 8px;">
+            Đồng chí có chắc chắn muốn xóa đoàn viên sau khỏi sổ theo dõi?
+          </p>
+          <div style="background: var(--bg-input); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px 20px; margin: 16px 0 24px; text-align: left; display: flex; align-items: center; gap: 14px;">
+            <img th:src="${member.avatar}" alt="Avatar" style="width: 46px; height: 46px; border-radius: 50%; object-fit: cover;">
+            <div>
+              <div style="font-size: 1.1rem; font-weight: 800; color: var(--text-primary);" th:text="${member.fullName}">Nguyễn Văn An</div>
+              <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 2px;" th:text="${member.village} + ' • ' + ${member.position}">Xóm 1 • Bí thư Chi đoàn</div>
+            </div>
+          </div>
+          <p style="font-size: 0.84rem; color: var(--text-secondary); margin-bottom: 30px; line-height: 1.5;">
+            Hồ sơ đoàn viên này sẽ bị xóa hoàn toàn khỏi cơ sở dữ liệu của Chi Đoàn Thôn Tiền Tiến.
+          </p>
+
+          <form th:action="@{'/members/' + ${member.id} + '/delete'}" method="post" style="display: flex; gap: 14px; justify-content: center;">
+            <a th:href="@{/members}" class="btn-secondary" style="padding: 12px 26px; text-decoration: none; font-weight: 700; border-radius: var(--radius-md);">Hủy Bỏ</a>
+            <button type="submit" class="btn-danger" style="padding: 12px 28px; font-weight: 800; border: none; cursor: pointer; border-radius: var(--radius-md); font-size: 0.95rem;">
+              🗑️ Xác Nhận Xóa Khỏi Sổ Thôn
+            </button>
+          </form>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Scripts Fragment -->
+  <div th:replace="~{fragments/scripts :: scripts}"></div>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title)">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:text="${title}">Chi Đoàn Thôn Tiền Tiến - Quản Lý Đoàn Viên</title>
+  <link rel="icon" type="image/svg+xml" th:href="@{/assets/logo.svg}">
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <link rel="stylesheet" th:href="@{/css/components.css}">
+  <script>
+    // Kiểm tra và áp dụng Dark mode ngay trước khi render để tránh nhấp nháy
+    const savedTheme = localStorage.getItem('tt_theme') || 'light';
+    if (savedTheme === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+  </script>
+</head>
+<body></body>
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Tổng Quan - Chi Đoàn Thôn Tiền Tiến')}"></head>
+<body>
+  <div class="ambient-glow"></div>
+  <div class="ambient-glow-2"></div>
+
+  <div class="app-layout">
+    <!-- Sidebar Fragment -->
+    <div th:replace="~{fragments/sidebar :: sidebar('dashboard')}"></div>
+
+    <!-- Main Content -->
+    <main class="main-wrapper">
+      <!-- Topbar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <div class="breadcrumb-nav">
+            <span>🏡 Chi Đoàn Thôn Tiền Tiến</span>
+            <span class="breadcrumb-separator">/</span>
+            <span style="color: var(--primary); font-weight: 700;">Tổng Quan Nghiệp Vụ</span>
+          </div>
+        </div>
+
+        <div class="topbar-right" style="display: flex; align-items: center; gap: 10px;">
+          <!-- Theme Toggle -->
+          <button type="button" onclick="toggleTheme()" class="btn-theme-toggle" title="Chuyển chế độ Sáng / Tối"
+                  style="background: var(--bg-input); border: 1px solid var(--border-color); width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-primary); font-size: 1.05rem;">
+            <span id="themeIcon">🌓</span>
+          </button>
+          <a th:href="@{/members/new}" class="btn-primary-gradient" style="text-decoration: none;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <span>+ Tiếp Nhận Đoàn Viên</span>
+          </a>
+          <a th:href="@{/members/import}" class="btn-action-link" style="background: var(--bg-input); border: 1px solid var(--border-color); padding: 9px 15px; border-radius: var(--radius-md); color: var(--text-primary); font-weight: 600; text-decoration: none;">
+            <span>📥 Nhập File</span>
+          </a>
+          <div class="user-pill" style="display: flex; align-items: center; gap: 10px; background: var(--bg-input); padding: 5px 12px; border-radius: var(--radius-full); border: 1px solid var(--border-color);">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=faces" alt="Avatar" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
+            <div class="user-pill-text">
+              <span class="user-pill-name" style="font-size: 0.82rem; font-weight: 700; color: var(--text-primary); display: block;">BCH Chi Đoàn</span>
+              <span class="user-pill-role" style="font-size: 0.72rem; color: var(--text-muted);">Thôn Tiền Tiến</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Page Content -->
+      <div class="page-content">
+        <!-- Flash Message Alerts -->
+        <div th:if="${successMessage}" class="alert-banner alert-success">
+          <span>✅</span>
+          <span th:text="${successMessage}"></span>
+        </div>
+        <div th:if="${errorMessage}" class="alert-banner alert-error">
+          <span>⚠️</span>
+          <span th:text="${errorMessage}"></span>
+        </div>
+
+        <!-- Premium Hero Welcome Banner -->
+        <div class="hero-banner">
+          <div class="hero-badge">
+            <span class="pulsing-dot"></span>
+            <span>Trực thuộc Đoàn TNCS Hồ Chí Minh • Cấp cơ sở Thôn</span>
+          </div>
+          <h2 class="hero-title">Chi Đoàn Thanh Niên Thôn Tiền Tiến</h2>
+          <p class="hero-subtitle">
+            Hệ thống số hóa quản trị sổ đoàn viên thôn, theo dõi thanh niên các xóm (Xóm 1, 2, 3, 4, Cụm Đình - Chùa, Cụm Đồng Sau) và phong trào Ngày Chủ nhật xanh đường làng ngõ xóm.
+          </p>
+          <div class="hero-actions">
+            <a th:href="@{/members}" class="btn-glass-primary">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+              <span>Xem Sổ Đoàn Viên Toàn Thôn</span>
+            </a>
+            <a th:href="@{/members/new}" class="btn-glass">
+              <span>+ Tiếp Nhận Đoàn Viên</span>
+            </a>
+            <a th:href="@{/members/template}" class="btn-glass">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <span>Tải Mẫu Excel Thôn (.xlsx)</span>
+            </a>
+            <a th:href="@{/ai/copilot}" class="btn-glass" style="background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.4); color: #065f46; font-weight: 700;">
+              <span>⚡ Trợ Lý AI Chi Đoàn</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- KPI Grid -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon-wrap blue" style="background: rgba(29, 78, 216, 0.12); color: #1d4ed8;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-label">Tổng số đoàn viên thôn</span>
+              <span class="stat-value" th:text="${stats.totalMembers}">8</span>
+              <span class="stat-trend positive">Đang quản trị theo sổ</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-wrap emerald" style="background: rgba(16, 185, 129, 0.12); color: #059669;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-label">Đoàn viên tại thôn</span>
+              <span class="stat-value" th:text="${stats.localCount}">5</span>
+              <span class="stat-trend positive">Sinh hoạt thường xuyên</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-wrap gold" style="background: rgba(245, 158, 11, 0.12); color: #d97706;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-label">Đi làm ăn xa / KCN</span>
+              <span class="stat-value" th:text="${stats.awayCount}">2</span>
+              <span class="stat-trend neutral">Giữ liên lạc nhóm Zalo thôn</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-wrap purple" style="background: rgba(139, 92, 246, 0.12); color: #7c3aed;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-label">Sinh viên học xa</span>
+              <span class="stat-value" th:text="${stats.studentCount}">1</span>
+              <span class="stat-trend neutral">Sinh hoạt hè tại thôn</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-wrap blue" style="background: rgba(2, 132, 199, 0.12); color: #0284c7;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-label">Ngày Chủ nhật xanh</span>
+              <span class="stat-value" th:text="${stats.volunteerTotal}">89</span>
+              <span class="stat-trend positive">Tổng lượt tham gia dọn làng</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-wrap emerald" style="background: rgba(16, 185, 129, 0.12); color: #10b981;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-label">Đoàn viên Xuất sắc</span>
+              <span class="stat-value" th:text="${stats.excellentCount}">5</span>
+              <span class="stat-trend positive">Xếp loại thi đua năm</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Two Column Layout: Village Distribution & Top Volunteers -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(440px, 1fr)); gap: 24px; margin-top: 10px;">
+          <!-- Village Distribution Card -->
+          <div class="card" style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-xl); padding: 26px; box-shadow: var(--shadow-sm);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+              <div>
+                <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--text-primary);">Phân Bổ Đoàn Viên Các Xóm Trong Thôn</h3>
+                <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 2px;">Cơ cấu đoàn viên thanh niên chia theo từng cụm dân cư Thôn Tiền Tiến</p>
+              </div>
+              <span class="badge" style="background: var(--bg-input); color: var(--primary); font-weight: 700; padding: 5px 12px; border-radius: var(--radius-full); font-size: 0.8rem;">Thôn Tiền Tiến</span>
+            </div>
+
+            <div th:each="entry : ${stats.villageDistribution}" class="village-stat-item">
+              <div class="village-stat-header">
+                <span style="display: flex; align-items: center; gap: 8px;">
+                  <span style="width: 8px; height: 8px; border-radius: 50%; background: #2563eb;"></span>
+                  <span th:text="${entry.key}">Xóm 1 (Thôn Tiền Tiến)</span>
+                </span>
+                <span style="color: var(--primary); font-weight: 800; font-size: 0.86rem;" th:text="${entry.value} + ' đoàn viên'">2 đoàn viên</span>
+              </div>
+              <div class="village-stat-bar">
+                <div class="village-stat-fill" th:style="'width: ' + (${entry.value} * 100 / (${stats.totalMembers} > 0 ? ${stats.totalMembers} : 1)) + '%'"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Top Volunteers Card -->
+          <div class="card" style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-xl); padding: 26px; box-shadow: var(--shadow-sm);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+              <div>
+                <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--text-primary);">Gương Mặt Tiêu Biểu Phong Trào Thôn</h3>
+                <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 2px;">Đoàn viên tích cực tham gia Ngày Chủ nhật xanh dọn vệ sinh đường thôn</p>
+              </div>
+              <a th:href="@{/members}" style="font-size: 0.82rem; color: var(--primary); font-weight: 700; text-decoration: none;">Xem tất cả &rarr;</a>
+            </div>
+
+            <div th:each="m, iter : ${topVolunteers}" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border-color);">
+              <div style="display: flex; align-items: center; gap: 14px;">
+                <span style="font-weight: 800; font-size: 0.9rem; width: 22px; text-align: center; color: var(--text-muted);"
+                      th:text="${iter.index == 0 ? '🥇' : (iter.index == 1 ? '🥈' : (iter.index == 2 ? '🥉' : '#' + (iter.index + 1)))}">#1</span>
+                <img th:src="${m.avatar}" alt="Avatar" style="width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid #e2e8f0;">
+                <div>
+                  <div style="font-weight: 700; font-size: 0.92rem; color: var(--text-primary);" th:text="${m.fullName}">Nguyễn Văn An</div>
+                  <div style="font-size: 0.78rem; color: var(--text-secondary);" th:text="${m.village} + ' • ' + ${m.position}">Xóm 1 • Bí thư Chi đoàn</div>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span class="badge" style="background: rgba(16, 185, 129, 0.12); color: #047857; font-weight: 700; padding: 5px 10px; border-radius: var(--radius-full); font-size: 0.8rem;" th:text="${m.volunteerDays} + ' buổi'">14 buổi</span>
+                <a th:href="@{'/members/' + ${m.id} + '/certificate'}" class="btn-action-link btn-action-cert" style="padding: 5px 10px; font-size: 0.76rem;" title="Xem Giấy nhận xét">📜 Giấy NX</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Scripts Fragment -->
+  <div th:replace="~{fragments/scripts :: scripts}"></div>
+</body>
+</html>

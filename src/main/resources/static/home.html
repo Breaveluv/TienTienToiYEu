@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trang Chủ - Đoàn TNCS Hồ Chí Minh Thôn Tiền Tiến</title>
+  
+  <!-- Favicon biểu trưng sao vàng cờ Đoàn -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%23005baa'/><polygon points='50,15 61,38 85,38 66,54 73,78 50,63 27,78 34,54 15,38 39,38' fill='%23ffcc00'/></svg>">
+
+  <!-- Google Fonts: Be Vietnam Pro (Chuẩn quốc tế tiếng Việt) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5.3.3 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Bootstrap Icons 1.11.3 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --doan-blue: #005baa;       /* Màu xanh cờ Đoàn TNCS */
+      --doan-blue-dark: #003d75;  /* Xanh đậm */
+      --doan-blue-light: #e6f0fa; /* Nền xanh phấn nhạt */
+      --doan-red: #dc2626;        /* Đỏ nhiệt huyết cờ Tổ quốc */
+      --doan-gold: #f59e0b;       /* Vàng sao sáng */
+      --doan-green: #10b981;      /* Xanh lá tình nguyện */
+      --bg-body: #f8fafc;         /* Nền sáng tinh tế */
+      --text-main: #0f172a;       /* Màu chữ chính */
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      font-family: 'Be Vietnam Pro', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    /* ========================================================
+       1. TOP NAVBAR (THANH ĐIỀU HƯỚNG CỔNG THÔNG TIN)
+    ======================================================== */
+    .portal-navbar {
+      background-color: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid #e2e8f0;
+      position: sticky;
+      top: 0;
+      z-index: 1050;
+      transition: var(--transition);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+    }
+
+    .brand-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .brand-badge {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--doan-blue), #2563eb);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.35rem;
+      box-shadow: 0 4px 12px rgba(0, 91, 170, 0.3);
+    }
+
+    .brand-title h1 {
+      font-size: 1.02rem;
+      font-weight: 800;
+      color: var(--doan-blue);
+      margin: 0;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+    }
+
+    .brand-title span {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .nav-link-custom {
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: #334155;
+      padding: 8px 16px;
+      border-radius: 8px;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+
+    .nav-link-custom:hover {
+      color: var(--doan-blue);
+      background-color: var(--doan-blue-light);
+    }
+
+    .btn-dashboard-entry {
+      background: linear-gradient(135deg, var(--doan-blue), #1d4ed8);
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 0.88rem;
+      border-radius: 24px;
+      padding: 8px 20px;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0, 91, 170, 0.3);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: var(--transition);
+      border: none;
+    }
+
+    .btn-dashboard-entry:hover {
+      background: linear-gradient(135deg, var(--doan-blue-dark), #1e40af);
+      color: #ffffff;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(0, 91, 170, 0.4);
+    }
+
+    /* ========================================================
+       2. HERO BANNER (KHỐI CHÀO ĐÓN ẤN TƯỢNG)
+    ======================================================== */
+    .hero-section {
+      position: relative;
+      background: linear-gradient(135deg, #004b8d 0%, #005baa 50%, #0284c7 100%);
+      color: #ffffff;
+      padding: 90px 0 80px;
+      overflow: hidden;
+    }
+
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 204, 0, 0.15) 0%, rgba(255,255,255,0) 70%);
+      pointer-events: none;
+    }
+
+    .hero-badge-pill {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(8px);
+      color: #ffffff;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 6px 18px;
+      border-radius: 30px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .hero-title {
+      font-size: 2.85rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+    }
+
+    .hero-subtitle {
+      font-size: 1.15rem;
+      color: rgba(255, 255, 255, 0.92);
+      line-height: 1.65;
+      margin-bottom: 32px;
+      max-width: 620px;
+    }
+
+    .hero-stats-card {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(10px);
+      border-radius: 18px;
+      padding: 24px;
+      color: #ffffff;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .hero-stat-item {
+      padding: 12px;
+      text-align: center;
+      border-right: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .hero-stat-item:last-child {
+      border-right: none;
+    }
+
+    .hero-stat-num {
+      font-size: 2.1rem;
+      font-weight: 800;
+      color: #ffde59;
+      line-height: 1.1;
+    }
+
+    .hero-stat-lbl {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.85);
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    /* ========================================================
+       3. PHONG TRÀO & HOẠT ĐỘNG SECTION
+    ======================================================== */
+    .section-title-wrap {
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto 50px;
+    }
+
+    .section-badge {
+      font-size: 0.76rem;
+      font-weight: 800;
+      color: var(--doan-blue);
+      background-color: var(--doan-blue-light);
+      padding: 6px 14px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      display: inline-block;
+      margin-bottom: 12px;
+    }
+
+    .section-heading {
+      font-size: 2.1rem;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.01em;
+      margin-bottom: 12px;
+    }
+
+    .section-desc {
+      font-size: 0.96rem;
+      color: #64748b;
+      line-height: 1.6;
+    }
+
+    .activity-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
+      transition: var(--transition);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .activity-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 30px rgba(0, 91, 170, 0.12);
+      border-color: rgba(0, 91, 170, 0.35);
+    }
+
+    .activity-thumb {
+      height: 190px;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+
+    .activity-tag {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      backdrop-filter: blur(8px);
+    }
+
+    .activity-body {
+      padding: 22px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .activity-title {
+      font-size: 1.12rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 8px;
+      line-height: 1.35;
+    }
+
+    .activity-text {
+      font-size: 0.88rem;
+      color: #64748b;
+      line-height: 1.55;
+      margin-bottom: 16px;
+      flex: 1;
+    }
+
+    .activity-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 14px;
+      border-top: 1px solid #f1f5f9;
+      font-size: 0.8rem;
+      color: #64748b;
+    }
+
+    /* ========================================================
+       4. GƯƠNG SÁNG TIÊU BIỂU SECTION
+    ======================================================== */
+    .profile-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+      transition: var(--transition);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.02);
+      height: 100%;
+    }
+
+    .profile-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 14px 26px rgba(0, 91, 170, 0.1);
+      border-color: rgba(0, 91, 170, 0.3);
+    }
+
+    .profile-avatar-wrap {
+      width: 88px;
+      height: 88px;
+      border-radius: 50%;
+      margin: 0 auto 16px;
+      padding: 4px;
+      background: linear-gradient(135deg, var(--doan-blue), #38bdf8);
+    }
+
+    .profile-avatar-wrap img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #ffffff;
+    }
+
+    .profile-name {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 4px;
+    }
+
+    .profile-pos {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--doan-blue);
+      margin-bottom: 6px;
+    }
+
+    .profile-village {
+      font-size: 0.78rem;
+      color: #64748b;
+      margin-bottom: 12px;
+    }
+
+    .profile-bio {
+      font-size: 0.85rem;
+      color: #475569;
+      line-height: 1.5;
+      background: #f8fafc;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid #f1f5f9;
+    }
+
+    /* ========================================================
+       5. KHỐI TRA CỨU ĐOÀN VIÊN NHANH
+    ======================================================== */
+    .lookup-section {
+      background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%);
+      padding: 70px 0;
+      border-top: 1px solid #e2e8f0;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .lookup-box {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 20px;
+      padding: 36px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    .lookup-search-input {
+      border-radius: 30px;
+      padding: 14px 24px;
+      border: 2px solid #e2e8f0;
+      font-size: 0.95rem;
+      transition: var(--transition);
+    }
+
+    .lookup-search-input:focus {
+      border-color: var(--doan-blue);
+      box-shadow: 0 0 0 4px rgba(0, 91, 170, 0.15);
+      outline: none;
+    }
+
+    /* ========================================================
+       6. FOOTER
+    ======================================================== */
+    .portal-footer {
+      background-color: #0b192c;
+      color: #cbd5e1;
+      padding: 60px 0 24px;
+      font-size: 0.9rem;
+    }
+
+    .portal-footer a {
+      color: #94a3b8;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .portal-footer a:hover {
+      color: #38bdf8;
+    }
+
+    .footer-divider {
+      border-color: rgba(255, 255, 255, 0.1);
+      margin: 40px 0 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================
+       1. TOP NAVBAR
+  ======================================================== -->
+  <nav class="portal-navbar">
+    <div class="container d-flex align-items-center justify-content-between py-2">
+      <!-- Logo & Tên đơn vị -->
+      <a href="home.html" class="brand-container">
+        <div class="brand-badge">
+          <i class="bi bi-star-fill"></i>
+        </div>
+        <div class="brand-title">
+          <h1>ĐOÀN TNCS THÔN TIỀN TIẾN</h1>
+          <span>Cổng Thông Tin Tuổi Trẻ Cơ Sở</span>
+        </div>
+      </a>
+
+      <!-- Menu các phần chính -->
+      <div class="d-none d-lg-flex align-items-center gap-2">
+        <a href="#hero" class="nav-link-custom">Trang Chủ</a>
+        <a href="#about" class="nav-link-custom">Giới Thiệu</a>
+        <a href="#activities" class="nav-link-custom">Phong Trào</a>
+        <a href="#spotlight" class="nav-link-custom">Gương Sáng</a>
+        <a href="#lookup" class="nav-link-custom">Tra Cứu</a>
+        <a href="#contact" class="nav-link-custom">Liên Hệ</a>
+      </div>
+
+      <!-- Nút vào Trang Quản Trị (Dashboard) -->
+      <div class="d-flex align-items-center gap-2">
+        <a href="dashboard-demo.html" class="btn-dashboard-entry" title="Truy cập hệ thống quản trị sổ đoàn viên">
+          <i class="bi bi-speedometer2"></i>
+          <span>Trang Quản Trị</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ========================================================
+       2. HERO BANNER
+  ======================================================== -->
+  <header class="hero-section" id="hero">
+    <div class="container">
+      <div class="row align-items-center g-5">
+        <div class="col-12 col-lg-7">
+          <div class="hero-badge-pill">
+            <i class="bi bi-shield-fill-check text-warning"></i>
+            <span>ĐOÀN THANH NIÊN CỘNG SẢN HỒ CHÍ MINH</span>
+          </div>
+          <h1 class="hero-title">
+            Tuổi Trẻ Thôn Tiền Tiến:<br>
+            <span style="color: #ffde59;">Tiên Phong - Bản Lĩnh - Cống Hiến</span>
+          </h1>
+          <p class="hero-subtitle">
+            Nơi hội tụ sức trẻ nhiệt huyết, kết nối và phát huy tinh thần xung kích của tuổi trẻ 4 xóm thôn trong lao động, học tập, giữ gìn văn hóa làng quê và xây dựng nông thôn mới kiểu mẫu.
+          </p>
+          <div class="d-flex flex-wrap gap-3">
+            <a href="#activities" class="btn btn-light fw-bold px-4 py-3 rounded-pill text-primary shadow">
+              <i class="bi bi-compass me-2"></i>Khám Phá Hoạt Động
+            </a>
+            <a href="#lookup" class="btn btn-outline-light fw-bold px-4 py-3 rounded-pill">
+              <i class="bi bi-search me-2"></i>Tra Cứu Sổ Đoàn
+            </a>
+            <a href="dashboard-demo.html" class="btn btn-warning fw-bold px-4 py-3 rounded-pill text-dark shadow">
+              <i class="bi bi-box-arrow-in-right me-2"></i>Vào Quản Trị (Dashboard)
+            </a>
+          </div>
+        </div>
+
+        <!-- Khối thống kê nổi bật -->
+        <div class="col-12 col-lg-5">
+          <div class="hero-stats-card">
+            <h5 class="fw-bold mb-3 d-flex align-items-center gap-2">
+              <i class="bi bi-bar-chart-fill text-warning"></i>
+              <span>Dấu Ấn Tuổi Trẻ Thôn Tiền Tiến</span>
+            </h5>
+            <div class="row g-0">
+              <div class="col-6 hero-stat-item border-bottom pb-3">
+                <div class="hero-stat-num">48+</div>
+                <div class="hero-stat-lbl">Đoàn viên thanh niên</div>
+              </div>
+              <div class="col-6 hero-stat-item border-bottom pb-3">
+                <div class="hero-stat-num">4</div>
+                <div class="hero-stat-lbl">Xóm thôn đoàn kết</div>
+              </div>
+              <div class="col-6 hero-stat-item pt-3">
+                <div class="hero-stat-num">100%</div>
+                <div class="hero-stat-lbl">Đoàn kết & xung kích</div>
+              </div>
+              <div class="col-6 hero-stat-item pt-3">
+                <div class="hero-stat-num">8.45 Tr</div>
+                <div class="hero-stat-lbl">Quỹ đoàn tự quản</div>
+              </div>
+            </div>
+            <div class="mt-3 pt-3 border-top border-white border-opacity-25 small text-center text-white-50">
+              <i class="bi bi-geo-alt-fill text-warning me-1"></i> Chi Đoàn Thôn Tiền Tiến - Sinh hoạt tại Nhà văn hóa thôn
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================================
+       3. GIỚI THIỆU CHI ĐOÀN THÔN TIỀN TIẾN
+  ======================================================== -->
+  <section class="py-5" id="about">
+    <div class="container py-4">
+      <div class="section-title-wrap">
+        <span class="section-badge">Giới Thiệu Đơn Vị</span>
+        <h2 class="section-heading">Chi Đoàn Cơ Sở Thôn Tiền Tiến</h2>
+        <p class="section-desc">
+          Chi đoàn Thôn Tiền Tiến là tổ chức Đoàn thanh niên trực tiếp tại địa bàn thôn xóm, đóng vai trò nòng cốt trong công tác tập hợp, giáo dục và tổ chức các phong trào thanh thiếu nhi của thôn.
+        </p>
+      </div>
+
+      <div class="row g-4">
+        <!-- Cột 1 -->
+        <div class="col-12 col-md-4">
+          <div class="p-4 bg-white rounded-4 border shadow-sm h-100 text-center">
+            <div class="d-inline-flex align-items-center justify-content-center bg-primary bg-opacity-10 text-primary rounded-3 p-3 mb-3" style="font-size: 2rem; width: 64px; height: 64px;">
+              <i class="bi bi-people-fill"></i>
+            </div>
+            <h4 class="fw-bold mb-2">Đoàn Kết 4 Cụm Xóm</h4>
+            <p class="text-muted small">
+              Tập hợp lực lượng thanh niên rộng khắp từ Xóm 1, Xóm 2, Xóm 3, Xóm 4 đến Cụm Đình - Chùa và Cụm Đồng Sau, tạo nên khối đại đoàn kết bền vững.
+            </p>
+          </div>
+        </div>
+
+        <!-- Cột 2 -->
+        <div class="col-12 col-md-4">
+          <div class="p-4 bg-white rounded-4 border shadow-sm h-100 text-center">
+            <div class="d-inline-flex align-items-center justify-content-center bg-success bg-opacity-10 text-success rounded-3 p-3 mb-3" style="font-size: 2rem; width: 64px; height: 64px;">
+              <i class="bi bi-tree-fill"></i>
+            </div>
+            <h4 class="fw-bold mb-2">Tình Nguyện Vì Làng Quê</h4>
+            <p class="text-muted small">
+              Thực hiện hiệu quả chiến dịch Ngày Chủ Nhật Xanh, đường làng ngõ xóm sáng - xanh - sạch - đẹp, chăm lo người già neo đơn và gia đình có công.
+            </p>
+          </div>
+        </div>
+
+        <!-- Cột 3 -->
+        <div class="col-12 col-md-4">
+          <div class="p-4 bg-white rounded-4 border shadow-sm h-100 text-center">
+            <div class="d-inline-flex align-items-center justify-content-center bg-warning bg-opacity-10 text-warning rounded-3 p-3 mb-3" style="font-size: 2rem; width: 64px; height: 64px;">
+              <i class="bi bi-cpu-fill"></i>
+            </div>
+            <h4 class="fw-bold mb-2">Tiên Phong Công Nghệ Số</h4>
+            <p class="text-muted small">
+              Đội hình Tổ công nghệ số cộng đồng của Chi đoàn thôn trực tiếp hỗ trợ nhân dân cài đặt VNeID, nộp hồ sơ dịch vụ công và thanh toán điện tử.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       4. PHONG TRÀO & HOẠT ĐỘNG
+  ======================================================== -->
+  <section class="py-5 bg-white" id="activities">
+    <div class="container py-4">
+      <div class="section-title-wrap">
+        <span class="section-badge">Phong Trào Hành Động</span>
+        <h2 class="section-heading">Các Hoạt Động Xung Kích Của Tuổi Trẻ Thôn</h2>
+        <p class="section-desc">
+          Các công trình, phần việc thanh niên thiết thực được tổ chức thường xuyên tại địa bàn Thôn Tiền Tiến.
+        </p>
+      </div>
+
+      <div class="row g-4">
+        <!-- Hoạt động 1 -->
+        <div class="col-12 col-md-6 col-lg-4">
+          <div class="activity-card">
+            <div class="activity-thumb" style="background-image: url('https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=600&h=350&fit=crop');">
+              <span class="activity-tag bg-success text-white">Đã Hoàn Thành</span>
+            </div>
+            <div class="activity-body">
+              <h3 class="activity-title">Chiến Dịch Ngày Chủ Nhật Xanh Vệ Sinh Đường Làng</h3>
+              <p class="activity-text">
+                Huy động hơn 35 đoàn viên thanh niên phát quang bụi rậm, thu gom rác thải và trồng cây xanh ven trục đường chính Thôn Tiền Tiến.
+              </p>
+              <div class="activity-meta">
+                <span><i class="bi bi-geo-alt text-primary me-1"></i>Đường trục thôn</span>
+                <span><i class="bi bi-calendar3 me-1"></i>15/08/2026</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hoạt động 2 -->
+        <div class="col-12 col-md-6 col-lg-4">
+          <div class="activity-card">
+            <div class="activity-thumb" style="background-image: url('https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=600&h=350&fit=crop');">
+              <span class="activity-tag bg-primary text-white">Đang Diễn Ra</span>
+            </div>
+            <div class="activity-body">
+              <h3 class="activity-title">Giải Bóng Đá Thanh Niên Thôn Tiền Tiến 2026</h3>
+              <p class="activity-text">
+                Giải bóng đá truyền thống giữa 4 đội đại diện các xóm chào mừng ngày Quốc khánh 2/9 tại sân vận động trung tâm Thôn Tiền Tiến.
+              </p>
+              <div class="activity-meta">
+                <span><i class="bi bi-trophy text-warning me-1"></i>Sân thể thao thôn</span>
+                <span><i class="bi bi-calendar3 me-1"></i>01/09 - 10/09</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hoạt động 3 -->
+        <div class="col-12 col-md-6 col-lg-4">
+          <div class="activity-card">
+            <div class="activity-thumb" style="background-image: url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=600&h=350&fit=crop');">
+              <span class="activity-tag bg-warning text-dark">Sắp Diễn Ra</span>
+            </div>
+            <div class="activity-body">
+              <h3 class="activity-title">Đêm Hội Trăng Rằm - Trung Thu Cho Thiếu Nhi Thôn</h3>
+              <p class="activity-text">
+                Chăm lo cho thế hệ măng non, tổ chức rước đèn ông sao, múa lân và trao 120 suất quà khuyến học cho các em thiếu nhi trong thôn.
+              </p>
+              <div class="activity-meta">
+                <span><i class="bi bi-house-door text-success me-1"></i>Nhà văn hóa thôn</span>
+                <span><i class="bi bi-calendar3 me-1"></i>Rằm tháng 8</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       5. GƯƠNG SÁNG TIÊU BIỂU
+  ======================================================== -->
+  <section class="py-5" id="spotlight">
+    <div class="container py-4">
+      <div class="section-title-wrap">
+        <span class="section-badge">Gương Sáng Thanh Niên</span>
+        <h2 class="section-heading">Những Tấm Gương Đi Đầu Thôn Tiền Tiến</h2>
+        <p class="section-desc">
+          Tôn vinh những đoàn viên thanh niên gương mẫu trong phong trào Đoàn, tích cực học tập, khởi nghiệp và làm giàu chính đáng ngay trên quê hương.
+        </p>
+      </div>
+
+      <div class="row g-4">
+        <!-- Gương 1 -->
+        <div class="col-12 col-sm-6 col-lg-3">
+          <div class="profile-card">
+            <div class="profile-avatar-wrap">
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=160&h=160&fit=crop&crop=faces" alt="Nguyễn Văn An">
+            </div>
+            <h4 class="profile-name">Nguyễn Văn An</h4>
+            <div class="profile-pos">Bí thư Chi đoàn thôn</div>
+            <div class="profile-village">Xóm 1 (Thôn Tiền Tiến)</div>
+            <div class="profile-bio">
+              Cán bộ Đoàn nhiệt huyết, lãnh đạo Chi đoàn Thôn Tiền Tiến đạt danh hiệu Chi đoàn xuất sắc 3 năm liên tục.
+            </div>
+          </div>
+        </div>
+
+        <!-- Gương 2 -->
+        <div class="col-12 col-sm-6 col-lg-3">
+          <div class="profile-card">
+            <div class="profile-avatar-wrap">
+              <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=160&h=160&fit=crop&crop=faces" alt="Vũ Đức Thịnh">
+            </div>
+            <h4 class="profile-name">Vũ Đức Thịnh</h4>
+            <div class="profile-pos">Thanh niên làm kinh tế giỏi</div>
+            <div class="profile-village">Xóm 4 (Thôn Tiền Tiến)</div>
+            <div class="profile-bio">
+              Tiên phong xây dựng mô hình nông nghiệp công nghệ cao VAC tại thôn, thu nhập trên 200 triệu đồng/năm.
+            </div>
+          </div>
+        </div>
+
+        <!-- Gương 3 -->
+        <div class="col-12 col-sm-6 col-lg-3">
+          <div class="profile-card">
+            <div class="profile-avatar-wrap">
+              <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=160&h=160&fit=crop&crop=faces" alt="Trần Thị Mai Anh">
+            </div>
+            <h4 class="profile-name">Trần Thị Mai Anh</h4>
+            <div class="profile-pos">Phó Bí thư Chi đoàn</div>
+            <div class="profile-village">Xóm 2 (Thôn Tiền Tiến)</div>
+            <div class="profile-bio">
+              Phụ trách công tác thiếu nhi và thủ quỹ minh bạch, năng nổ trong các hoạt động thiện nguyện xã hội.
+            </div>
+          </div>
+        </div>
+
+        <!-- Gương 4 -->
+        <div class="col-12 col-sm-6 col-lg-3">
+          <div class="profile-card">
+            <div class="profile-avatar-wrap">
+              <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=160&h=160&fit=crop&crop=faces" alt="Phạm Quỳnh Trang">
+            </div>
+            <h4 class="profile-name">Phạm Quỳnh Trang</h4>
+            <div class="profile-pos">Sinh viên tiêu biểu</div>
+            <div class="profile-village">Xóm 1 (Thôn Tiền Tiến)</div>
+            <div class="profile-bio">
+              Đoạt giải sinh viên nghiên cứu khoa học xuất sắc, luôn nhiệt tình tham gia hỗ trợ các em học sinh trong thôn dịp hè.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       6. CÔNG CỤ TRA CỨU ĐOÀN VIÊN NHANH
+  ======================================================== -->
+  <section class="lookup-section" id="lookup">
+    <div class="container">
+      <div class="lookup-box">
+        <div class="text-center mb-4">
+          <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2 rounded-pill fw-bold mb-2">TRA CỨU TRỰC TUYẾN</span>
+          <h3 class="fw-bold text-dark">Tra Cứu Thông Tin Đoàn Viên Thôn Tiền Tiến</h3>
+          <p class="text-muted small">Nhập họ tên hoặc số điện thoại của đoàn viên để kiểm tra tình trạng sinh hoạt chi đoàn</p>
+        </div>
+
+        <div class="row g-2 justify-content-center mb-4">
+          <div class="col-12 col-md-8">
+            <input type="text" class="form-control lookup-search-input" id="homeSearchInput" placeholder="Ví dụ: Nguyễn Văn An, Trần Thị Mai Anh...">
+          </div>
+          <div class="col-12 col-md-3">
+            <button class="btn btn-doan-primary w-100 py-3 rounded-pill fw-bold" onclick="searchPublicMember()">
+              <i class="bi bi-search me-1"></i> Tra Cứu Ngay
+            </button>
+          </div>
+        </div>
+
+        <!-- Kết quả tra cứu nhanh -->
+        <div id="lookupResultArea" class="d-none">
+          <div class="p-3 bg-light rounded-3 border">
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 border-bottom pb-2 mb-2">
+              <h6 class="fw-bold text-primary m-0"><i class="bi bi-check-circle-fill text-success me-2"></i>Kết Quả Tìm Kiếm:</h6>
+              <span class="badge bg-success" id="resultStatus">Đang sinh hoạt</span>
+            </div>
+            <div class="row g-2 small text-dark">
+              <div class="col-6 col-md-3 text-muted">Họ và tên:</div>
+              <div class="col-6 col-md-3 fw-bold" id="resultName">Nguyễn Văn An</div>
+              <div class="col-6 col-md-3 text-muted">Chức vụ:</div>
+              <div class="col-6 col-md-3 fw-bold" id="resultPos">Bí thư Chi đoàn</div>
+              <div class="col-6 col-md-3 text-muted">Địa bàn:</div>
+              <div class="col-6 col-md-3 fw-bold" id="resultVillage">Xóm 1 (Thôn Tiền Tiến)</div>
+              <div class="col-6 col-md-3 text-muted">Quỹ đoàn phí:</div>
+              <div class="col-6 col-md-3 fw-bold text-success" id="resultFee">Đã hoàn thành nộp 2026</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       7. LỜI KÊU GỌI & LIÊN KẾT NHANH (CTA)
+  ======================================================== -->
+  <section class="py-5" style="background: linear-gradient(135deg, #005baa, #1e40af); color: #ffffff;">
+    <div class="container text-center py-4">
+      <h2 class="fw-bold mb-3">Bạn Là Thanh Niên Thôn Tiền Tiến?</h2>
+      <p class="mb-4 text-white-50 mx-auto" style="max-width: 600px;">
+        Hãy cùng tham gia sinh hoạt chi đoàn, phát huy sức trẻ cống hiến vì sự phát triển của Thôn Tiền Tiến thân yêu!
+      </p>
+      <div class="d-flex justify-content-center gap-3 flex-wrap">
+        <a href="dashboard-demo.html" class="btn btn-warning btn-lg fw-bold px-4 rounded-pill text-dark shadow">
+          <i class="bi bi-speedometer2 me-2"></i>Vào Trang Quản Trị Chi Đoàn
+        </a>
+        <a href="#contact" class="btn btn-outline-light btn-lg fw-bold px-4 rounded-pill">
+          <i class="bi bi-telephone me-2"></i>Liên Hệ Bí Thư Chi Đoàn
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       8. FOOTER
+  ======================================================== -->
+  <footer class="portal-footer" id="contact">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-12 col-md-5">
+          <div class="d-flex align-items-center gap-2 mb-3">
+            <div class="brand-badge" style="width: 38px; height: 38px; font-size: 1.1rem;">
+              <i class="bi bi-star-fill"></i>
+            </div>
+            <strong class="text-white fs-6">ĐOÀN TNCS THÔN TIỀN TIẾN</strong>
+          </div>
+          <p class="small text-secondary mb-3">
+            Cơ quan đại diện thanh niên tại cơ sở Thôn Tiền Tiến. Nơi quy tụ thanh niên nông thôn, khơi dậy khát vọng lập thân, lập nghiệp và xây dựng nông thôn mới.
+          </p>
+          <div class="small text-secondary">
+            <div><i class="bi bi-geo-alt-fill text-warning me-2"></i>Nhà văn hóa Thôn Tiền Tiến</div>
+            <div><i class="bi bi-telephone-fill text-success me-2"></i>Đường dây nóng Bí thư: 0982.145.892</div>
+          </div>
+        </div>
+
+        <div class="col-6 col-md-3">
+          <h6 class="text-white fw-bold mb-3">Liên Kết Nhanh</h6>
+          <ul class="list-unstyled small d-flex flex-column gap-2">
+            <li><a href="#hero">Trang chủ</a></li>
+            <li><a href="#about">Giới thiệu Chi đoàn</a></li>
+            <li><a href="#activities">Hoạt động phong trào</a></li>
+            <li><a href="#spotlight">Gương sáng thanh niên</a></li>
+            <li><a href="#lookup">Tra cứu đoàn viên</a></li>
+          </ul>
+        </div>
+
+        <div class="col-6 col-md-4">
+          <h6 class="text-white fw-bold mb-3">Dành Cho Cán Bộ Đoàn</h6>
+          <p class="small text-secondary mb-3">
+            Truy cập hệ thống quản trị nội bộ để quản lý hồ sơ đoàn viên, theo dõi nộp đoàn phí và báo cáo hoạt động chi đoàn.
+          </p>
+          <a href="dashboard-demo.html" class="btn btn-primary btn-sm fw-bold px-3 py-2 rounded-3 text-white">
+            <i class="bi bi-box-arrow-in-right me-1"></i> Mở Trang Quản Trị (Dashboard)
+          </a>
+        </div>
+      </div>
+
+      <hr class="footer-divider">
+
+      <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 small text-secondary">
+        <div>© 2026 Đoàn TNCS Hồ Chí Minh - Chi Đoàn Thôn Tiền Tiến. Bản quyền được bảo lưu.</div>
+        <div>Hệ thống Quản Lý Đoàn Vụ Cơ Sở</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap 5.3.3 JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Script xử lý tra cứu nhanh -->
+  <script>
+    const sampleMembers = [
+      { name: "Nguyễn Văn An", pos: "Bí thư Chi đoàn", village: "Xóm 1 (Thôn Tiền Tiến)", status: "Đang sinh hoạt", fee: "Đã nộp đủ cả năm 2026" },
+      { name: "Trần Thị Mai Anh", pos: "Phó Bí thư Chi đoàn", village: "Xóm 2 (Thôn Tiền Tiến)", status: "Đang sinh hoạt", fee: "Đã nộp đủ cả năm 2026" },
+      { name: "Lê Hoàng Minh", pos: "Chi ủy viên", village: "Xóm 3 (Thôn Tiền Tiến)", status: "Đang sinh hoạt", fee: "Đã nộp đủ cả năm 2026" },
+      { name: "Vũ Đức Thịnh", pos: "Thanh niên làm kinh tế", village: "Xóm 4 (Thôn Tiền Tiến)", status: "Đang sinh hoạt", fee: "Đã nộp đủ cả năm 2026" },
+      { name: "Phạm Quỳnh Trang", pos: "Đoàn viên", village: "Xóm 1 (Thôn Tiền Tiến)", status: "Sinh viên học xa", fee: "Đã nộp 6 tháng 2026" },
+      { name: "Đặng Quốc Tuấn", pos: "Đoàn viên", village: "Xóm 2 (Thôn Tiền Tiến)", status: "Đi làm ăn xa", fee: "Chưa nộp (Đi làm xa)" }
+    ];
+
+    function searchPublicMember() {
+      const input = document.getElementById('homeSearchInput').value.trim().toLowerCase();
+      const area = document.getElementById('lookupResultArea');
+      
+      if (!input) {
+        alert('Vui lòng nhập họ tên hoặc số điện thoại để tra cứu!');
+        return;
+      }
+
+      const found = sampleMembers.find(m => m.name.toLowerCase().includes(input));
+
+      if (found) {
+        document.getElementById('resultName').textContent = found.name;
+        document.getElementById('resultPos').textContent = found.pos;
+        document.getElementById('resultVillage').textContent = found.village;
+        document.getElementById('resultStatus').textContent = found.status;
+        document.getElementById('resultFee').textContent = found.fee;
+        area.classList.remove('d-none');
+      } else {
+        alert(`Không tìm thấy đoàn viên "${input}" trong sổ chi đoàn Thôn Tiền Tiến.`);
+        area.classList.add('d-none');
+      }
+    }
+
+    // Cho phép nhấn Enter để tìm kiếm
+    document.getElementById('homeSearchInput')?.addEventListener('keyup', function(e) {
+      if (e.key === 'Enter') searchPublicMember();
+    });
+  </script>
+</body>
+</html>

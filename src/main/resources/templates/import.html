@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Đọc Danh Sách File & AI Nhập Liệu - Chi Đoàn Thôn Tiền Tiến')}"></head>
+<body>
+  <div class="ambient-glow"></div>
+  <div class="ambient-glow-2"></div>
+
+  <div class="app-layout">
+    <!-- Sidebar Fragment -->
+    <div th:replace="~{fragments/sidebar :: sidebar('import')}"></div>
+
+    <!-- Main Content -->
+    <main class="main-wrapper">
+      <!-- Topbar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <div class="breadcrumb-nav">
+            <a th:href="@{/}">🏡 Chi Đoàn Thôn Tiền Tiến</a>
+            <span class="breadcrumb-separator">/</span>
+            <a th:href="@{/members}">Sổ Đoàn Viên</a>
+            <span class="breadcrumb-separator">/</span>
+            <span style="color: var(--primary); font-weight: 700;">Đọc Tệp Tin Văn Phòng & AI</span>
+          </div>
+        </div>
+
+        <div class="topbar-right" style="display: flex; align-items: center; gap: 10px;">
+          <!-- Theme Toggle -->
+          <button type="button" onclick="toggleTheme()" class="btn-theme-toggle" title="Chuyển chế độ Sáng / Tối"
+                  style="background: var(--bg-input); border: 1px solid var(--border-color); width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-primary); font-size: 1.05rem;">
+            <span id="themeIcon">🌓</span>
+          </button>
+          <a th:href="@{/members}" class="btn-secondary" style="padding: 9px 16px; text-decoration: none; font-size: 0.85rem; font-weight: 600;">
+            <span>&larr; Trở Lại Danh Bạ</span>
+          </a>
+          <a th:href="@{/members/template}" class="template-btn" style="padding: 9px 16px; font-size: 0.85rem; text-decoration: none;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span>Tải Mẫu Excel Chuẩn (.xlsx)</span>
+          </a>
+        </div>
+      </header>
+
+      <!-- Page Content -->
+      <div class="page-content">
+        <!-- Flash Message Alerts -->
+        <div th:if="${errorMessage}" class="alert-banner alert-error">
+          <span>⚠️</span>
+          <span th:text="${errorMessage}"></span>
+        </div>
+
+        <!-- Section Title Header -->
+        <div class="page-header" style="margin-bottom: 24px;">
+          <div class="page-header-title">
+            <h2>Đọc & Nhập Danh Sách Đoàn Viên Từ File</h2>
+            <p>Hệ thống tự động trích xuất lý lịch đoàn viên từ file Excel, Word (.docx) hoặc PDF chuyển vào Sổ Chi Đoàn Thôn Tiền Tiến.</p>
+          </div>
+        </div>
+
+        <!-- 3-Step Guide Cards -->
+        <div class="step-guide-grid">
+          <div class="step-guide-card">
+            <div class="step-num">1</div>
+            <h4>Tải Biểu Mẫu Chuẩn</h4>
+            <p>Tải file Excel mẫu được định dạng chuẩn các cột: Họ tên, Năm sinh, Xóm thôn, Chức vụ, SĐT, Số thẻ đoàn.</p>
+            <div style="margin-top: 12px;">
+              <a th:href="@{/members/template}" style="font-size: 0.82rem; font-weight: 700; color: var(--emerald); text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+                <span>📥 Tải file mẫu ngay &rarr;</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="step-guide-card">
+            <div class="step-num" style="background: rgba(59, 130, 246, 0.12); color: #2563eb;">2</div>
+            <h4>Điền Hoặc Soạn Thảo</h4>
+            <p>Nhập danh sách đoàn viên thanh niên các xóm hoặc sử dụng sẵn danh sách dạng bảng Word (.docx), bảng Excel hay văn bản PDF.</p>
+          </div>
+
+          <div class="step-guide-card">
+            <div class="step-num" style="background: rgba(16, 185, 129, 0.12); color: #059669;">3</div>
+            <h4>Tải Lên Hệ Thống</h4>
+            <p>Chọn tệp tin và nhấn xử lý. Backend Java (Apache POI & PDFBox) sẽ nạp ngay dữ liệu vào Sổ Chi Đoàn Thôn Tiền Tiến.</p>
+          </div>
+        </div>
+
+        <!-- Main Upload Card -->
+        <div class="card" style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-xl); padding: 36px; box-shadow: var(--shadow-sm); max-width: 860px; margin: 0 auto;">
+          <form th:action="@{/members/import}" method="post" enctype="multipart/form-data">
+            <!-- Upload Drop Zone Box -->
+            <div style="border: 2px dashed #93c5fd; background: linear-gradient(180deg, rgba(239, 246, 255, 0.6) 0%, rgba(248, 250, 252, 0.4) 100%); border-radius: var(--radius-lg); padding: 48px 24px; text-align: center; margin-bottom: 24px; transition: border-color 0.2s ease;">
+              <div style="width: 72px; height: 72px; border-radius: 50%; background: linear-gradient(135deg, #1d4ed8, #3b82f6); color: #ffffff; display: inline-flex; align-items: center; justify-content: center; font-size: 2rem; box-shadow: 0 8px 20px rgba(29, 78, 216, 0.3); margin-bottom: 18px;">
+                📁
+              </div>
+              <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-primary); margin-bottom: 8px;">
+                Chọn tệp tin danh sách đoàn viên từ máy tính
+              </h3>
+              <p style="font-size: 0.88rem; color: var(--text-secondary); max-width: 520px; margin: 0 auto 24px;">
+                Hệ thống hỗ trợ đọc dữ liệu tự động từ các định dạng văn phòng phổ biến của Đoàn cơ sở:
+              </p>
+
+              <!-- Supported Format Badges -->
+              <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 28px;">
+                <span style="padding: 6px 14px; font-size: 0.82rem; border-radius: var(--radius-full); background: rgba(16, 185, 129, 0.12); color: #047857; font-weight: 700; border: 1px solid rgba(16, 185, 129, 0.2);">
+                  📊 Bảng tính Excel (.xlsx, .xls, .csv)
+                </span>
+                <span style="padding: 6px 14px; font-size: 0.82rem; border-radius: var(--radius-full); background: rgba(59, 130, 246, 0.12); color: #1d4ed8; font-weight: 700; border: 1px solid rgba(59, 130, 246, 0.2);">
+                  📄 Văn bản Word (.docx)
+                </span>
+                <span style="padding: 6px 14px; font-size: 0.82rem; border-radius: var(--radius-full); background: rgba(239, 68, 68, 0.12); color: #b91c1c; font-weight: 700; border: 1px solid rgba(239, 68, 68, 0.2);">
+                  📕 Tài liệu PDF (.pdf)
+                </span>
+              </div>
+
+              <!-- File Input Container -->
+              <div style="display: inline-block; background: var(--bg-surface); border: 1px solid #cbd5e1; border-radius: var(--radius-md); padding: 8px 12px; box-shadow: var(--shadow-sm);">
+                <input type="file" name="file" accept=".xlsx, .xls, .docx, .doc, .pdf, .csv, .txt" required
+                       style="font-size: 0.9rem; color: var(--text-primary); cursor: pointer;">
+              </div>
+            </div>
+
+            <!-- Footer Action Buttons -->
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+              <a th:href="@{/members}" class="btn-secondary" style="padding: 12px 24px; text-decoration: none; font-weight: 600;">
+                &larr; Quay Lại Danh Bạ
+              </a>
+
+              <button type="submit" class="btn-primary-gradient" style="padding: 12px 28px; border: none; cursor: pointer; font-size: 0.95rem; border-radius: var(--radius-md);">
+                <span>🚀 Bắt Đầu Đọc & Nhập Dữ Liệu Vào Sổ Thôn</span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- AI Smart Text Parsing Card -->
+        <div class="card" style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-xl); padding: 32px; box-shadow: var(--shadow-sm); max-width: 860px; margin: 32px auto 0 auto;">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <div style="width: 42px; height: 42px; border-radius: 12px; background: linear-gradient(135deg, #8b5cf6, #3b82f6); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">
+                ⚡
+              </div>
+              <div>
+                <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--text-primary); margin: 0;">
+                  AI Bóc Tách Tin Nhắn Zalo & Văn Bản Tự Do
+                </h3>
+                <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 2px 0 0 0;">
+                  Dán trực tiếp tin nhắn từ Zalo nhóm thôn hoặc biên bản họp, AI sẽ tự động chuẩn hóa từng đoàn viên
+                </p>
+              </div>
+            </div>
+            <span style="font-size: 0.75rem; background: rgba(139, 92, 246, 0.12); color: var(--purple); font-weight: 700; padding: 4px 10px; border-radius: var(--radius-full);">
+              SPRING AI ENGINE
+            </span>
+          </div>
+
+          <div style="margin-bottom: 16px;">
+            <textarea id="rawTextarea" rows="5" style="width: 100%; border: 1.5px solid var(--border-color); border-radius: var(--radius-md); padding: 12px 14px; font-size: 0.88rem; background: var(--bg-input); color: var(--text-primary); outline: none; font-family: inherit; line-height: 1.5;"
+                      placeholder="Dán danh sách tự do vào đây. Ví dụ:&#10;1. Nguyễn Văn Đức, 2002, Xóm 1 (Thôn Tiền Tiến), 0984.111.222, Chi ủy viên&#10;2. Đặng Thu Thảo - 2004 - Xóm 3 - Sinh viên - 0976.333.444&#10;3. Hoàng Quốc Việt, 2001, Xóm 4, Đi làm ăn xa"></textarea>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <button type="button" onclick="clearAiText()" class="btn-secondary" style="padding: 9px 18px; font-size: 0.85rem;">
+              🧹 Xóa nội dung
+            </button>
+            <button type="button" onclick="parseRawTextWithAi()" class="btn-primary-gradient" style="border: none; cursor: pointer; padding: 10px 22px; font-size: 0.88rem; font-weight: 700;">
+              <span>⚡ AI Phân Tích Danh Sách</span>
+            </button>
+          </div>
+
+          <!-- AI Parse Preview Container -->
+          <div id="aiPreviewArea" style="display: none; margin-top: 24px; border-top: 1px dashed var(--border-color); padding-top: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+              <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--emerald); margin: 0;" id="aiResultCount">
+                ✅ AI đã nhận diện thành công: 0 đoàn viên
+              </h4>
+              <button type="button" onclick="saveParsedMembers()" class="btn-primary-gradient" style="background: linear-gradient(135deg, #059669, #10b981); border: none; cursor: pointer; padding: 8px 18px; font-size: 0.85rem; font-weight: 700;">
+                💾 Lưu Vào Sổ Chi Đoàn Ngay
+              </button>
+            </div>
+            <div style="overflow-x: auto; max-height: 280px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: var(--radius-md);">
+              <table style="width: 100%; border-collapse: collapse; font-size: 0.82rem; text-align: left;" id="aiResultTable">
+                <thead>
+                  <tr style="background: var(--bg-input); border-bottom: 1px solid var(--border-color);">
+                    <th style="padding: 8px 10px;">Họ và Tên</th>
+                    <th style="padding: 8px 10px;">Năm sinh</th>
+                    <th style="padding: 8px 10px;">Xóm</th>
+                    <th style="padding: 8px 10px;">Chức vụ</th>
+                    <th style="padding: 8px 10px;">Số điện thoại</th>
+                    <th style="padding: 8px 10px;">Tình trạng</th>
+                  </tr>
+                </thead>
+                <tbody id="aiResultTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sample Structure Preview Card -->
+        <div style="margin-top: 32px; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-xl); padding: 24px; max-width: 860px; margin-left: auto; margin-right: auto;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+            <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--text-primary);">
+              📋 Cấu Trúc Các Cột Tiêu Chuẩn Trong Biểu Mẫu Excel Của Thôn Tiền Tiến:
+            </h4>
+            <a th:href="@{/members/template}" class="template-btn" style="padding: 6px 12px; font-size: 0.78rem;">Tải File Mẫu</a>
+          </div>
+          <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.8rem; text-align: left;">
+              <thead>
+                <tr style="background: var(--bg-input); border-bottom: 1px solid var(--border-color);">
+                  <th style="padding: 8px 12px; color: var(--text-secondary);">Cột 1: Họ và Tên</th>
+                  <th style="padding: 8px 12px; color: var(--text-secondary);">Cột 2: Năm Sinh</th>
+                  <th style="padding: 8px 12px; color: var(--text-secondary);">Cột 3: Xóm Cư Trú</th>
+                  <th style="padding: 8px 12px; color: var(--text-secondary);">Cột 4: Chức Vụ</th>
+                  <th style="padding: 8px 12px; color: var(--text-secondary);">Cột 5: Số Điện Thoại</th>
+                  <th style="padding: 8px 12px; color: var(--text-secondary);">Cột 6: Tình Trạng</th>
+                  <th style="padding: 8px 12px; color: var(--text-secondary);">Cột 7: Số Thẻ Đoàn</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="color: var(--text-muted);">
+                  <td style="padding: 8px 12px;">Lê Văn Hùng</td>
+                  <td style="padding: 8px 12px;">2003</td>
+                  <td style="padding: 8px 12px;">Xóm 1 (Thôn Tiền Tiến)</td>
+                  <td style="padding: 8px 12px;">Đoàn viên</td>
+                  <td style="padding: 8px 12px;">0982.111.222</td>
+                  <td style="padding: 8px 12px;">Tại thôn</td>
+                  <td style="padding: 8px 12px;">TD-882190</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Scripts Fragment -->
+  <div th:replace="~{fragments/scripts :: scripts}"></div>
+
+  <script>
+    let currentParsedMembers = [];
+
+    function clearAiText() {
+      document.getElementById('rawTextarea').value = '';
+      document.getElementById('aiPreviewArea').style.display = 'none';
+      currentParsedMembers = [];
+    }
+
+    async function parseRawTextWithAi() {
+      const text = document.getElementById('rawTextarea').value.trim();
+      if (!text) {
+        alert('Vui lòng dán nội dung văn bản hoặc danh sách cần bóc tách!');
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/ai/parse-text', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ rawText: text })
+        });
+        const data = await res.json();
+        currentParsedMembers = data.members || [];
+
+        if (currentParsedMembers.length === 0) {
+          alert('Không nhận diện được đoàn viên nào từ đoạn văn bản trên. Hãy thử định dạng mỗi đoàn viên trên 1 dòng.');
+          return;
+        }
+
+        document.getElementById('aiResultCount').innerText = `✅ AI đã nhận diện thành công: ${currentParsedMembers.length} đoàn viên`;
+        const tbody = document.getElementById('aiResultTableBody');
+        tbody.innerHTML = '';
+
+        currentParsedMembers.forEach(m => {
+          const tr = document.createElement('tr');
+          tr.style.borderBottom = '1px solid var(--border-color)';
+          tr.innerHTML = `
+            <td style="padding: 8px 10px; font-weight: 700;">${escapeHtml(m.fullName)}</td>
+            <td style="padding: 8px 10px;">${escapeHtml(m.birthYear)}</td>
+            <td style="padding: 8px 10px;">${escapeHtml(m.village)}</td>
+            <td style="padding: 8px 10px;">${escapeHtml(m.position)}</td>
+            <td style="padding: 8px 10px;">${escapeHtml(m.phone)}</td>
+            <td style="padding: 8px 10px;"><span class="badge" style="background: rgba(16, 185, 129, 0.1); color: var(--emerald);">${escapeHtml(m.residenceStatus)}</span></td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+        document.getElementById('aiPreviewArea').style.display = 'block';
+      } catch (err) {
+        alert('Lỗi AI bóc tách văn bản: ' + err.message);
+      }
+    }
+
+    async function saveParsedMembers() {
+      if (!currentParsedMembers || currentParsedMembers.length === 0) return;
+
+      try {
+        const res = await fetch('/api/ai/save-imported-members', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(currentParsedMembers)
+        });
+        const data = await res.json();
+        if (data.success) {
+          alert(`🎉 ${data.message}`);
+          window.location.href = '/members';
+        } else {
+          alert('Lỗi lưu dữ liệu: ' + (data.message || 'Không rõ nguyên nhân'));
+        }
+      } catch (err) {
+        alert('Lỗi gửi dữ liệu lên máy chủ: ' + err.message);
+      }
+    }
+
+    function escapeHtml(string) {
+      if (!string) return '';
+      const entityMap = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+      return String(string).replace(/[&<>"']/g, s => entityMap[s]);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trợ Lý AI Chi Đoàn - Thôn Tiền Tiến</title>
+  <link rel="icon" type="image/svg+xml" th:href="@{/assets/logo.svg}">
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <link rel="stylesheet" th:href="@{/css/components.css}">
+  <style>
+    .copilot-container {
+      display: flex;
+      flex-direction: column;
+      height: calc(100vh - 120px);
+      max-width: 1000px;
+      margin: 0 auto;
+      background: var(--bg-surface);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+    }
+
+    .copilot-header {
+      padding: 18px 24px;
+      background: linear-gradient(135deg, rgba(29, 78, 216, 0.08), rgba(139, 92, 246, 0.08));
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .copilot-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      background: rgba(16, 185, 129, 0.12);
+      color: var(--emerald);
+      font-size: 0.8rem;
+      font-weight: 700;
+      border: 1px solid rgba(16, 185, 129, 0.25);
+    }
+
+    .copilot-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .chat-msg {
+      display: flex;
+      gap: 14px;
+      max-width: 85%;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .chat-msg.user {
+      align-self: flex-end;
+      flex-direction: row-reverse;
+    }
+
+    .chat-msg.assistant {
+      align-self: flex-start;
+    }
+
+    .msg-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .chat-msg.assistant .msg-avatar {
+      background: linear-gradient(135deg, #1d4ed8, #8b5cf6);
+      color: white;
+    }
+
+    .chat-msg.user .msg-avatar {
+      background: linear-gradient(135deg, #0284c7, #06b6d4);
+      color: white;
+    }
+
+    .msg-bubble {
+      padding: 14px 18px;
+      border-radius: var(--radius-lg);
+      line-height: 1.6;
+      font-size: 0.95rem;
+      position: relative;
+    }
+
+    .chat-msg.assistant .msg-bubble {
+      background: var(--bg-main);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+      border-top-left-radius: 4px;
+    }
+
+    .chat-msg.user .msg-bubble {
+      background: linear-gradient(135deg, #1d4ed8, #2563eb);
+      color: white;
+      border-top-right-radius: 4px;
+      box-shadow: 0 4px 12px rgba(29, 78, 216, 0.25);
+    }
+
+    .msg-bubble p {
+      margin: 0 0 8px 0;
+    }
+
+    .msg-bubble p:last-child {
+      margin-bottom: 0;
+    }
+
+    .msg-bubble ul, .msg-bubble ol {
+      margin: 6px 0 6px 20px;
+      padding: 0;
+    }
+
+    .msg-bubble li {
+      margin-bottom: 4px;
+    }
+
+    .chip-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 0 24px 16px 24px;
+    }
+
+    .prompt-chip {
+      background: var(--bg-main);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-full);
+      padding: 6px 14px;
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .prompt-chip:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    .copilot-input-area {
+      padding: 16px 24px;
+      background: var(--bg-surface-elevated);
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .copilot-input-box {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      background: var(--bg-input);
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-xl);
+      padding: 6px 16px;
+      transition: border-color var(--transition-fast);
+    }
+
+    .copilot-input-box:focus-within {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.15);
+    }
+
+    .copilot-input-box input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: 8px 0;
+      font-size: 0.95rem;
+      outline: none;
+      color: var(--text-primary);
+    }
+
+    .send-btn {
+      background: linear-gradient(135deg, var(--primary), #3b82f6);
+      color: white;
+      border: none;
+      border-radius: var(--radius-lg);
+      padding: 10px 18px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all var(--transition-fast);
+      box-shadow: 0 4px 12px rgba(29, 78, 216, 0.3);
+    }
+
+    .send-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(29, 78, 216, 0.4);
+    }
+
+    .typing-indicator {
+      display: none;
+      align-items: center;
+      gap: 4px;
+      padding: 12px 18px;
+      background: var(--bg-main);
+      border-radius: var(--radius-lg);
+      width: fit-content;
+      border: 1px solid var(--border-color);
+    }
+
+    .typing-dot {
+      width: 7px;
+      height: 7px;
+      background: var(--text-muted);
+      border-radius: 50%;
+      animation: bounce 1.4s infinite ease-in-out;
+    }
+
+    .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+    .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+    @keyframes bounce {
+      0%, 80%, 100% { transform: scale(0); }
+      40% { transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+  <div class="ambient-glow"></div>
+  <div class="ambient-glow-2"></div>
+
+  <div class="app-layout">
+    <!-- Sidebar Fragment -->
+    <div th:replace="~{fragments/sidebar :: sidebar('copilot')}"></div>
+
+    <!-- Main Content -->
+    <main class="main-wrapper">
+      <header class="topbar">
+        <div class="topbar-left">
+          <div class="breadcrumb-nav">
+            <a th:href="@{/}">🏡 Chi Đoàn Thôn Tiền Tiến</a>
+            <span class="breadcrumb-separator">/</span>
+            <span style="color: var(--primary); font-weight: 700;">Trợ Lý AI Chi Đoàn (Copilot)</span>
+          </div>
+        </div>
+        <div class="topbar-right" style="display: flex; align-items: center; gap: 10px;">
+          <!-- Theme Toggle -->
+          <button type="button" onclick="toggleTheme()" class="btn-theme-toggle" title="Chuyển chế độ Sáng / Tối"
+                  style="background: var(--bg-input); border: 1px solid var(--border-color); width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-primary); font-size: 1.05rem;">
+            <span id="themeIcon">🌓</span>
+          </button>
+          <span class="copilot-badge" style="padding: 6px 12px; font-size: 0.82rem;">
+            <span class="pulsing-dot" style="background: var(--emerald);"></span>
+            Spring AI • Sẵn Sàng
+          </span>
+        </div>
+      </header>
+
+      <div class="content-body" style="padding: 24px;">
+        <div class="copilot-container">
+          <!-- Header info -->
+          <div class="copilot-header">
+            <div>
+              <strong style="color: var(--text-primary); font-size: 1rem;">Chi Đoàn Copilot v2.0</strong>
+              <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 2px;">
+                Dữ liệu kết nối: <span th:text="${stats.totalMembers}">8</span> đoàn viên • <span th:text="${stats.localCount}">5</span> tại thôn • <span th:text="${stats.awayCount}">2</span> làm ăn xa • <span th:text="${stats.studentCount}">2</span> sinh viên
+              </div>
+            </div>
+            <button onclick="clearChat()" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.82rem;">
+              🧹 Làm mới hội thoại
+            </button>
+          </div>
+
+          <!-- Messages Area -->
+          <div class="copilot-messages" id="chatBox">
+            <!-- Bot Welcome -->
+            <div class="chat-msg assistant">
+              <div class="msg-avatar">🇻🇳</div>
+              <div class="msg-bubble">
+                <p><strong>Chào mừng đồng chí Bí thư và Ban chấp hành Chi đoàn Thôn Tiền Tiến!</strong></p>
+                <p>Tôi là Trợ lý AI của Chi đoàn. Tôi có thể hỗ trợ đồng chí các nội dung công tác thiết thực:</p>
+                <ul>
+                  <li>📊 <strong>Phân tích số liệu đoàn viên:</strong> Tình hình sinh hoạt tại thôn, đoàn viên đi làm ăn xa, sinh viên học xa.</li>
+                  <li>🌿 <strong>Xây dựng kế hoạch phong trào:</strong> Ngày Chủ nhật xanh, dọn dẹp đường làng ngõ xóm, trồng hoa trục thôn.</li>
+                  <li>✍️ <strong>Soạn thảo văn bản Đoàn:</strong> Lời nhận xét đoàn viên, bài phát biểu đại hội, kế hoạch hoạt động hè.</li>
+                </ul>
+                <p style="margin-top: 8px; font-size: 0.88rem; color: var(--text-secondary);">
+                  👉 Đồng chí hãy chọn một gợi ý bên dưới hoặc nhập câu hỏi trực tiếp:
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Typing indicator -->
+          <div class="typing-indicator" id="typingIndicator" style="margin-left: 24px; margin-bottom: 12px;">
+            <span class="typing-dot"></span>
+            <span class="typing-dot"></span>
+            <span class="typing-dot"></span>
+            <span style="font-size: 0.82rem; color: var(--text-muted); margin-left: 6px;">AI đang soạn câu trả lời...</span>
+          </div>
+
+          <!-- Suggested chips -->
+          <div class="chip-container" id="chipContainer">
+            <div class="prompt-chip" onclick="sendQuickPrompt('Thống kê tổng quan số lượng đoàn viên Thôn Tiền Tiến')">
+              📊 Thống kê nhân lực thanh niên
+            </div>
+            <div class="prompt-chip" onclick="sendQuickPrompt('Tình hình đoàn viên đi làm ăn xa và sinh viên học xa')">
+              💼 Đoàn viên làm xa & Sinh viên
+            </div>
+            <div class="prompt-chip" onclick="sendQuickPrompt('Danh sách Top đoàn viên tham gia nhiều buổi Chủ nhật xanh nhất')">
+              🏆 Top thanh niên tích cực
+            </div>
+            <div class="prompt-chip" onclick="sendQuickPrompt('Gợi ý kế hoạch tổ chức Ngày Chủ nhật xanh tuần tới')">
+              🌿 Kế hoạch ra quân Chủ nhật xanh
+            </div>
+            <div class="prompt-chip" onclick="sendQuickPrompt('Dự thảo bài phát biểu cho Bí thư Chi đoàn thôn')">
+              🎤 Soạn thảo bài phát biểu
+            </div>
+          </div>
+
+          <!-- Input Area -->
+          <div class="copilot-input-area">
+            <div class="copilot-input-box">
+              <input type="text" id="userInput" placeholder="Hỏi bất kỳ điều gì về đoàn viên và phong trào Thôn Tiền Tiến..." onkeydown="handleKeyDown(event)">
+            </div>
+            <button class="send-btn" onclick="sendMessage()">
+              <span>Gửi</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Scripts Fragment -->
+  <div th:replace="~{fragments/scripts :: scripts}"></div>
+
+  <script>
+    function handleKeyDown(e) {
+      if (e.key === 'Enter') {
+        sendMessage();
+      }
+    }
+
+    function sendQuickPrompt(promptText) {
+      document.getElementById('userInput').value = promptText;
+      sendMessage();
+    }
+
+    function clearChat() {
+      const chatBox = document.getElementById('chatBox');
+      chatBox.innerHTML = `
+        <div class="chat-msg assistant">
+          <div class="msg-avatar">🇻🇳</div>
+          <div class="msg-bubble">
+            <p><strong>Chào đồng chí!</strong> Hội thoại đã được làm mới. Tôi sẵn sàng hỗ trợ các công việc tiếp theo của Chi đoàn Thôn Tiền Tiến.</p>
+          </div>
+        </div>
+      `;
+    }
+
+    async function sendMessage() {
+      const input = document.getElementById('userInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const chatBox = document.getElementById('chatBox');
+      const indicator = document.getElementById('typingIndicator');
+
+      // Add user message
+      const userDiv = document.createElement('div');
+      userDiv.className = 'chat-msg user';
+      userDiv.innerHTML = `
+        <div class="msg-avatar">👤</div>
+        <div class="msg-bubble"><p>${escapeHtml(text)}</p></div>
+      `;
+      chatBox.appendChild(userDiv);
+      input.value = '';
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      // Show typing
+      indicator.style.display = 'flex';
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      try {
+        const res = await fetch('/api/ai/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: text })
+        });
+        const data = await res.json();
+
+        indicator.style.display = 'none';
+
+        // Add assistant reply
+        const botDiv = document.createElement('div');
+        botDiv.className = 'chat-msg assistant';
+        botDiv.innerHTML = `
+          <div class="msg-avatar">⚡</div>
+          <div class="msg-bubble">${formatMarkdown(data.reply || 'Không có phản hồi.')}</div>
+        `;
+        chatBox.appendChild(botDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
+      } catch (err) {
+        indicator.style.display = 'none';
+        const errDiv = document.createElement('div');
+        errDiv.className = 'chat-msg assistant';
+        errDiv.innerHTML = `
+          <div class="msg-avatar">⚠️</div>
+          <div class="msg-bubble"><p style="color: var(--crimson);">Đã có lỗi khi kết nối với máy chủ AI: ${err.message}</p></div>
+        `;
+        chatBox.appendChild(errDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }
+    }
+
+    function formatMarkdown(text) {
+      let html = escapeHtml(text);
+      // Bold
+      html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      // Italic
+      html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+      // Linebreaks to paragraphs/breaks
+      html = html.replace(/\n\n/g, '</p><p>');
+      html = html.replace(/\n/g, '<br>');
+      return `<p>${html}</p>`;
+    }
+
+    function escapeHtml(string) {
+      const entityMap = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      };
+      return String(string).replace(/[&<>"']/g, s => entityMap[s]);
+    }
+  </script>
+</body>
+</html>

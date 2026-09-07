@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Sổ Đoàn Viên - Chi Đoàn Thôn Tiền Tiến')}"></head>
+<body>
+  <div class="ambient-glow"></div>
+  <div class="ambient-glow-2"></div>
+
+  <div class="app-layout">
+    <!-- Sidebar Fragment -->
+    <div th:replace="~{fragments/sidebar :: sidebar('members')}"></div>
+
+    <!-- Main Content -->
+    <main class="main-wrapper">
+      <!-- Topbar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <div class="breadcrumb-nav">
+            <a th:href="@{/}">🏡 Chi Đoàn Thôn Tiền Tiến</a>
+            <span class="breadcrumb-separator">/</span>
+            <span style="color: var(--primary); font-weight: 700;">Sổ Danh Bạ Đoàn Viên</span>
+          </div>
+        </div>
+
+        <div class="topbar-right" style="display: flex; align-items: center; gap: 10px;">
+          <!-- Theme Toggle -->
+          <button type="button" onclick="toggleTheme()" class="btn-theme-toggle" title="Chuyển chế độ Sáng / Tối"
+                  style="background: var(--bg-input); border: 1px solid var(--border-color); width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-primary); font-size: 1.05rem;">
+            <span id="themeIcon">🌓</span>
+          </button>
+          <a th:href="@{/members/new}" class="btn-primary-gradient" style="text-decoration: none;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <span>+ Tiếp Nhận Đoàn Viên</span>
+          </a>
+          <a th:href="@{/members/import}" class="btn-action-link" style="background: var(--bg-input); border: 1px solid var(--border-color); padding: 9px 15px; border-radius: var(--radius-md); color: var(--text-primary); font-weight: 600; text-decoration: none;">
+            <span>📥 Nhập File</span>
+          </a>
+          <a th:href="@{/members/template}" class="template-btn" style="padding: 9px 15px; font-size: 0.84rem; text-decoration: none;">
+            <span>📊 Mẫu Excel</span>
+          </a>
+        </div>
+      </header>
+
+      <!-- Page Content -->
+      <div class="page-content">
+        <!-- Flash Message Alerts -->
+        <div th:if="${successMessage}" class="alert-banner alert-success">
+          <span>✅</span>
+          <span th:text="${successMessage}"></span>
+        </div>
+        <div th:if="${errorMessage}" class="alert-banner alert-error">
+          <span>⚠️</span>
+          <span th:text="${errorMessage}"></span>
+        </div>
+
+        <!-- Section Header -->
+        <div class="page-header">
+          <div class="page-header-title">
+            <h2>Sổ Danh Bạ Đoàn Viên Chi Đoàn Thôn Tiền Tiến</h2>
+            <p th:text="'Quản lý thông tin chính thức của ' + ${totalCount} + ' đoàn viên tại các xóm trong Thôn Tiền Tiến.'"></p>
+          </div>
+          <div style="display: flex; gap: 10px;">
+            <a th:href="@{/members/new}" class="btn-primary-gradient" style="text-decoration: none;">
+              + Thêm Mới Đoàn Viên
+            </a>
+          </div>
+        </div>
+
+        <!-- Filter Card -->
+        <form th:action="@{/members}" method="get" style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-xl); padding: 18px 22px; margin-bottom: 24px; box-shadow: var(--shadow-sm); display: flex; flex-wrap: wrap; gap: 14px; align-items: center;">
+          <div style="flex: 1; min-width: 240px; position: relative;">
+            <input type="text" name="search" th:value="${search}" placeholder="🔍 Tìm theo họ tên, số thẻ đoàn, số điện thoại..." class="form-input" style="width: 100%; padding-left: 16px; border-radius: var(--radius-md);">
+          </div>
+
+          <div style="min-width: 200px;">
+            <select name="village" class="form-select" style="border-radius: var(--radius-md);">
+              <option value="all" th:selected="${selectedVillage == 'all'}">Tất cả các Xóm Thôn</option>
+              <option th:each="v : ${villages}" th:value="${v}" th:text="${v}" th:selected="${selectedVillage == v}"></option>
+            </select>
+          </div>
+
+          <div style="min-width: 180px;">
+            <select name="residenceStatus" class="form-select" style="border-radius: var(--radius-md);">
+              <option value="all" th:selected="${selectedResidence == 'all'}">Tất cả tình trạng cư trú</option>
+              <option th:each="r : ${residences}" th:value="${r}" th:text="${r}" th:selected="${selectedResidence == r}"></option>
+            </select>
+          </div>
+
+          <button type="submit" class="btn-primary-gradient" style="padding: 10px 20px; border: none; cursor: pointer; border-radius: var(--radius-md);">
+            Lọc Dữ Liệu
+          </button>
+
+          <a th:href="@{/members}" class="btn-secondary" style="padding: 10px 16px; text-decoration: none; display: inline-flex; align-items: center; border-radius: var(--radius-md);">
+            Xóa Lọc
+          </a>
+        </form>
+
+        <!-- Members Table Card -->
+        <div class="card" style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-sm);">
+          <div style="overflow-x: auto;">
+            <table class="data-table" style="width: 100%; border-collapse: collapse; text-align: left;">
+              <thead>
+                <tr style="background: var(--bg-input); border-bottom: 1px solid var(--border-color);">
+                  <th style="padding: 16px 20px; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); font-weight: 700;">Đoàn Viên</th>
+                  <th style="padding: 16px 20px; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); font-weight: 700;">Năm Sinh / Giới Tính</th>
+                  <th style="padding: 16px 20px; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); font-weight: 700;">Địa Bàn Cư Trú (Thôn Tiền Tiến)</th>
+                  <th style="padding: 16px 20px; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); font-weight: 700;">Chức Vụ</th>
+                  <th style="padding: 16px 20px; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); font-weight: 700;">Tình Trạng Sinh Hoạt</th>
+                  <th style="padding: 16px 20px; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); font-weight: 700;">Ngày CN Xanh</th>
+                  <th style="padding: 16px 20px; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); font-weight: 700;">Xếp Loại</th>
+                  <th style="padding: 16px 20px; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); font-weight: 700; text-align: center;">Thao Tác</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr th:if="${#lists.isEmpty(members)}">
+                  <td colspan="8" style="text-align: center; padding: 50px 20px; color: var(--text-secondary);">
+                    <div style="font-size: 2.5rem; margin-bottom: 10px;">🔍</div>
+                    <p style="font-size: 1rem; font-weight: 700; color: var(--text-primary);">Không tìm thấy đoàn viên nào</p>
+                    <p style="font-size: 0.85rem; margin-top: 4px;">Vui lòng thử lại với từ khóa tìm kiếm hoặc điều kiện lọc khác.</p>
+                  </td>
+                </tr>
+                <tr th:each="m : ${members}" style="border-bottom: 1px solid var(--border-color); transition: background 0.15s ease;">
+                  <td style="padding: 16px 20px;">
+                    <div style="display: flex; align-items: center; gap: 14px;">
+                      <img th:src="${m.avatar}" alt="Avatar" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid #e2e8f0;">
+                      <div>
+                        <div style="font-weight: 800; font-size: 0.95rem; color: var(--text-primary);" th:text="${m.fullName}">Nguyễn Văn An</div>
+                        <div style="font-size: 0.76rem; color: var(--text-muted); margin-top: 2px;">
+                          <span style="font-family: monospace; font-weight: 600; color: var(--text-secondary);" th:text="${m.unionCardNumber}">TD-892140</span>
+                          <span>•</span>
+                          <span th:text="${m.phone}">0982.145.892</span>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td style="padding: 16px 20px; font-size: 0.88rem; color: var(--text-secondary); font-weight: 600;" th:text="${m.birthYear} + ' (' + ${m.gender} + ')'">2002 (Nam)</td>
+                  <td style="padding: 16px 20px;">
+                    <span class="badge-xom"
+                          th:classappend="${m.village.contains('Xóm 1') ? 'badge-xom-1' : (m.village.contains('Xóm 2') ? 'badge-xom-2' : (m.village.contains('Xóm 3') ? 'badge-xom-3' : (m.village.contains('Xóm 4') ? 'badge-xom-4' : (m.village.contains('Đình') ? 'badge-xom-dinh' : 'badge-xom-dong'))))}"
+                          th:text="${m.village}">Xóm 1 (Thôn Tiền Tiến)</span>
+                  </td>
+                  <td style="padding: 16px 20px; font-size: 0.88rem; font-weight: 700; color: var(--text-primary);" th:text="${m.position}">Bí thư Chi đoàn</td>
+                  <td style="padding: 16px 20px;">
+                    <span class="residence-pill"
+                          th:classappend="${m.residenceStatus == 'Tại thôn' ? 'residence-pill-local' : (m.residenceStatus == 'Đi làm ăn xa' ? 'residence-pill-away' : 'residence-pill-student')}"
+                          th:text="${m.residenceStatus}">Tại thôn</span>
+                  </td>
+                  <td style="padding: 16px 20px; font-size: 0.88rem;">
+                    <span style="font-weight: 800; color: var(--emerald);" th:text="${m.volunteerDays}">14</span>
+                    <span style="font-size: 0.78rem; color: var(--text-secondary);"> buổi</span>
+                  </td>
+                  <td style="padding: 16px 20px;">
+                    <span class="badge" style="background: rgba(16, 185, 129, 0.12); color: #059669; font-weight: 800; padding: 4px 10px; border-radius: var(--radius-sm); font-size: 0.8rem;" th:text="${m.classification}">Xuất sắc</span>
+                  </td>
+                  <td style="padding: 16px 20px; text-align: center;">
+                    <div style="display: inline-flex; gap: 8px;">
+                      <a th:href="@{'/members/' + ${m.id} + '/certificate'}" class="btn-action-link btn-action-cert" title="Xem & In Giấy Nhận Xét Sinh Hoạt Cư Trú">
+                        📜 Nhận Xét
+                      </a>
+                      <a th:href="@{'/members/' + ${m.id} + '/edit'}" class="btn-action-link btn-action-edit" title="Chỉnh sửa thông tin đoàn viên">
+                        ✏️ Sửa
+                      </a>
+                      <a th:href="@{'/members/' + ${m.id} + '/delete'}" class="btn-action-link btn-action-delete" title="Xóa đoàn viên khỏi sổ">
+                        🗑️ Xóa
+                      </a>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Scripts Fragment -->
+  <div th:replace="~{fragments/scripts :: scripts}"></div>
+</body>
+</html>

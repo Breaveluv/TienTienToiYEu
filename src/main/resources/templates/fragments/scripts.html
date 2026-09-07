@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<body>
+  <div th:fragment="scripts">
+    <script>
+      // Hàm chuyển đổi giao diện Dark / Light Mode
+      function toggleTheme() {
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('tt_theme', newTheme);
+        updateThemeIcon(newTheme);
+      }
+
+      function updateThemeIcon(theme) {
+        const icon = document.getElementById('themeIcon');
+        if (icon) {
+          icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+      }
+
+      // Khởi tạo icon theo theme hiện tại
+      document.addEventListener('DOMContentLoaded', () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+        updateThemeIcon(currentTheme);
+
+        // Tự động ẩn các alert banner sau 6 giây
+        const alerts = document.querySelectorAll('.alert-banner');
+        alerts.forEach(alert => {
+          setTimeout(() => {
+            alert.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            alert.style.opacity = '0';
+            alert.style.transform = 'translateY(-10px)';
+            setTimeout(() => alert.remove(), 500);
+          }, 6000);
+        });
+      });
+    </script>
+  </div>
+</body>
+</html>

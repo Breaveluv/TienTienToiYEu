@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:text="'Giấy Nhận Xét - ' + ${member.fullName} + ' - Chi Đoàn Thôn Tiền Tiến'">Giấy Nhận Xét Sinh Hoạt Đoàn</title>
+  <link rel="icon" type="image/svg+xml" th:href="@{/assets/logo.svg}">
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <link rel="stylesheet" th:href="@{/css/components.css}">
+  <style>
+    @media print {
+      body {
+        background: #ffffff !important;
+        color: #000000 !important;
+      }
+      .sidebar, .topbar, .no-print, .ambient-glow {
+        display: none !important;
+      }
+      .main-wrapper {
+        margin-left: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+      }
+      .page-content {
+        padding: 0 !important;
+      }
+      .transfer-doc-container {
+        box-shadow: none !important;
+        border: none !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 20px 40px !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="ambient-glow no-print"></div>
+
+  <div class="app-layout">
+    <!-- Sidebar Fragment -->
+    <div th:replace="~{fragments/sidebar :: sidebar('members')}"></div>
+
+    <!-- Main Content -->
+    <main class="main-wrapper">
+      <header class="topbar no-print">
+        <div class="topbar-left">
+          <a th:href="@{/members}" style="display: inline-flex; align-items: center; gap: 8px; color: var(--text-secondary); text-decoration: none; font-weight: 700; font-size: 0.88rem;">
+            <span>&larr; Quay lại Danh bạ đoàn viên</span>
+          </a>
+        </div>
+        <div class="topbar-right" style="display: flex; gap: 10px; align-items: center;">
+          <button onclick="window.print()" class="btn-primary-gradient" style="border: none; cursor: pointer; padding: 10px 20px; font-weight: 700;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+            <span>In Giấy Nhận Xét (Ctrl + P)</span>
+          </button>
+        </div>
+      </header>
+
+      <div class="page-content">
+        <!-- AI Toolbar (No Print) -->
+        <div class="no-print" style="max-width: 820px; margin: 0 auto 20px auto; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px 20px; box-shadow: var(--shadow-sm); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 1.3rem;">⚡</span>
+            <div>
+              <strong style="font-size: 0.95rem; color: var(--text-primary);">AI Trợ Lý Viết Nhận Xét Tự Động</strong>
+              <div style="font-size: 0.8rem; color: var(--text-muted);">Tự động phân tích ngày công tình nguyện và hoàn cảnh sinh hoạt để tạo lời phê chuẩn mực</div>
+            </div>
+          </div>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button onclick="generateAiReview('summer_review')" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.82rem;">
+              🎓 Sinh hoạt hè
+            </button>
+            <button onclick="generateAiReview('year_end')" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.82rem;">
+              🏆 Đánh giá cuối năm
+            </button>
+            <button onclick="generateAiReview('commendation')" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.82rem;">
+              🌟 Khen thưởng gương sáng
+            </button>
+          </div>
+        </div>
+
+        <!-- Official Document Paper Format -->
+        <div class="transfer-doc-container" style="background: #ffffff; color: #111827; border: 1px solid #d1d5db; border-radius: 12px; padding: 50px 60px; max-width: 820px; margin: 0 auto; box-shadow: 0 12px 30px rgba(0,0,0,0.08); font-family: 'Times New Roman', Times, serif;">
+          <!-- Header 2 Cột -->
+          <div style="display: flex; justify-content: space-between; margin-bottom: 24px;">
+            <div style="text-align: center; font-size: 0.95rem; line-height: 1.45;">
+              <strong>ĐOÀN TNCS HỒ CHÍ MINH</strong><br>
+              <strong>BCH CHI ĐOÀN THÔN TIỀN TIẾN</strong><br>
+              Số: 15-NX/CĐ-TT
+              <div style="width: 90px; height: 1.5px; background: #111; margin: 4px auto 0;"></div>
+            </div>
+            <div style="text-align: center; font-size: 0.95rem; line-height: 1.45;">
+              <strong>CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</strong><br>
+              <strong>Độc lập - Tự do - Hạnh phúc</strong>
+              <div style="width: 140px; height: 1.5px; background: #111; margin: 4px auto 0;"></div>
+              <div style="font-weight: normal; font-style: italic; font-size: 0.88rem; margin-top: 6px;">
+                Thôn Tiền Tiến, ngày 26 tháng 03 năm 2025
+              </div>
+            </div>
+          </div>
+
+          <h2 style="text-align: center; font-size: 1.5rem; font-weight: 800; margin: 36px 0 28px; letter-spacing: 0.5px;">
+            GIẤY NHẬN XÉT SINH HOẠT ĐOÀN NƠI CƯ TRÚ
+          </h2>
+
+          <div style="font-size: 1.06rem; line-height: 1.85;">
+            <p style="text-align: center; margin-bottom: 24px;">
+              <strong>Kính gửi:</strong> Ban Chấp hành Đoàn trường / Chi đoàn cơ sở nơi công tác, học tập
+            </p>
+
+            <p>Ban Chấp hành Chi đoàn Thôn Tiền Tiến trân trọng chứng nhận và nhận xét quá trình sinh hoạt đối với đồng chí:</p>
+            <p style="margin-left: 10px;">• Họ và tên: <strong style="font-size: 1.18rem; text-transform: uppercase;" th:text="${member.fullName}">NGUYỄN VĂN AN</strong></p>
+            <p style="margin-left: 10px;">• Năm sinh: <strong th:text="${member.birthYear}">2002</strong> &nbsp;&nbsp;&nbsp;&nbsp; Giới tính: <span th:text="${member.gender}">Nam</span> &nbsp;&nbsp;&nbsp;&nbsp; Số thẻ đoàn viên: <strong th:text="${member.unionCardNumber}">TD-892140</strong></p>
+            <p style="margin-left: 10px;">• Chức vụ trong Chi đoàn: <span th:text="${member.position}">Bí thư Chi đoàn Thôn</span></p>
+            <p style="margin-left: 10px;">• Địa bàn cư trú: <strong th:text="${member.village}">Xóm 1 (Thôn Tiền Tiến)</strong></p>
+            <p style="margin-left: 10px;">• Tình trạng cư trú thực tế: <strong th:text="${member.residenceStatus}">Tại thôn</strong> &nbsp;&nbsp;&nbsp;&nbsp; Điện thoại liên hệ: <span th:text="${member.phone}">0982.145.892</span></p>
+
+            <div style="margin-top: 20px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <p style="margin: 0;"><strong>Nội dung nhận xét của Ban Chấp hành Chi đoàn Thôn Tiền Tiến:</strong></p>
+                <span class="no-print" style="font-size: 0.78rem; color: #2563eb; font-style: italic;">(Có thể click trực tiếp vào văn bản để chỉnh sửa trước khi in)</span>
+              </div>
+              <div id="aiReviewContent" contenteditable="true" style="padding: 8px; border-radius: 6px; transition: background 0.2s;">
+                <p style="margin-left: 14px; text-align: justify;">
+                  1. <strong>Ý thức chấp hành</strong>: Luôn gương mẫu đi đầu chấp hành tốt các chủ trương, đường lối của Đảng, chính sách pháp luật của Nhà nước và các quy ước nếp sống văn minh của Thôn Tiền Tiến.
+                </p>
+                <p style="margin-left: 14px; text-align: justify;">
+                  2. <strong>Tham gia phong trào</strong>: Nhiệt tình tham gia đầy đủ các buổi sinh hoạt Chi đoàn thôn; tích cực hưởng ứng chiến dịch <strong>Ngày Chủ nhật xanh</strong> dọn dẹp vệ sinh đường làng ngõ xóm và các hoạt động văn hóa thể thao tại Nhà văn hóa thôn (đã tham gia <strong th:text="${member.volunteerDays} + ' buổi'">14 buổi</strong>).
+                </p>
+                <p style="margin-left: 14px;">
+                  3. <strong>Xếp loại đoàn viên cuối năm</strong>: <strong style="color: #047857;" th:text="${member.classification}">Xuất sắc</strong>.
+                </p>
+                <p th:if="${member.activityNotes != null and !member.activityNotes.isBlank()}" style="margin-left: 14px;">
+                  4. <strong>Đóng góp tiêu biểu</strong>: <span th:text="${member.activityNotes}"></span>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Phần ký tên xác nhận & Mã xác thực -->
+          <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 48px;">
+            <div style="text-align: center; font-size: 0.88rem;">
+              <div style="border: 2px dashed #9ca3af; padding: 10px 14px; border-radius: 6px; width: 140px; margin: 0 auto 6px; background: #fafafa;">
+                <div style="font-weight: 800; font-size: 0.82rem; color: #1d4ed8;">XÁC THỰC SỔ</div>
+                <div style="font-size: 0.72rem; color: #6b7280;">Chi Đoàn Thôn Tiền Tiến</div>
+              </div>
+              <p style="font-style: italic; font-size: 0.8rem; color: #4b5563;">Mã tra cứu: <span id="memberIdSpan" th:text="${member.id}" style="font-weight: 700;">DV-TT01</span></p>
+            </div>
+
+            <div style="text-align: center; font-size: 0.98rem; min-width: 280px;">
+              <strong>TM. BAN CHẤP HÀNH CHI ĐOÀN THÔN TIỀN TIẾN</strong><br>
+              <strong style="color: #1e3a8a;">BÍ THƯ CHI ĐOÀN</strong>
+              <div style="height: 80px;"></div>
+              <strong style="text-decoration: underline;">(Ký, ghi rõ họ tên và đóng dấu)</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script th:inline="javascript">
+    async function generateAiReview(type) {
+      const memberId = [[${member.id}]];
+      const reviewBox = document.getElementById('aiReviewContent');
+      
+      const prevContent = reviewBox.innerHTML;
+      reviewBox.style.background = '#eff6ff';
+      reviewBox.innerHTML = '<p style="color: #2563eb; font-style: italic;">⚡ AI đang phân tích dữ liệu hoạt động và soạn thảo lời nhận xét...</p>';
+
+      try {
+        const res = await fetch('/api/ai/generate-review', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            memberId: memberId,
+            reviewType: type
+          })
+        });
+        const data = await res.json();
+        if (data.review) {
+          reviewBox.innerHTML = `
+            <p style="margin-left: 14px; text-align: justify; line-height: 1.85;">
+              ${data.review}
+            </p>
+            <p style="margin-left: 14px; margin-top: 8px;">
+              • <strong>Xếp loại đề xuất:</strong> <strong style="color: #047857;">[[${member.classification}]]</strong> &nbsp;&nbsp;&nbsp;&nbsp; 
+              • <strong>Ngày công Chủ nhật xanh:</strong> <strong>[[${member.volunteerDays}]] buổi</strong>
+            </p>
+          `;
+          reviewBox.style.background = '#f0fdf4';
+          setTimeout(() => reviewBox.style.background = 'transparent', 1500);
+        } else {
+          reviewBox.innerHTML = prevContent;
+        }
+      } catch (err) {
+        alert('Lỗi gọi AI: ' + err.message);
+        reviewBox.innerHTML = prevContent;
+        reviewBox.style.background = 'transparent';
+      }
+    }
+  </script>
+
+  <!-- Scripts Fragment -->
+  <div th:replace="~{fragments/scripts :: scripts}"></div>
+</body>
+</html>
