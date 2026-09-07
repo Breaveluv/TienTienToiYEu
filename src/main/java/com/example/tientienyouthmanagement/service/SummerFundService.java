@@ -99,9 +99,11 @@ public class SummerFundService {
 
     public List<String> getAllVillages() {
         return List.of(
-                "Xóm 1",
-                "Xóm 2",
-                "Xóm 3",
+                "Đội 5",
+                "Đội 6",
+                "Đội 7",
+                "Đội 8",
+                "Đội 15",
                 "Con em làm ăn xa quê",
                 "Doanh nghiệp / Mạnh thường quân",
                 "Ban ngành đoàn thể thôn"
@@ -119,7 +121,7 @@ public class SummerFundService {
                         .receiptCode("QHH-2026-001")
                         .donorName("Bác Nguyễn Văn Thắng")
                         .donorTitle("Trưởng Ban Công tác Mặt trận Thôn")
-                        .villageOrUnit("Xóm 2")
+                        .villageOrUnit("Đội 7")
                         .amount(1_500_000L)
                         .itemDonation("1 thùng bánh kẹo thiếu nhi")
                         .donationPurpose("Trại hè Thiếu nhi")
@@ -158,7 +160,7 @@ public class SummerFundService {
                         .receiptCode("QHH-2026-004")
                         .donorName("Gia đình Bác Phạm Văn Hải")
                         .donorTitle("Bà con nhân dân")
-                        .villageOrUnit("Xóm 1")
+                        .villageOrUnit("Đội 5")
                         .amount(500_000L)
                         .itemDonation("2 thùng nước khoáng đóng chai")
                         .donationPurpose("Ủng hộ chung Hoạt động hè")
@@ -183,8 +185,8 @@ public class SummerFundService {
                 SummerFundDonation.builder()
                         .receiptCode("QHH-2026-006")
                         .donorName("Cửa Hàng Tạp Hóa Cô Mai")
-                        .donorTitle("Hộ kinh doanh xóm 3")
-                        .villageOrUnit("Xóm 3")
+                        .donorTitle("Hộ kinh doanh đội 6")
+                        .villageOrUnit("Đội 6")
                         .amount(800_000L)
                         .itemDonation("50 chiếc khăn quàng đỏ + 5 quả bóng chuyền")
                         .donationPurpose("Khen thưởng Học sinh giỏi hè")

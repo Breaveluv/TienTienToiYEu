@@ -135,8 +135,8 @@
                   <td style="padding: 16px 20px; font-size: 0.88rem; color: var(--text-secondary); font-weight: 600;" th:text="${m.birthYear} + ' (' + ${m.gender} + ')'">2002 (Nam)</td>
                   <td style="padding: 16px 20px;">
                     <span class="badge-xom"
-                          th:classappend="${m.village.contains('Xóm 1') ? 'badge-xom-1' : (m.village.contains('Xóm 2') ? 'badge-xom-2' : (m.village.contains('Xóm 3') ? 'badge-xom-3' : (m.village.contains('Xóm 4') ? 'badge-xom-4' : (m.village.contains('Đình') ? 'badge-xom-dinh' : 'badge-xom-dong'))))}"
-                          th:text="${m.village}">Xóm 1 (Thôn Tiền Tiến)</span>
+                          th:classappend="${m.village.contains('5') ? 'badge-xom-1' : (m.village.contains('6') ? 'badge-xom-2' : (m.village.contains('7') ? 'badge-xom-3' : (m.village.contains('8') ? 'badge-xom-4' : (m.village.contains('15') ? 'badge-xom-dinh' : 'badge-xom-dong'))))}"
+                          th:text="${m.village}">Đội 5 (Thôn Tiền Tiến)</span>
                   </td>
                   <td style="padding: 16px 20px; font-size: 0.88rem; font-weight: 700; color: var(--text-primary);" th:text="${m.position}">Bí thư Chi đoàn</td>
                   <td style="padding: 16px 20px;">

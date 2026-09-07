@@ -34,7 +34,7 @@ public class YouthMemberService {
                 .fullName("Nguyễn Văn An")
                 .birthYear("2002")
                 .gender("Nam")
-                .village("Xóm 1 (Thôn Tiền Tiến)")
+                .village("Đội 5 (Thôn Tiền Tiến)")
                 .position("Bí thư Chi đoàn Thôn")
                 .unionCardNumber("TD-892140")
                 .joinDate("26/03/2018")
@@ -51,7 +51,7 @@ public class YouthMemberService {
                 .fullName("Trần Thị Mai Anh")
                 .birthYear("2001")
                 .gender("Nữ")
-                .village("Xóm 2 (Thôn Tiền Tiến)")
+                .village("Đội 6 (Thôn Tiền Tiến)")
                 .position("Phó Bí thư Chi đoàn Thôn")
                 .unionCardNumber("TD-763401")
                 .joinDate("19/05/2017")
@@ -68,7 +68,7 @@ public class YouthMemberService {
                 .fullName("Lê Hoàng Minh")
                 .birthYear("2003")
                 .gender("Nam")
-                .village("Xóm 3 (Thôn Tiền Tiến)")
+                .village("Đội 7 (Thôn Tiền Tiến)")
                 .position("Chi ủy viên Chi đoàn")
                 .unionCardNumber("TD-665123")
                 .joinDate("26/03/2019")
@@ -85,7 +85,7 @@ public class YouthMemberService {
                 .fullName("Phạm Quỳnh Trang")
                 .birthYear("2004")
                 .gender("Nữ")
-                .village("Xóm 1 (Thôn Tiền Tiến)")
+                .village("Đội 8 (Thôn Tiền Tiến)")
                 .position("Đoàn viên")
                 .unionCardNumber("TD-902345")
                 .joinDate("26/03/2020")
@@ -102,7 +102,7 @@ public class YouthMemberService {
                 .fullName("Vũ Đức Thịnh")
                 .birthYear("2000")
                 .gender("Nam")
-                .village("Xóm 4 (Thôn Tiền Tiến)")
+                .village("Đội 15 (Thôn Tiền Tiến)")
                 .position("Đoàn viên phát triển kinh tế")
                 .unionCardNumber("TD-554128")
                 .joinDate("26/03/2016")
@@ -119,7 +119,7 @@ public class YouthMemberService {
                 .fullName("Hoàng Bảo Ngọc")
                 .birthYear("2005")
                 .gender("Nữ")
-                .village("Cụm Đình - Chùa (Thôn Tiền Tiến)")
+                .village("Đội 5 (Thôn Tiền Tiến)")
                 .position("Đoàn viên")
                 .unionCardNumber("TD-112349")
                 .joinDate("26/03/2021")
@@ -136,7 +136,7 @@ public class YouthMemberService {
                 .fullName("Đặng Quốc Tuấn")
                 .birthYear("2002")
                 .gender("Nam")
-                .village("Xóm 2 (Thôn Tiền Tiến)")
+                .village("Đội 6 (Thôn Tiền Tiến)")
                 .position("Đoàn viên")
                 .unionCardNumber("TD-443901")
                 .joinDate("26/03/2018")
@@ -153,7 +153,7 @@ public class YouthMemberService {
                 .fullName("Bùi Thị Thu Hằng")
                 .birthYear("1999")
                 .gender("Nữ")
-                .village("Xóm 3 (Thôn Tiền Tiến)")
+                .village("Đội 7 (Thôn Tiền Tiến)")
                 .position("Đoàn viên tích cực")
                 .unionCardNumber("TD-332187")
                 .joinDate("26/03/2015")
@@ -245,12 +245,11 @@ public class YouthMemberService {
 
     public List<String> getAllVillages() {
         return Arrays.asList(
-                "Xóm 1 (Thôn Tiền Tiến)",
-                "Xóm 2 (Thôn Tiền Tiến)",
-                "Xóm 3 (Thôn Tiền Tiến)",
-                "Xóm 4 (Thôn Tiền Tiến)",
-                "Cụm Đình - Chùa (Thôn Tiền Tiến)",
-                "Cụm Đồng Sau (Thôn Tiền Tiến)"
+                "Đội 5 (Thôn Tiền Tiến)",
+                "Đội 6 (Thôn Tiền Tiến)",
+                "Đội 7 (Thôn Tiền Tiến)",
+                "Đội 8 (Thôn Tiền Tiến)",
+                "Đội 15 (Thôn Tiền Tiến)"
         );
     }
 

@@ -307,11 +307,11 @@
               </select>
             </div>
 
-            <!-- Lọc theo Xóm / Đơn vị -->
+            <!-- Lọc theo Đội / Nguồn -->
             <div>
               <select name="village" style="width: 100%; padding: 10px 14px; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: var(--radius-md); color: var(--text-primary); font-size: 0.88rem; cursor: pointer; box-sizing: border-box;">
-                <option value="all" th:selected="${selectedVillage == 'all'}">Tất cả Xóm / Nguồn tài trợ</option>
-                <option th:each="v : ${villages}" th:value="${v}" th:text="${v}" th:selected="${selectedVillage == v}">Xóm 1</option>
+                <option value="all" th:selected="${selectedVillage == 'all'}">Tất cả Đội / Nguồn tài trợ</option>
+                <option th:each="v : ${villages}" th:value="${v}" th:text="${v}" th:selected="${selectedVillage == v}">Đội 5</option>
               </select>
             </div>
 
@@ -349,7 +349,7 @@
                 <tr style="background: var(--bg-input); border-bottom: 2px solid var(--border-color); color: var(--text-muted); font-size: 0.78rem; text-transform: uppercase;">
                   <th style="padding: 12px 14px;">Mã Phiếu</th>
                   <th style="padding: 12px 14px;">Họ và Tên / Đơn vị</th>
-                  <th style="padding: 12px 14px;">Địa bàn / Xóm</th>
+                  <th style="padding: 12px 14px;">Đội / Địa bàn</th>
                   <th style="padding: 12px 14px; text-align: right;">Số Tiền (VNĐ)</th>
                   <th style="padding: 12px 14px;">Hiện Vật Đi Kèm</th>
                   <th style="padding: 12px 14px;">Mục Đích</th>
@@ -501,13 +501,13 @@
                    style="width: 100%; padding: 10px 14px; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: var(--radius-md); color: var(--text-primary); font-size: 0.9rem; box-sizing: border-box;">
           </div>
 
-          <!-- Xóm / Nguồn -->
+          <!-- Đội / Nguồn -->
           <div>
             <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px;">
-              Xóm / Địa bàn
+              Đội / Địa bàn
             </label>
             <select th:field="*{villageOrUnit}" style="width: 100%; padding: 10px 14px; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: var(--radius-md); color: var(--text-primary); font-size: 0.9rem; box-sizing: border-box;">
-              <option th:each="v : ${villages}" th:value="${v}" th:text="${v}">Xóm 1</option>
+              <option th:each="v : ${villages}" th:value="${v}" th:text="${v}">Đội 5</option>
             </select>
           </div>
 

@@ -60,7 +60,7 @@ public class YouthMemberWebController {
     @GetMapping("/members/new")
     public String newMemberForm(Model model) {
         YouthMember member = new YouthMember();
-        member.setVillage("Xóm 1 (Thôn Tiền Tiến)");
+        member.setVillage("Đội 5 (Thôn Tiền Tiến)");
         member.setPosition("Đoàn viên");
         member.setResidenceStatus("Tại thôn");
         member.setClassification("Khá");

@@ -31,10 +31,10 @@ class YouthMemberRepositoryTest {
 
     @Test
     void testSearchByVillage() {
-        List<YouthMember> results = repository.searchMembers(null, "Xóm 1 (Thôn Tiền Tiến)", null);
+        List<YouthMember> results = repository.searchMembers(null, "Đội 5 (Thôn Tiền Tiến)", null);
         assertFalse(results.isEmpty());
         for (YouthMember m : results) {
-            assertEquals("Xóm 1 (Thôn Tiền Tiến)", m.getVillage());
+            assertEquals("Đội 5 (Thôn Tiền Tiến)", m.getVillage());
         }
     }
 

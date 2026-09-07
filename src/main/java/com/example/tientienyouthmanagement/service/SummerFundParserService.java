@@ -204,7 +204,7 @@ public class SummerFundParserService {
             result.add(SummerFundDonation.builder()
                     .donorName(donorName)
                     .donorTitle("Bà con nhân dân")
-                    .villageOrUnit(village)
+                    .villageOrUnit(normalizeVillage(village))
                     .amount(amount)
                     .itemDonation(item)
                     .donationPurpose(purpose)
@@ -215,6 +215,18 @@ public class SummerFundParserService {
         }
 
         return result;
+    }
+
+    public String normalizeVillage(String v) {
+        if (v == null || v.isBlank()) return "Đội 5";
+        String trimmed = v.trim();
+        String lower = trimmed.toLowerCase();
+        if (lower.equals("5") || lower.contains("đội 5") || lower.contains("xóm 5") || lower.equals("doi 5") || lower.equals("d5")) return "Đội 5";
+        if (lower.equals("6") || lower.contains("đội 6") || lower.contains("xóm 6") || lower.equals("doi 6") || lower.equals("d6")) return "Đội 6";
+        if (lower.equals("7") || lower.contains("đội 7") || lower.contains("xóm 7") || lower.equals("doi 7") || lower.equals("d7")) return "Đội 7";
+        if (lower.equals("8") || lower.contains("đội 8") || lower.contains("xóm 8") || lower.equals("doi 8") || lower.equals("d8")) return "Đội 8";
+        if (lower.equals("15") || lower.contains("đội 15") || lower.contains("xóm 15") || lower.equals("doi 15") || lower.equals("d15")) return "Đội 15";
+        return trimmed;
     }
 
     private static class SmartRowDetected {
@@ -259,13 +271,17 @@ public class SummerFundParserService {
             }
         }
 
-        // 2. Tìm ô chứa địa bàn / xóm / đội (chứa chữ "Đội", "Xóm", "Thôn", "Khu")
+        // 2. Tìm ô chứa địa bàn / xóm / đội (chứa chữ "Đội", "Xóm", "Thôn", "Khu" hoặc số đội 5, 6, 7, 8, 15)
         for (IndexedCell c : cells) {
             if (c == amountCell) continue;
             String lower = c.value.toLowerCase();
             if (lower.contains("đội") || lower.contains("xóm") || lower.contains("thôn") || lower.contains("cụm") || lower.contains("khu")) {
                 villageCell = c;
-                res.village = c.value;
+                res.village = normalizeVillage(c.value);
+                break;
+            } else if (c.col > 0 && (lower.equals("5") || lower.equals("6") || lower.equals("7") || lower.equals("8") || lower.equals("15"))) {
+                villageCell = c;
+                res.village = normalizeVillage(c.value);
                 break;
             }
         }
@@ -361,7 +377,7 @@ public class SummerFundParserService {
         String[] columns = {
                 "Họ và Tên Người / Đơn Vị Ủng Hộ",
                 "Danh Xưng / Vai Trò",
-                "Xóm / Địa Bàn (Thôn Tiền Tiến)",
+                "Đội / Địa Bàn (Thôn Tiền Tiến)",
                 "Số Tiền Ủng Hộ (VNĐ)",
                 "Hiện Vật Ủng Hộ (nếu có)",
                 "Mục Đích Ủng Hộ",
@@ -377,10 +393,10 @@ public class SummerFundParserService {
         }
 
         Object[][] sampleData = {
-                {"Bác Nguyễn Văn Thắng", "Trưởng Ban Mặt trận Thôn", "Xóm 2", 1500000, "1 thùng bánh kẹo", "Trại hè Thiếu nhi", "Tiền mặt", "Chúc các cháu mùa hè vui tươi, chăm ngoan!"},
+                {"Bác Nguyễn Văn Thắng", "Trưởng Ban Mặt trận Thôn", "Đội 7", 1500000, "1 thùng bánh kẹo", "Trại hè Thiếu nhi", "Tiền mặt", "Chúc các cháu mùa hè vui tươi, chăm ngoan!"},
                 {"Công ty TNHH Cơ Khí Tiền Tiến", "Doanh nghiệp địa phương", "Doanh nghiệp / Mạnh thường quân", 3000000, "Cúp & cờ lưu niệm", "Giải bóng đá Thanh thiếu nhi", "Chuyển khoản VietQR", "Đồng hành cùng giải bóng đá hè thanh thiếu niên."},
                 {"Anh Lê Hoàng Nam", "Cựu Bí thư Chi đoàn (Hà Nội)", "Con em làm ăn xa quê", 2000000, "", "Đêm hội Văn nghệ hè", "Chuyển khoản VietQR", "Tiếp sức thanh thiếu nhi quê nhà."},
-                {"Gia đình Chị Phạm Thị Hoa", "Bà con nhân dân", "Xóm 1", 500000, "2 thùng sữa tươi", "Ủng hộ chung Hoạt động hè", "Tiền mặt", "Ủng hộ bồi dưỡng cho các cháu tập văn nghệ."}
+                {"Gia đình Chị Phạm Thị Hoa", "Bà con nhân dân", "Đội 5", 500000, "2 thùng sữa tươi", "Ủng hộ chung Hoạt động hè", "Tiền mặt", "Ủng hộ bồi dưỡng cho các cháu tập văn nghệ."}
         };
 
         for (int i = 0; i < sampleData.length; i++) {
