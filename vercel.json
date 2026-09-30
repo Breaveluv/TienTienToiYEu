@@ -3,7 +3,7 @@
   "rewrites": [
     {
       "source": "/(.*)",
-      "destination": "https://YOUR_BACKEND_APP.onrender.com/$1"
+      "destination": "https://tientientoiyeu.onrender.com/$1"
     }
   ]
 }
